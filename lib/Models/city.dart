@@ -1,28 +1,24 @@
-class SendingPurpose {
+class City {
   String? name;
   String? description;
-  int? id;
   String? status;
+  int? id;
 
-  SendingPurpose({this.name, this.description, this.id, this.status});
+  City({this.name, this.description, this.status, this.id});
 
-  SendingPurpose.fromJson(Map<String, dynamic> json) {
+  City.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     description = json['description'];
-    id = json['id'];
     status = json['status'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['description'] = description;
-    data['id'] = id;
     data['status'] = status;
+    data['id'] = id;
     return data;
   }
-
-  @override
-  bool operator ==(Object other) => other is SendingPurpose && other.id == id;
-
 }

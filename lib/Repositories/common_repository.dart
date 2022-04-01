@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:hidmona/Models/currency_conversion_details.dart';
-import 'package:hidmona/Models/mode_of_receive.dart';
+import 'package:hidmona/Models/mode_of_payment.dart';
 import 'package:hidmona/Models/server_country.dart';
 import 'package:hidmona/Models/server_currency.dart';
 import 'package:hidmona/Repositories/api_response.dart';

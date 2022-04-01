@@ -3,7 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
-import 'package:hidmona/Models/mode_of_receive.dart';
+import 'package:hidmona/Models/mode_of_payment.dart';
 import 'package:hidmona/Models/sending_purpose.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Utilities/colors.dart';
