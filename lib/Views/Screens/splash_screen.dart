@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hidmona/Models/app_user.dart';
-import 'package:hidmona/Repositories/UserRepository.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Views/Screens/getstart_screen.dart';

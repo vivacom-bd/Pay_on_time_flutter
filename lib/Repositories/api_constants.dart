@@ -1,4 +1,6 @@
 
+import 'package:hidmona/Controllers/common_controller.dart';
+
 bool isDev = false;
 
 String baseAPIUrl(){
@@ -12,5 +14,6 @@ final headers = {
 
 final headersWithAuth = {
   'Content-Type': 'application/json',
-  //'Authorization': 'bearer '+ (CurrentUser().appUser !=null? CurrentUser().appUser.token : ""),
+  "x-org-domain": "hidmona",
+  'Authorization': '${CommonController().currentUser.value.tokenType??'bearer'} '+ (CommonController().currentUser.value.accessToken??""),
 };
