@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
 import 'package:hidmona/Models/mode_of_payment.dart';
 import 'package:hidmona/Models/sending_purpose.dart';
@@ -151,7 +152,7 @@ class CommonRepository{
   }
 
   ///getPaymentMethod
-  static Future<APIResponse<List<SendingPurpose>>> getSendingPurposes(int countryId) async{
+  static Future<APIResponse<List<SendingPurpose>>> getSendingPurposes() async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<SendingPurpose>>(error: true, errorMessage: "Internet is not connected!");
     }
@@ -172,6 +173,33 @@ class CommonRepository{
     }).catchError((onError){
       print(onError);
       return APIResponse<List<SendingPurpose>>(error: true, errorMessage: "An Error Occurred!");
+    });
+  }
+
+
+
+  ///getPaymentMethod
+  static Future<APIResponse<List<City>>> getCities(int countryId) async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<List<City>>(error: true, errorMessage: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'public/city_list_based_on_country/$countryId');
+    return http.get(url,headers: headersWithAuth)
+        .then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        List<City> cities = [];
+        jsonData.forEach((purpose){
+          cities.add(City.fromJson(purpose));
+        });
+        return APIResponse<List<City>>(data: cities);
+      }
+      return APIResponse<List<City>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<List<City>>(error: true, errorMessage: "An Error Occurred!");
     });
   }
 

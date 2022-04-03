@@ -7,6 +7,8 @@ import 'package:hidmona/Models/mode_of_payment.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
+import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/recepient_details_screen.dart';
 import 'package:hidmona/Views/Widgets/country_item.dart';
 import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
@@ -196,13 +198,11 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                                 }
                                 else if(input > 50000)
                                   {
-                                    return "You can not send money more than 50000 ${commonController
-                                        .countryFrom.value.currencyCode}";
+                                    return "You can not send money more than 50000 ${commonController.serverCountryFrom.value.selectedCurrency!.code}";
                                   }
                                 return null;
                               },
-                              labelText: "Enter amount in ${commonController
-                                  .countryFrom.value.currencyCode}",
+                              labelText: "Enter amount in ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
                               hindText: "",
                               keyboardType: TextInputType.number,
                               onChanged: (value) {
@@ -217,7 +217,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                           Obx((){
                             if(inputAmount.value!=0){
                               return FutureBuilder(
-                                future: commonController.getConversionDetails(inputAmount.value, commonController.countryFrom.value.isoCode!, commonController.countryTo.value.isoCode!),
+                                future: commonController.getConversionDetails(inputAmount.value, commonController.serverCountryFrom.value.selectedCurrency!, commonController.serverCountryTo.value.selectedCurrency!),
                                 builder: (context, AsyncSnapshot<APIResponse<CurrencyConversionDetails>> snapshot){
 
                                   if(snapshot.data!=null){
@@ -234,35 +234,31 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                                           SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("rate"),
                                             title: "Our Rate",
-                                            value: "1  ${commonController.countryFrom.value.currencyCode} = ${currencyConversionDetails.ourRate!.toStringAsFixed(2)} ${commonController
-                                                .countryTo.value.currencyCode}",
+                                            value: "1  ${commonController.serverCountryFrom.value.selectedCurrency!.code} = ${currencyConversionDetails.ourRate!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}",
                                           ),
                                           const SizedBox(height: 10,),
                                           SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("transfer"),
                                             title: "Transfer Fee",
-                                            value: "${currencyConversionDetails.fees!.toStringAsFixed(2)} ${commonController.countryFrom.value.currencyCode}",
+                                            value: "${currencyConversionDetails.fees!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
                                           ),
                                           const SizedBox(height: 10,),
                                           SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("amount_to_send"),
                                             title: "Amount to send",
-                                            value: "${currencyConversionDetails.amountToSend!.toStringAsFixed(2)} ${commonController
-                                                .countryFrom.value.currencyCode}",
+                                            value: "${currencyConversionDetails.amountToSend!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
                                           ),
                                           const SizedBox(height: 10,),
                                           SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("Amount_to_receive"),
                                             title: "Amount to receive",
-                                            value: '${currencyConversionDetails.amountToReceive!.toStringAsFixed(2)} ${commonController
-                                                .countryTo.value.currencyCode}',
+                                            value: '${currencyConversionDetails.amountToReceive!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}',
                                           ),
                                           const SizedBox(height: 10,),
                                           SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("Amount_to_receive"),
                                             title: "Total to pay",
-                                            value: "${currencyConversionDetails.amountToPay!.toStringAsFixed(2)} ${commonController
-                                                .countryFrom.value.currencyCode}",
+                                            value: "${currencyConversionDetails.amountToPay!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
                                           ),
                                         ],
                                       );
@@ -339,10 +335,30 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: DefaultButton(
-                      buttonText: "Send Money Now", onTap: () {
+                      buttonText: "Send Money", onTap: () async{
+                        if(_formKey.currentState!.validate()){
 
+                          Utility.showLoadingDialog();
+
+                          bool isSuccessGetMyRecipients = await commonController.getMyRecipients();
+                          if(!isSuccessGetMyRecipients){
+                            Get.back();
+                            return;
+                          }
+
+                          bool isSuccessGetCities = await commonController.getCities();
+                          if(!isSuccessGetCities){
+                            Get.back();
+                            return;
+                          }
+
+                          Get.back();
+
+                          Get.to(RecipientDetailsScreen());
+                        }
                     },),
                   ),
+                  const SizedBox(height: 15,)
                 ],
               ),
             );

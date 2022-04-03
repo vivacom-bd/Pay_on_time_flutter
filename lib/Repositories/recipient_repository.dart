@@ -92,13 +92,12 @@ class RecipientRepository{
 
 
   ///getRecipients
-  static Future<APIResponse<List<Recipient>>> getRecipients(int countryId) async{
+  static Future<APIResponse<List<Recipient>>> getRecipients() async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<Recipient>>(error: true, errorMessage: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'recipients');
-    return http.get(url,headers: headersWithAuth)
-        .then((data){
+    return http.get(url,headers: headersWithAuth).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);

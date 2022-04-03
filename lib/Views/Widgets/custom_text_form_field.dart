@@ -26,8 +26,8 @@ class CustomTextFormField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(labelText,style: TextStyle(fontWeight: FontWeight.w600,color: AppColor.textColor),),
-        const SizedBox(height: 5,),
+        if(labelText.isNotEmpty) Text(labelText,style: TextStyle(fontWeight: FontWeight.w600,color: AppColor.textColor),),
+        if(labelText.isNotEmpty) const SizedBox(height: 5,),
         TextFormField(
           keyboardType: keyboardType,
           controller: controller,
@@ -58,7 +58,7 @@ class CustomTextFormField extends StatelessWidget {
             errorBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.red,
-                width: 1.5,
+                width: 1,
               ),
             ),
             isDense: true,

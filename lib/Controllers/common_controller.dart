@@ -2,12 +2,15 @@ import 'package:country_currency_pickers/country.dart';
 import 'package:country_currency_pickers/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Models/app_user.dart';
+import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
 import 'package:hidmona/Models/mode_of_payment.dart';
+import 'package:hidmona/Models/recipient.dart';
 import 'package:hidmona/Models/server_country.dart';
 import 'package:hidmona/Models/server_currency.dart';
 import 'package:hidmona/Repositories/common_repository.dart';
 import 'package:hidmona/Repositories/api_response.dart';
+import 'package:hidmona/Repositories/recipient_repository.dart';
 import 'package:hidmona/Utilities/utility.dart';
 
 class CommonController extends GetxController{
@@ -23,12 +26,16 @@ class CommonController extends GetxController{
   RxList<ServerCountry> serverCountries = <ServerCountry>[].obs;
   RxList<ModeOfPayment> modeOfReceives = <ModeOfPayment>[].obs;
   RxList<ModeOfPayment> modeOfPayments = <ModeOfPayment>[].obs;
+  RxList<Recipient> myRecipients = <Recipient>[].obs;
+  RxList<City> cities = <City>[].obs;
+
 
   Rx<CurrencyConversionDetails> currencyConversionDetails = CurrencyConversionDetails().obs;
 
 
   ModeOfPayment? selectedModeOfReceive;
   ModeOfPayment? selectedModeOfPayment;
+  Recipient? selectedRecipient;
 
 
   @override
@@ -67,7 +74,7 @@ class CommonController extends GetxController{
     });
   }
 
-  ///getModeOfReceives
+  ///getModeOfPayments
   Future<bool> getModeOfPayments(String countryCode) async{
 
     ServerCountry serverCountry = getServerCountryFromCountryCode(countryCode);
@@ -85,12 +92,43 @@ class CommonController extends GetxController{
   }
 
 
-  /// getConversionDetails
-  Future<APIResponse<CurrencyConversionDetails>> getConversionDetails(double amount, String countryFromCode, String countryToCode) async{
-    ServerCountry serverCountryFrom = getServerCountryFromCountryCode(countryFromCode);
-    ServerCountry serverCountryTo = getServerCountryFromCountryCode(countryToCode);
+  ///getMyRecipients
+  Future<bool> getMyRecipients() async{
 
-    APIResponse<CurrencyConversionDetails> apiResponse = await CommonRepository.getConversionDetails(amount, serverCountryFrom.id!, serverCountryTo.id!);
+    return RecipientRepository.getRecipients().then((APIResponse<List<Recipient>> apiResponse){
+      if(apiResponse.data != null){
+        myRecipients.clear();
+        myRecipients.addAll(apiResponse.data!);
+        return true;
+      }else{
+        Utility.showSnackBar(apiResponse.errorMessage??"An error Occurred");
+        return false;
+      }
+    });
+
+  }
+
+
+  ///getModeOfReceives
+  Future<bool> getCities() async{
+
+    return CommonRepository.getCities(serverCountryTo.value.id!).then((APIResponse<List<City>> apiResponse){
+      if(apiResponse.data != null){
+        cities.clear();
+        cities.addAll(apiResponse.data!);
+        return true;
+      }else{
+        Utility.showSnackBar(apiResponse.errorMessage??"An error Occurred");
+        return false;
+      }
+    });
+
+  }
+
+
+  /// getConversionDetails
+  Future<APIResponse<CurrencyConversionDetails>> getConversionDetails(double amount, ServerCurrency serverCurrencyFrom, ServerCurrency serverCurrencyTo) async{
+    APIResponse<CurrencyConversionDetails> apiResponse = await CommonRepository.getConversionDetails(amount, serverCurrencyFrom.id!, serverCurrencyTo.id!);
 
     return apiResponse;
   }

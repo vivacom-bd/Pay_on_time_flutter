@@ -10,7 +10,7 @@ class CustomDropDownFromField extends StatelessWidget {
   var items;
   var prefixIcon;
   var suffixIcon;
-  Function validator;
+  String? Function(Object?)? validator;
   String labelAndHintText;
   void Function(Object?)? onChanged;
   var selectedValue;
@@ -20,12 +20,12 @@ class CustomDropDownFromField extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
         isExpanded: true,
-        // validator: validator,
+        validator: validator,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         iconSize: 0.0,
-        style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w600),
+        style: const TextStyle(fontSize: 17,overflow: TextOverflow.ellipsis,fontWeight: FontWeight.w600),
         items: items,
-        //onChanged: onChanged,
+        onChanged: onChanged,
         alignment: Alignment.center,
         value: selectedValue,
         decoration: InputDecoration(
@@ -69,7 +69,6 @@ class CustomDropDownFromField extends StatelessWidget {
           hintText: labelAndHintText,
           hintStyle: const TextStyle( fontSize: 14, fontWeight: FontWeight.bold),
         ),
-        onChanged: onChanged,
     );
   }
 }

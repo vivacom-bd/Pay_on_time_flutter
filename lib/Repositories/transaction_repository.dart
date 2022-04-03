@@ -93,7 +93,7 @@ class RecipientRepository{
 
 
   ///getRecipients
-  static Future<APIResponse<List<Transaction>>> getRecipients(int countryId) async{
+  static Future<APIResponse<List<Transaction>>> getRecipients() async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<Transaction>>(error: true, errorMessage: "Internet is not connected!");
     }
