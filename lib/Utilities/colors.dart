@@ -46,6 +46,15 @@ class AppGradient{
               Colors.red[900]!,
             ]);
       }
+      case "grey" : {
+        return LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors:  [
+              Colors.grey[300]!,
+              Colors.grey,
+            ]);
+      }
       default: {
         //default
         return LinearGradient(

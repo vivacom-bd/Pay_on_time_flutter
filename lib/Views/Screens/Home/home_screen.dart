@@ -8,13 +8,18 @@ import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
-import 'package:hidmona/Views/Screens/send_money_screen.dart';
+import 'package:hidmona/Views/Screens/Profile/profile_screen.dart';
+import 'package:hidmona/Views/Screens/Recipient/my_recipients_screen.dart';
+import 'package:hidmona/Views/Screens/SendMoney/send_money_screen.dart';
+import 'package:hidmona/Views/Screens/Transaction/transaction_history_screen.dart';
 import 'package:hidmona/Views/Widgets/country_item.dart';
 import 'package:hidmona/Views/Widgets/dashboard_item.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = "/HomeScreen";
+
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -46,19 +51,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     DashboardExploreItem(title: "Profile",subtitle: "See your profile here",iconName: "user",
                       onTap: (){
-                        //Navigator.of(context).pushNamed(ProfileScreen.routeName);
+                       Get.to(const ProfileScreen());
                       },
                     ),
                     const SizedBox(height: 10,),
                     DashboardExploreItem(title: "History",subtitle: "See your previous transactions",iconName: "history",
                       onTap: (){
-                        //Navigator.of(context).pushNamed(TransactionHistoryScreen.routeName);
+                        Get.to(const TransactionHistoryScreen());
                       },
                     ),
                     const SizedBox(height: 10,),
                     DashboardExploreItem(title: "My Recipients",subtitle: "See your profile here",iconName: "users",
                       onTap: (){
-                        //Navigator.of(context).pushNamed(MyBeneficiariesScreen.routeName);
+                        Get.to(const MyRecipientScreen());
                       },
                     ),
                   ],

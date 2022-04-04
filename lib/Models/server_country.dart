@@ -29,4 +29,10 @@ class ServerCountry {
     return data;
   }
 
+  @override
+  bool operator ==(Object other) => other is ServerCountry && other.id == id;
+
+  @override
+  int get hashCode => id!;
+
 }

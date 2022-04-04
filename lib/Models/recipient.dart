@@ -6,6 +6,8 @@ import 'package:hidmona/Models/server_country.dart';
 
 //Recipient
 class Recipient {
+  int? id;
+  int? userId;
   String? email;
   String? fullName;
   String? phone;
@@ -17,8 +19,6 @@ class Recipient {
   int? citizenCountryId;
   bool? isCitizen;
   String? recipientCode;
-  int? id;
-  int? userId;
   String? status;
   ServerCountry? country;
   City? city;
@@ -99,6 +99,13 @@ class Recipient {
     }
     return data;
   }
+
+
+  @override
+  bool operator ==(Object other) => other is Recipient && other.id == id;
+
+  @override
+  int get hashCode => id!;
 }
 
 
@@ -114,7 +121,7 @@ class RecipientRequestBody {
   int? cityId;
   int? citizenCountryId;
   bool? isCitizen;
-  int? status;
+  // int? status;
 
   RecipientRequestBody(
       {this.email,
@@ -126,8 +133,7 @@ class RecipientRequestBody {
         this.dateOfBirth,
         this.cityId,
         this.citizenCountryId,
-        this.isCitizen,
-        this.status});
+        this.isCitizen});
 
   RecipientRequestBody.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -140,7 +146,7 @@ class RecipientRequestBody {
     cityId = json['city_id'];
     citizenCountryId = json['citizen_country_id'];
     isCitizen = json['is_citizen'];
-    status = json['status'];
+    // status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -155,7 +161,7 @@ class RecipientRequestBody {
     data['city_id'] = cityId;
     data['citizen_country_id'] = citizenCountryId;
     data['is_citizen'] = isCitizen;
-    data['status'] = status;
+    // data['status'] = status;
     return data;
   }
 }

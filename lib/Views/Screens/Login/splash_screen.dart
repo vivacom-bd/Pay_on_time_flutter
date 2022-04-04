@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
-import 'package:hidmona/Views/Screens/getstart_screen.dart';
+import 'package:hidmona/Views/Screens/Login/getstart_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String routeName = "/SplashScreen";

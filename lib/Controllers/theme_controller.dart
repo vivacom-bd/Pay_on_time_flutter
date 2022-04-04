@@ -26,6 +26,7 @@ class ThemeController extends GetxController{
     appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       color: AppColor.defaultColor,
+      shadowColor: AppColor.defaultColor,
       // titleTextStyle: TextStyle(color: Colors.redAccent[700],fontSize: 23,fontWeight: FontWeight.w700),
       // iconTheme: IconThemeData(color: Colors.redAccent[700],size: 30)
     ),

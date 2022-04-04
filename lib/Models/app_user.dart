@@ -56,6 +56,13 @@ class AppUser {
     }
     return data;
   }
+
+
+  @override
+  bool operator ==(Object other) => other is AppUser && other.email == email;
+
+  @override
+  int get hashCode => 1;
 }
 
 class Permissions {

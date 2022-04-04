@@ -6,7 +6,7 @@ class DefaultButton extends StatelessWidget {
     Key? key,
     required this.buttonText,
     this.iconData,
-    required this.onTap,
+    this.onTap,
     this.linearGradient,
   }) : super(key: key);
 
@@ -14,7 +14,7 @@ class DefaultButton extends StatelessWidget {
   final String buttonText;
   final IconData? iconData;
   final LinearGradient? linearGradient;
-  final Function() onTap;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {

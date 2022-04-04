@@ -6,8 +6,10 @@ import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
 import 'package:hidmona/Models/mode_of_payment.dart';
 import 'package:hidmona/Models/recipient.dart';
+import 'package:hidmona/Models/sending_purpose.dart';
 import 'package:hidmona/Models/server_country.dart';
 import 'package:hidmona/Models/server_currency.dart';
+import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Repositories/common_repository.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/recipient_repository.dart';
@@ -27,15 +29,21 @@ class CommonController extends GetxController{
   RxList<ModeOfPayment> modeOfReceives = <ModeOfPayment>[].obs;
   RxList<ModeOfPayment> modeOfPayments = <ModeOfPayment>[].obs;
   RxList<Recipient> myRecipients = <Recipient>[].obs;
-  RxList<City> cities = <City>[].obs;
+  RxList<City> receiveCities = <City>[].obs;
+  RxList<City> sendingCities = <City>[].obs;
+  RxList<SendingPurpose> sendingPurposes = <SendingPurpose>[].obs;
 
 
   Rx<CurrencyConversionDetails> currencyConversionDetails = CurrencyConversionDetails().obs;
+  TransactionRequestBody? transactionRequestBody;
+  Transaction? currentTransaction;
 
 
   ModeOfPayment? selectedModeOfReceive;
   ModeOfPayment? selectedModeOfPayment;
+  SendingPurpose? selectedSendingPurpose;
   Recipient? selectedRecipient;
+  City? senderCity;
 
 
   @override
@@ -112,10 +120,39 @@ class CommonController extends GetxController{
   ///getModeOfReceives
   Future<bool> getCities() async{
 
-    return CommonRepository.getCities(serverCountryTo.value.id!).then((APIResponse<List<City>> apiResponse){
+    APIResponse<List<City>> apiResponse1 = await CommonRepository.getCities(serverCountryTo.value.id!);
+    if(apiResponse1.data != null){
+      receiveCities.clear();
+      receiveCities.addAll(apiResponse1.data!);
+    }else{
+      Utility.showSnackBar(apiResponse1.errorMessage??"An error Occurred");
+      return false;
+    }
+
+
+    APIResponse<List<City>> apiResponse2 = await CommonRepository.getCities(serverCountryFrom.value.id!);
+    if(apiResponse2.data != null){
+      sendingCities.clear();
+      sendingCities.addAll(apiResponse2.data!);
+    }else{
+      Utility.showSnackBar(apiResponse2.errorMessage??"An error Occurred");
+      return false;
+    }
+
+
+    return true;
+
+  }
+
+
+
+  ///getSendingPurposes
+  Future<bool> getSendinPurposes() async{
+
+    return CommonRepository.getSendingPurposes().then((APIResponse<List<SendingPurpose>> apiResponse){
       if(apiResponse.data != null){
-        cities.clear();
-        cities.addAll(apiResponse.data!);
+        sendingPurposes.clear();
+        sendingPurposes.addAll(apiResponse.data!);
         return true;
       }else{
         Utility.showSnackBar(apiResponse.errorMessage??"An error Occurred");
@@ -124,6 +161,7 @@ class CommonController extends GetxController{
     });
 
   }
+
 
 
   /// getConversionDetails

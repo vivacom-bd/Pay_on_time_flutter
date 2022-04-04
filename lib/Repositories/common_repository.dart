@@ -151,7 +151,7 @@ class CommonRepository{
     });
   }
 
-  ///getPaymentMethod
+  ///getSendingPurposes
   static Future<APIResponse<List<SendingPurpose>>> getSendingPurposes() async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<SendingPurpose>>(error: true, errorMessage: "Internet is not connected!");

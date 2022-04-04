@@ -1,0 +1,300 @@
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hidmona/Controllers/common_controller.dart';
+import 'package:hidmona/Models/sending_purpose.dart';
+import 'package:hidmona/Models/transaction.dart';
+import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Views/Screens/SendMoney/sending_confirmation_screen.dart';
+import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
+import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
+import 'package:hidmona/Views/Widgets/default_button.dart';
+import 'package:intl/intl.dart';
+
+class RecipientBankInfoScreen extends StatefulWidget {
+  static const String routeName = "/RecipientBankInfoScreen";
+
+  const RecipientBankInfoScreen({Key? key}) : super(key: key);
+
+  @override
+  _RecipientBankInfoScreenState createState() => _RecipientBankInfoScreenState();
+}
+
+class _RecipientBankInfoScreenState extends State<RecipientBankInfoScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController bankNameTextEditingController = TextEditingController();
+  final TextEditingController bankAccountNoTextEditingController = TextEditingController();
+  final TextEditingController bankAccountTitleTextEditingController = TextEditingController();
+  final TextEditingController bankAddressTextEditingController = TextEditingController();
+  final TextEditingController bankSwiftCodeTextEditingController = TextEditingController();
+  final TextEditingController branchNameTextEditingController = TextEditingController();
+
+  CommonController commonController = Get.find<CommonController>();
+
+
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    commonController.selectedSendingPurpose = null;
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50.0),
+        child: AppBar(
+          title: const Text("Recipient Details"),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: AppGradient.getColorGradient("default"),
+            ),
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Obx(() {
+            return Form(
+              key: _formKey,
+              child: Column(
+                children: [
+
+                  const SizedBox(height: 10,),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Sending Purpose',
+                          style: TextStyle(
+                            color: AppColor.textColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 7,),
+                        CustomDropDownFromField(
+                            validator: (value) {
+                              if (value == null) {
+                                return "Select Sending Purpose";
+                              }
+                              return null;
+                            },
+
+                            items: commonController.sendingPurposes.map((SendingPurpose sendingPurpose) {
+                              return DropdownMenuItem(
+                                  value: sendingPurpose,
+                                  child: Text(sendingPurpose.name!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
+                              );
+                            }).toList(),
+                            selectedValue: commonController.selectedSendingPurpose,
+                            labelAndHintText: "Select Sending Purpose",
+                            suffixIcon: Padding(
+                              padding: const EdgeInsets.only(bottom: 4.0),
+                              child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                            ),
+                            filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
+                            onChanged: (value) {
+
+                              commonController.selectedSendingPurpose = value as SendingPurpose;
+
+                            }
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 15,),
+
+                  if(commonController.selectedModeOfReceive?.name!.toLowerCase() == "bank")Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Recipient Bank Info',
+                              style: TextStyle(
+                                color: AppColor.textColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 7),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: AppColor.dropdownBoxColor.withOpacity(0.3),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextFormField(
+                                controller: bankNameTextEditingController,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
+                                  return null;
+                                },
+                                labelText: "Bank Name",
+                                hindText: "",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+
+                                }
+                            ),
+                            const SizedBox(height: 10,),
+                            CustomTextFormField(
+                                controller: bankAccountNoTextEditingController,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
+                                  return null;
+                                },
+                                labelText: "Bank Account No.",
+                                hindText: "",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+
+                                }
+                            ),
+                            const SizedBox(height: 10,),
+                            CustomTextFormField(
+                                controller: bankAccountTitleTextEditingController,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
+                                  return null;
+                                },
+                                labelText: "Bank Account Title",
+                                hindText: "",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+
+                                }
+                            ),
+                            const SizedBox(height: 10,),
+                            CustomTextFormField(
+                                controller: bankSwiftCodeTextEditingController,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
+                                  return null;
+                                },
+                                labelText: "Bank Swift Code",
+                                hindText: "",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+
+                                }
+                            ),
+                            const SizedBox(height: 10,),
+                            CustomTextFormField(
+                                controller: bankAddressTextEditingController,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
+                                  return null;
+                                },
+                                labelText: "Bank Address",
+                                hindText: "",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+
+                                }
+                            ),
+                            const SizedBox(height: 10,),
+                            CustomTextFormField(
+                                controller: branchNameTextEditingController,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
+                                  return null;
+                                },
+                                labelText: "Branch Name",
+                                hindText: "",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+
+                                }
+                            ),
+                            const SizedBox(height: 5,),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 15,),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: DefaultButton(
+                      buttonText: "Continue", onTap: () {
+                        FocusScope.of(context).unfocus();
+                        if(_formKey.currentState!.validate()){
+
+
+                           commonController.transactionRequestBody = TransactionRequestBody(
+                            bankName: bankNameTextEditingController.text,
+                            bankAccountNo: bankAccountNoTextEditingController.text,
+                            bankAccountTitle: bankAddressTextEditingController.text,
+                            bankSwiftCode: bankSwiftCodeTextEditingController.text,
+                            bankAddress: bankAddressTextEditingController.text,
+                            branchName: branchNameTextEditingController.text,
+                            payoutCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
+                            receivingCurrency: commonController.serverCountryTo.value.selectedCurrency!.code,
+                            transactionDate: DateFormat("yyyy-mm-dd").format(DateTime.now()),
+                            purpose: commonController.selectedSendingPurpose!.name,
+                            purposeDescription: commonController.selectedSendingPurpose!.description,
+                            sendingPurposeId: commonController.selectedSendingPurpose!.id,
+                            settlementCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
+                            remarks: "Transaction from app",
+                            paymentDeliveryModeId: commonController.selectedModeOfPayment!.id,
+                            paymentReceiveModeId: commonController.selectedModeOfReceive!.id,
+                            recipientId: commonController.selectedRecipient!.id,
+                            recipientCityId: commonController.selectedRecipient!.city!.id,
+                            recipientCountryId: commonController.selectedRecipient!.country!.id,
+                            senderCountryId: commonController.serverCountryFrom.value.id,
+                            senderCityId: commonController.senderCity!.id,
+                            amount: commonController.currencyConversionDetails.value.amountToSend,
+                          );
+
+
+                           Get.to(const SendingMoneyConfirmationScreen());
+
+                        }
+                    },),
+                  ),
+                  const SizedBox(height: 15,)
+                ],
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+}

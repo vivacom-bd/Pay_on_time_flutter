@@ -1,0 +1,221 @@
+import 'package:animations/animations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
+import 'package:hidmona/Controllers/common_controller.dart';
+import 'package:hidmona/Repositories/transaction_repository.dart';
+import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Utilities/size_config.dart';
+import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/SendMoney/sending_successful_screen.dart';
+import 'package:hidmona/Views/Widgets/default_button.dart';
+
+class SendingMoneyConfirmationScreen extends StatefulWidget {
+
+  static const String routeName = "SendingMoneyConfirmationScreen";
+
+  const SendingMoneyConfirmationScreen({Key? key}) : super(key: key);
+
+  @override
+  _SendingMoneyConfirmationScreenState createState() => _SendingMoneyConfirmationScreenState();
+}
+
+class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmationScreen> {
+
+  CommonController commonController = Get.find<CommonController>();
+
+  bool isInformationCorrect = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Sending Information")
+      ),
+      body:SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          color: AppColor.defaultColor.withOpacity(.1),
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Text("Your Money Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),),
+                          Divider(color: AppColor.defaultColor,thickness: 2,),
+                          SendDetailsItem(title: "Amount to send",value: "${commonController.currencyConversionDetails.value.amountToSend!.toStringAsFixed(2)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Amount to receive",value: "${commonController.currencyConversionDetails.value.amountToReceive!.toStringAsFixed(2)} ${commonController.currencyConversionDetails.value.receivingCurrency}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Fees",value: "${commonController.currencyConversionDetails.value.fees!.toStringAsFixed(2)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Total to pay",value: "${commonController.currencyConversionDetails.value.amountToPay!.toStringAsFixed(2)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20,),
+                    // Container(
+                    //   padding: const EdgeInsets.all(15),
+                    //   decoration: BoxDecoration(
+                    //       color: AppColor.defaultColor.withOpacity(.1),
+                    //       borderRadius: BorderRadius.circular(10)
+                    //   ),
+                    //   child: Column(
+                    //     mainAxisSize: MainAxisSize.min,
+                    //     crossAxisAlignment: CrossAxisAlignment.stretch,
+                    //     children: [
+                    //       const Text("Your Agent Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),),
+                    //       Divider(color: AppColor.defaultColor,thickness: 2,),
+                    //       SendDetailsItem(title: "Sender Agent Code",value: "${CommonSingleTon().recipient.senderAgent}",),
+                    //       Divider(color: AppColor.defaultColor,thickness: .5,),
+                    //       SendDetailsItem(title: "Sender Agent",value: "${CommonSingleTon().recipient.sendAgent??""}",),
+                    //     ],
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 20,),
+                    Container(
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          color: AppColor.defaultColor.withOpacity(.1),
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Text("Your Recipient Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),),
+                          Divider(color: AppColor.defaultColor,thickness: 2,),
+                          SendDetailsItem(title: "Full name",value: "${commonController.selectedRecipient!.fullName}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Mobile Number",value: "${commonController.selectedRecipient!.phone}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "City",value: "${commonController.selectedRecipient!.city!.name}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Country",value: "${commonController.selectedRecipient!.country!.name}",),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20,),
+                    if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bank") const SizedBox(height: 20,),
+                    if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bank") Container(
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          color: AppColor.defaultColor.withOpacity(.1),
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Text("Your Recipient Bank Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),),
+                          Divider(color: AppColor.defaultColor,thickness: 2,),
+                          SendDetailsItem(title: "Bank Name",value: "${commonController.transactionRequestBody!.bankName}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Bank Account No",value: "${commonController.transactionRequestBody!.bankAccountNo}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Bank Account Title",value: "${commonController.transactionRequestBody!.bankAccountTitle}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Branch Name",value: "${commonController.transactionRequestBody!.branchName}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Bank Address",value: "${commonController.transactionRequestBody!.bankAddress}",),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20,),
+                    Row(
+                      children: [
+                        Checkbox(activeColor: AppColor.defaultColor,value: isInformationCorrect, onChanged: (value){
+                          setState(() {
+                            isInformationCorrect = value!;
+                          });
+                        }),
+                        Expanded(
+                          child: Text("Please check this box to ensure that this information is correct", style: TextStyle(color: AppColor.defaultColor),),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20,),
+              InkWell(
+                onTap: (){
+                  if(isInformationCorrect) {
+
+                    Utility.showLoadingDialog();
+                    TransactionRepository.createTransaction(commonController.transactionRequestBody!).then((value){
+                      Get.back();
+                      if(value.data != null){
+                        commonController.currentTransaction = value.data;
+
+                        Get.offAll(const SendingSuccessFulScreen());
+
+                      }else{
+                        Utility.showSnackBar(value.errorMessage??"An Error Occurred");
+                      }
+                    });
+
+
+                  }else{
+                    Utility.showSnackBar("Please ensure this information is correct");
+                  }
+                },
+                child: Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenWidth/2,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(SizeConfig.screenWidth),topRight: Radius.circular(SizeConfig.screenWidth)),
+                    gradient: AppGradient.getColorGradient("default"),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text("Send Money",style: TextStyle(color: Colors.white,fontSize: 27,fontWeight: FontWeight.bold),),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+}
+
+class SendDetailsItem extends StatelessWidget {
+  const SendDetailsItem({
+    Key? key,
+    required this.title,
+    required this.value,
+  }) : super(key: key);
+
+  final String title;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: [
+          Expanded(child: Text(title,style: const TextStyle(fontSize: 14),)),
+          Text(value,style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w700),)
+        ],
+      ),
+    );
+  }
+}

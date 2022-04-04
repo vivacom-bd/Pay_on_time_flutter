@@ -21,4 +21,10 @@ class City {
     data['id'] = id;
     return data;
   }
+
+  @override
+  bool operator ==(Object other) => other is City && other.id == id;
+
+  @override
+  int get hashCode => id!;
 }

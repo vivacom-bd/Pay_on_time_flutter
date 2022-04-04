@@ -5,15 +5,23 @@ import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/recipient.dart';
+import 'package:hidmona/Models/server_country.dart';
+import 'package:hidmona/Repositories/api_response.dart';
+import 'package:hidmona/Repositories/recipient_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/SendMoney/recepient_bank_info_screen.dart';
 import 'package:hidmona/Views/Widgets/country_item.dart';
 import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 import 'package:libphonenumber/libphonenumber.dart';
+import 'package:phone_number/phone_number.dart' as phone;
 
 class RecipientDetailsScreen extends StatefulWidget {
   static const String routeName = "/RecipientDetailsScreen";
+
+  const RecipientDetailsScreen({Key? key}) : super(key: key);
 
   @override
   _RecipientDetailsScreenState createState() => _RecipientDetailsScreenState();
@@ -33,6 +41,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
   Country? selectedPhoneCountry;
   City? selectedRecipientCity;
   Country? selectedCitizenCountry;
+  Recipient? selectedRecipient;
 
   bool isPhoneNumberValid = false;
 
@@ -42,8 +51,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
   @override
   void initState() {
     super.initState();
-
-    commonController.selectedRecipient = null;
+    commonController.senderCity = null;
   }
 
 
@@ -54,7 +62,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70.0),
+        preferredSize: const Size.fromHeight(50.0),
         child: AppBar(
           title: const Text("Recipient Details"),
           flexibleSpace: Container(
@@ -81,7 +89,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Select Recipient',
+                          'Choose Recipient',
                           style: TextStyle(
                             color: AppColor.textColor,
                             fontWeight: FontWeight.w600,
@@ -91,9 +99,9 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                         const SizedBox(height: 7,),
                         CustomDropDownFromField(
                             validator: (value) {
-                              if (value == null) {
-                                return "Select Recipient";
-                              }
+                              // if (value == null) {
+                              //   return "Select Recipient";
+                              // }
                               return null;
                             },
 
@@ -103,28 +111,85 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                   child: Text(recipient.fullName!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
                               );
                             }).toList(),
-                            selectedValue: commonController.selectedRecipient,
-                            labelAndHintText: "Select mode of payment",
+                            selectedValue: selectedRecipient,
+                            labelAndHintText: "Select Recipient",
                             suffixIcon: Padding(
                               padding: const EdgeInsets.only(bottom: 4.0),
                               child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
                             ),
                             filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
                             onChanged: (value) {
-                              setState(() {
-                                commonController.selectedRecipient = value as Recipient;
+
+                              selectedRecipient = value as Recipient;
+
+                              emailTextEditingController.text = selectedRecipient!.email!;
+                              nameTextEditingController.text = selectedRecipient!.fullName!;
+                              addressTextEditingController.text = selectedRecipient!.streetAddress??"";
+                              postalCodeTextEditingController.text = selectedRecipient!.postalCode.toString();
+                              dateOfBirthTextEditingController.text = selectedRecipient!.postalCode.toString();
+
+                              phone.PhoneNumberUtil().parse(selectedRecipient!.phone!).then((number){
+                                //phoneNumber = number.nationalNumber;
+                                print(phoneNumber);
+                                phoneTextEditingController.text = number.nationalNumber;
+
                               });
+
+                              if(selectedRecipient!.city != null){
+                                List<City> cities = commonController.receiveCities.where((city) => selectedRecipient!.city!.id == city.id).toList();
+                                if(cities.isNotEmpty){
+                                  selectedRecipientCity = cities.first;
+                                }
+                              }
+
+                              if(selectedRecipient!.citizenCountry != null){
+                                List<ServerCountry> countries = commonController.serverCountries.where((country) => selectedRecipient!.citizenCountry!.id == country.id).toList();
+                                if (countries.isNotEmpty) {
+                                  selectedCitizenCountry = CountryPickerUtils.getCountryByIsoCode(countries.first.countryCode!);
+                                }
+                              }
+
+                              setState(() {});
                             }
                         ),
                       ],
                     ),
                   ),
-
+                  const SizedBox(height: 15,),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Recipient Info',
+                          style: TextStyle(
+                            color: AppColor.textColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: (){
+                            clear();
+                          },
+                          child: Text(
+                            'Clear',
+                            style: TextStyle(
+                              color: AppColor.textColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Container(
                     width: double.infinity,
                     alignment: Alignment.center,
                     margin: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 15),
+                        horizontal: 15, vertical: 7),
                     padding: const EdgeInsets.symmetric(
                         vertical: 15, horizontal: 15),
                     decoration: BoxDecoration(
@@ -144,6 +209,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                 }
                                 return null;
                               },
+                              enabled: commonController.selectedRecipient == null,
                               labelText: "Email",
                               hindText: "",
                               keyboardType: TextInputType.emailAddress,
@@ -182,10 +248,10 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                               InkWell(
                                 onTap: (){
                                   FocusScope.of(context).unfocus();
-                                  _openCountryPickerDialog();
+                                  //_openCountryPickerDialog();
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 2),
+                                  padding: const EdgeInsets.only(top: 12, bottom: 12, left: 10, right: 10),
                                   decoration: BoxDecoration(
                                     color: Colors.grey.withOpacity(.2),
                                     borderRadius: BorderRadius.circular(4),
@@ -193,7 +259,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                   child: Row(
                                     children: [
                                       CountryItem(country: selectedPhoneCountry,titleType: "flag",),
-                                      const Icon(Icons.arrow_drop_down)
+                                      //const Icon(Icons.arrow_drop_down)
                                     ],
                                   )
                                 ),
@@ -258,6 +324,22 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                               }
                           ),
                           const SizedBox(height: 10,),
+                          CustomTextFormField(
+                              controller: dateOfBirthTextEditingController,
+                              validator: (value) {
+                                if(value!.isEmpty){
+                                  return "Field can't be empty";
+                                }
+                                return null;
+                              },
+                              labelText: "Date Of Birth (yyyy-month-day)",
+                              hindText: "2022-04-20",
+                              keyboardType: TextInputType.text,
+                              onChanged: (value) {
+
+                              }
+                          ),
+                          const SizedBox(height: 10,),
                           Text(
                             'Select City',
                             style: TextStyle(
@@ -275,7 +357,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                 return null;
                               },
 
-                              items: commonController.cities.map((City city) {
+                              items: commonController.receiveCities.map((City city) {
                                 return DropdownMenuItem(
                                     value: city,
                                     child: Text(city.name!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
@@ -329,13 +411,100 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                       ),
                   ),
 
-                  const SizedBox(height: 10,),
+                 Container(
+                   padding: const EdgeInsets.symmetric(horizontal: 15),
+                   child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.stretch,
+                     children: [
+                       const SizedBox(height: 10,),
+                       Text(
+                         'Select Sender City',
+                         style: TextStyle(
+                           color: AppColor.textColor,
+                           fontWeight: FontWeight.w600,
+                           fontSize: 14,
+                         ),
+                       ),
+                       const SizedBox(height: 7,),
+                       CustomDropDownFromField(
+                           validator: (value) {
+                             if (value == null) {
+                               return "Select Sender city";
+                             }
+                             return null;
+                           },
+
+                           items: commonController.sendingCities.map((City city) {
+                             return DropdownMenuItem(
+                                 value: city,
+                                 child: Text(city.name!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
+                             );
+                           }).toList(),
+                           selectedValue: commonController.senderCity,
+                           labelAndHintText: "Select Sender city",
+                           suffixIcon: Padding(
+                             padding: const EdgeInsets.only(bottom: 4.0),
+                             child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                           ),
+                           filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
+                           onChanged: (value) {
+                             setState(() {
+                               commonController.senderCity = value as City;
+                             });
+                           }
+                       ),
+                     ],
+                   ),
+                 ),
+
+                  const SizedBox(height: 15,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: DefaultButton(
-                      buttonText: "Continue", onTap: () {
+                      buttonText: "Continue", onTap: () async{
                         FocusScope.of(context).unfocus();
                         if(_formKey.currentState!.validate()){
+
+                          Utility.showLoadingDialog();
+
+                          RecipientRequestBody recipientRequestBody =  RecipientRequestBody(
+                            email: emailTextEditingController.text,
+                            fullName: nameTextEditingController.text,
+                            phone: phoneNumber,
+                            streetAddress: addressTextEditingController.text,
+                            postalCode: int.tryParse(postalCodeTextEditingController.text),
+                            dateOfBirth: dateOfBirthTextEditingController.text,
+                            countryId: commonController.serverCountryTo.value.id,
+                            citizenCountryId: commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
+                            cityId: selectedRecipientCity!.id,
+                            isCitizen: commonController.serverCountryTo.value.id == commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id
+                          );
+
+                          if(selectedRecipient == null){
+                            APIResponse<Recipient> value = await RecipientRepository.createRecipient(recipientRequestBody);
+                            if(value.data != null){
+                              commonController.selectedRecipient = value.data;
+                            }else{
+                              Utility.showSnackBar(value.errorMessage??"Recipient Not Created");
+                            }
+                          }else{
+                            APIResponse<Recipient> value = await RecipientRepository.updateRecipient(selectedRecipient!.id!,recipientRequestBody);
+                            if(value.data != null){
+                              commonController.selectedRecipient = value.data;
+                            }else{
+                              Utility.showSnackBar(value.errorMessage??"Recipient Not Updated");
+                            }
+                          }
+
+                          if(commonController.selectedRecipient != null){
+                            bool isGetSendingPurposes = await commonController.getSendinPurposes();
+                            Get.back();
+                            if(isGetSendingPurposes){
+                              Get.to(const RecipientBankInfoScreen());
+                            }
+                          }else{
+                            Get.back();
+                          }
 
                         }
                     },),
@@ -386,20 +555,15 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
 
 
 
-  void phoneNumberValidator(String value) async {
+  void phoneNumberValidator(String value){
 
     Future.delayed(const Duration(seconds: 1),(){
       PhoneNumberUtil.normalizePhoneNumber(phoneNumber: value, isoCode: selectedPhoneCountry!.isoCode!).then((normalizedPhoneNumber){
         PhoneNumberUtil.isValidPhoneNumber(phoneNumber: normalizedPhoneNumber!, isoCode:selectedPhoneCountry!.isoCode!).then((isPhoneValid){
 
           if(isPhoneValid!){
-            // phone.PhoneNumberUtil().parse(normalizedPhoneNumber).then((number){
-            //   phoneNumber = number.nationalNumber;
-            //   print(phoneNumber);
-            //
-            // });
-
             phoneNumber = normalizedPhoneNumber;
+            print(phoneNumber);
           }
 
           WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
@@ -412,5 +576,20 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
         });
       });
     });
+  }
+
+  clear(){
+    selectedRecipient = null;
+
+    emailTextEditingController.text = "";
+    nameTextEditingController.text = "";
+    phoneTextEditingController.text = "";
+    addressTextEditingController.text = "";
+    postalCodeTextEditingController.text = "";
+    dateOfBirthTextEditingController.text = "";
+    selectedRecipientCity = null;
+    selectedCitizenCountry =  null;
+
+    setState(() {});
   }
 }

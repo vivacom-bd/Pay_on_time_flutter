@@ -8,7 +8,7 @@ import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:http/http.dart' as http;
 
-class RecipientRepository{
+class TransactionRepository{
   /// create Transaction
   static Future<APIResponse<Transaction>> createTransaction(TransactionRequestBody requestBody) async{
 
@@ -93,7 +93,7 @@ class RecipientRepository{
 
 
   ///getRecipients
-  static Future<APIResponse<List<Transaction>>> getRecipients() async{
+  static Future<APIResponse<List<Transaction>>> getTransaction() async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<Transaction>>(error: true, errorMessage: "Internet is not connected!");
     }

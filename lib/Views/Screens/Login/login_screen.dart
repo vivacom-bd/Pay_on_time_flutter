@@ -9,11 +9,11 @@ import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
-import 'package:hidmona/Views/Screens/home_screen.dart';
+import 'package:hidmona/Views/Screens/Home/home_screen.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
-import '../Widgets/country_item.dart';
+import '../../Widgets/country_item.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = "/LoginScreen";
@@ -176,12 +176,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                       Utility.showLoadingDialog();
 
-                                      UserRepository.login(emailController.text, passwordController.text).then((value){
+                                      UserRepository.customerLogin(emailController.text, passwordController.text).then((value){
                                         if(value.data != null){
                                           controller.currentUser.value = value.data!;
 
                                           Get.back();
-                                          Get.to(()=> HomeScreen());
+                                          Get.to(()=> const HomeScreen());
 
                                         }else{
                                           Get.back();

@@ -16,11 +16,9 @@ class ModeOfPayment {
     return data;
   }
 
-  static List<ModeOfPayment> getSendingPurpose(){
-    return [
-      ModeOfPayment(id: 1, name: "Cash"),
-      ModeOfPayment(id: 2, name: "Bank"),
-      ModeOfPayment(id: 3, name: "DEBIT_OR_CREDIT"),
-    ];
-  }
+  @override
+  bool operator ==(Object other) => other is ModeOfPayment && other.id == id;
+
+  @override
+  int get hashCode => id!;
 }

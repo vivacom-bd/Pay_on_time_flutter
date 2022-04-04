@@ -7,11 +7,11 @@ import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
-import 'package:hidmona/Views/Screens/login_screen.dart';
-import 'package:hidmona/Views/Screens/home_screen.dart';
+import 'package:hidmona/Views/Screens/Login/login_screen.dart';
+import 'package:hidmona/Views/Screens/Home/home_screen.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
-import '../Widgets/country_item.dart';
+import '../../Widgets/country_item.dart';
 
 class GetStartScreen extends StatefulWidget {
   static const String routeName = "/GetStartScreen";

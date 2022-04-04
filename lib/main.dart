@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hidmona/Controllers/app_bindings.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Controllers/theme_controller.dart';
-import 'package:hidmona/Views/Screens/splash_screen.dart';
+import 'package:hidmona/Views/Screens/Login/splash_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

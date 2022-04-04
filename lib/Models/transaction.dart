@@ -30,12 +30,12 @@ class Transaction {
   String? paymentReceiveStatus;
   Recipient? sender;
   Agent? agent;
-  int? payoutAmount;
-  int? totalAmount;
-  int? receivingAmount;
+  double? payoutAmount;
+  double? totalAmount;
+  double? receivingAmount;
   ModeOfPayment? paymentReceiveMode;
   ModeOfPayment? paymentDeliveryMode;
-  int? totalCommission;
+  double? totalCommission;
   ServerCountry? senderCountry;
   City? recipientCity;
   ServerCountry? recipientCountry;
@@ -110,16 +110,16 @@ class Transaction {
     json['sender'] != null ? Recipient.fromJson(json['sender']) : null;
     agent =
     json['agent'] != null ? Agent.fromJson(json['agent']) : null;
-    payoutAmount = json['payout_amount'];
-    totalAmount = json['total_amount'];
-    receivingAmount = json['receiving_amount'];
+    payoutAmount = json['payout_amount']*1.0;
+    totalAmount = json['total_amount']*1.0;
+    receivingAmount = json['receiving_amount']*1.0;
     paymentReceiveMode = json['payment_receive_mode'] != null
         ? ModeOfPayment.fromJson(json['payment_receive_mode'])
         : null;
     paymentDeliveryMode = json['payment_delivery_mode'] != null
         ? ModeOfPayment.fromJson(json['payment_delivery_mode'])
         : null;
-    totalCommission = json['total_commission'];
+    totalCommission = json['total_commission']*1.0;
     senderCountry = json['sender_country'] != null
         ? ServerCountry.fromJson(json['sender_country'])
         : null;
@@ -213,6 +213,12 @@ class Transaction {
     }
     return data;
   }
+
+  @override
+  bool operator ==(Object other) => other is Transaction && other.id == id;
+
+  @override
+  int get hashCode => id!;
 }
 
 
@@ -245,7 +251,7 @@ class TransactionRequestBody {
   int? agentCustomerId;
   int? senderCityId;
   int? paymentBankId;
-  int? amount;
+  double? amount;
 
   TransactionRequestBody(
       {this.bankName,
@@ -297,7 +303,7 @@ class TransactionRequestBody {
     agentCustomerId = json['agent_customer_id'];
     senderCityId = json['sender_city_id'];
     paymentBankId = json['payment_bank_id'];
-    amount = json['amount'];
+    amount = json['amount']*1.0;
   }
 
   Map<String, dynamic> toJson() {

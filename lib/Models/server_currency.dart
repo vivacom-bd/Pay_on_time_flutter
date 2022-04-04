@@ -19,4 +19,10 @@ class ServerCurrency {
     data['code'] = code;
     return data;
   }
+
+  @override
+  bool operator ==(Object other) => other is ServerCurrency && other.id == id;
+
+  @override
+  int get hashCode => id!;
 }

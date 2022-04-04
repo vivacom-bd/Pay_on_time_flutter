@@ -25,4 +25,8 @@ class SendingPurpose {
   @override
   bool operator ==(Object other) => other is SendingPurpose && other.id == id;
 
+  @override
+  int get hashCode => id!;
+
+
 }
