@@ -266,7 +266,7 @@ class _RecipientBankInfoScreenState extends State<RecipientBankInfoScreen> {
                             branchName: branchNameTextEditingController.text,
                             payoutCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
                             receivingCurrency: commonController.serverCountryTo.value.selectedCurrency!.code,
-                            transactionDate: DateFormat("yyyy-mm-dd").format(DateTime.now()),
+                            // transactionDate: DateFormat("yyyy-mm-dd").format(DateTime.now()),
                             purpose: commonController.selectedSendingPurpose!.name,
                             purposeDescription: commonController.selectedSendingPurpose!.description,
                             sendingPurposeId: commonController.selectedSendingPurpose!.id,

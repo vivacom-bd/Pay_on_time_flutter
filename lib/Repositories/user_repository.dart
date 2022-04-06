@@ -27,7 +27,7 @@ class UserRepository{
       if(data.statusCode == 200){
         return APIResponse<AppUser>(data: AppUser.fromJson(jsonData));
       }
-      return APIResponse<AppUser>(error: true, errorMessage: jsonData["detail"]??"An error occurred");
+      return APIResponse<AppUser>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
       return APIResponse<AppUser>(error: true, errorMessage: "An Error Occurred!");
@@ -55,7 +55,7 @@ class UserRepository{
       if(data.statusCode == 200){
         return APIResponse<AppUser>(data: AppUser.fromJson(jsonData));
       }
-      return APIResponse<AppUser>(error: true, errorMessage: jsonData["detail"]??"An error occurred");
+      return APIResponse<AppUser>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
       return APIResponse<AppUser>(error: true, errorMessage: "An Error Occurred!");

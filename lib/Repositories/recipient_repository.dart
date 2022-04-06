@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/recipient.dart';
 import 'package:hidmona/Repositories/api_constants.dart';
 import 'package:hidmona/Repositories/api_response.dart';
@@ -28,7 +27,7 @@ class RecipientRepository{
       if(data.statusCode == 201){
         return APIResponse<Recipient>(data: Recipient.fromJson(jsonData['data']));
       }
-      return APIResponse<Recipient>(error: true, errorMessage: jsonData["detail"]??"An error occurred");
+      return APIResponse<Recipient>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
       return APIResponse<Recipient>(error: true, errorMessage: "An Error Occurred!");
@@ -56,7 +55,7 @@ class RecipientRepository{
       if(data.statusCode == 202){
         return APIResponse<Recipient>(data: Recipient.fromJson(jsonData['data']));
       }
-      return APIResponse<Recipient>(error: true, errorMessage: jsonData["detail"]??"An error occurred");
+      return APIResponse<Recipient>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
       return APIResponse<Recipient>(error: true, errorMessage: "An Error Occurred!");

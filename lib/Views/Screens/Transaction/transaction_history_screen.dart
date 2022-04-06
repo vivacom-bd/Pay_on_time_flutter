@@ -31,7 +31,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
       ),
       body: SafeArea(
         child: FutureBuilder(
-          future: TransactionRepository.getTransaction(),
+          future: TransactionRepository.getTransactions(),
           builder: (context,AsyncSnapshot< APIResponse<List<Transaction>>> snapshot){
 
             if(snapshot.data!=null){

@@ -392,7 +392,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                               _openCountryPickerDialog(type: "Citizen");
                             },
                             child: Container(
-                                padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 2),
+                                padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
                                 decoration: BoxDecoration(
                                   color: Colors.grey.withOpacity(.2),
                                   borderRadius: BorderRadius.circular(4),
@@ -401,7 +401,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     CountryItem(country: selectedCitizenCountry),
-                                    const Icon(Icons.arrow_drop_down)
+                                    Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
                                   ],
                                 )
                             ),

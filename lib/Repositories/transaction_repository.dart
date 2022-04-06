@@ -29,7 +29,7 @@ class TransactionRepository{
       if(data.statusCode == 201){
         return APIResponse<Transaction>(data: Transaction.fromJson(jsonData['data']));
       }
-      return APIResponse<Transaction>(error: true, errorMessage: jsonData["detail"]??"An error occurred");
+      return APIResponse<Transaction>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
       return APIResponse<Transaction>(error: true, errorMessage: "An Error Occurred!");
@@ -93,7 +93,7 @@ class TransactionRepository{
 
 
   ///getRecipients
-  static Future<APIResponse<List<Transaction>>> getTransaction() async{
+  static Future<APIResponse<List<Transaction>>> getTransactions() async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<Transaction>>(error: true, errorMessage: "Internet is not connected!");
     }
