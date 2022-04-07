@@ -209,7 +209,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                 }
                                 return null;
                               },
-                              enabled: selectedRecipient == null,
+                              //enabled: selectedRecipient == null,
                               labelText: "Email",
                               hindText: "",
                               keyboardType: TextInputType.emailAddress,

@@ -101,7 +101,6 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                                 }
                                 return null;
                               },
-                              enabled: commonController.selectedRecipient == null,
                               labelText: "Email",
                               hindText: "",
                               keyboardType: TextInputType.emailAddress,

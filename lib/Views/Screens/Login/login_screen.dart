@@ -85,45 +85,45 @@ class _LoginScreenState extends State<LoginScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Text(
-                                    'Select country',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      color: AppColor.textColor,
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 7,),
-                                  InkWell(
-                                    onTap: (){
-                                      _openCountryPickerDialog();
-                                    },
-                                    child: Container(
-                                      height: 45,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(.2),
-                                        borderRadius  : BorderRadius.circular(10),
-                                      ),
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          Expanded(
-                                            child: Container(padding: const EdgeInsets.only(left: 10),child: CountryItem(country: controller.countryFrom.value)),
-                                          ),
-                                          Container(
-                                              padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 20) ,
-                                              decoration: BoxDecoration(
-                                                gradient: AppGradient.getColorGradient('default')
-                                              ),
-                                              child: const Icon(Icons.keyboard_arrow_down_rounded,color: Colors.white,size: 30,)
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 7,),
+                                  // Text(
+                                  //   'Select country',
+                                  //   textAlign: TextAlign.left,
+                                  //   style: TextStyle(
+                                  //     color: AppColor.textColor,
+                                  //     fontSize: 14.0,
+                                  //     fontWeight: FontWeight.w600,
+                                  //   ),
+                                  // ),
+                                  // const SizedBox(height: 7,),
+                                  // InkWell(
+                                  //   onTap: (){
+                                  //     _openCountryPickerDialog();
+                                  //   },
+                                  //   child: Container(
+                                  //     height: 45,
+                                  //     clipBehavior: Clip.antiAlias,
+                                  //     decoration: BoxDecoration(
+                                  //       color: Colors.grey.withOpacity(.2),
+                                  //       borderRadius  : BorderRadius.circular(10),
+                                  //     ),
+                                  //     child: Row(
+                                  //       crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  //       children: [
+                                  //         Expanded(
+                                  //           child: Container(padding: const EdgeInsets.only(left: 10),child: CountryItem(country: controller.countryFrom.value)),
+                                  //         ),
+                                  //         Container(
+                                  //             padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 20) ,
+                                  //             decoration: BoxDecoration(
+                                  //               gradient: AppGradient.getColorGradient('default')
+                                  //             ),
+                                  //             child: const Icon(Icons.keyboard_arrow_down_rounded,color: Colors.white,size: 30,)
+                                  //         ),
+                                  //       ],
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  // const SizedBox(height: 7,),
                                   CustomTextFormField(
                                       controller: emailController,
                                       validator: (value) {

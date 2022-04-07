@@ -135,7 +135,7 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
                                 }
                                 return null;
                               },
-                              enabled: false,
+                              //enabled: false,
                               labelText: "Email",
                               hindText: "",
                               keyboardType: TextInputType.emailAddress,

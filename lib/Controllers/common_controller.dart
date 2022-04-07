@@ -15,6 +15,7 @@ import 'package:hidmona/Repositories/common_repository.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/recipient_repository.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Login/login_screen.dart';
 
 class CommonController extends GetxController{
 
@@ -61,6 +62,9 @@ class CommonController extends GetxController{
     CommonRepository.getCountries().then((APIResponse<List<ServerCountry>> apiResponse){
       if(apiResponse.data != null){
         serverCountries.addAll(apiResponse.data!);
+
+        Get.to(()=> const LoginScreen());
+
       }else{
         Utility.showSnackBar(apiResponse.errorMessage??"An error occurred");
       }
