@@ -3,6 +3,7 @@ import 'package:country_currency_pickers/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/city.dart';
+import 'package:hidmona/Models/country_wise_bank.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
 import 'package:hidmona/Models/mode_of_payment.dart';
 import 'package:hidmona/Models/recipient.dart';
@@ -32,6 +33,7 @@ class CommonController extends GetxController{
   RxList<City> receiveCities = <City>[].obs;
   RxList<City> sendingCities = <City>[].obs;
   RxList<SendingPurpose> sendingPurposes = <SendingPurpose>[].obs;
+  RxList<CountryWiseBank> countryWiseBanks = <CountryWiseBank>[].obs;
 
 
   Rx<CurrencyConversionDetails> currencyConversionDetails = CurrencyConversionDetails().obs;
@@ -44,6 +46,7 @@ class CommonController extends GetxController{
   SendingPurpose? selectedSendingPurpose;
   Recipient? selectedRecipient;
   City? senderCity;
+  CountryWiseBank? selectedCountryWiseBank;
 
 
   @override
@@ -153,6 +156,24 @@ class CommonController extends GetxController{
       if(apiResponse.data != null){
         sendingPurposes.clear();
         sendingPurposes.addAll(apiResponse.data!);
+        return true;
+      }else{
+        Utility.showSnackBar(apiResponse.errorMessage??"An error Occurred");
+        return false;
+      }
+    });
+
+  }
+
+
+  ///getCountryWiseBanks
+  Future<bool> getCountryWiseBanks() async{
+
+    ServerCountry serverCountry = getServerCountryFromCountryCode(countryFrom.value.isoCode!);
+    return CommonRepository.getCountryWiseBanks(serverCountry.id.toString()).then((APIResponse<List<CountryWiseBank>> apiResponse){
+      if(apiResponse.data != null){
+        countryWiseBanks.clear();
+        countryWiseBanks.addAll(apiResponse.data!);
         return true;
       }else{
         Utility.showSnackBar(apiResponse.errorMessage??"An error Occurred");

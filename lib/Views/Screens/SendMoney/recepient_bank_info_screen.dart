@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
+import 'package:hidmona/Models/country_wise_bank.dart';
 import 'package:hidmona/Models/sending_purpose.dart';
 import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Utilities/colors.dart';
@@ -9,18 +10,17 @@ import 'package:hidmona/Views/Screens/SendMoney/sending_confirmation_screen.dart
 import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
-import 'package:intl/intl.dart';
 
-class RecipientBankInfoScreen extends StatefulWidget {
-  static const String routeName = "/RecipientBankInfoScreen";
+class TransactionBankInfoScreen extends StatefulWidget {
+  static const String routeName = "/TransactionBankInfoScreen";
 
-  const RecipientBankInfoScreen({Key? key}) : super(key: key);
+  const TransactionBankInfoScreen({Key? key}) : super(key: key);
 
   @override
-  _RecipientBankInfoScreenState createState() => _RecipientBankInfoScreenState();
+  _TransactionBankInfoScreenState createState() => _TransactionBankInfoScreenState();
 }
 
-class _RecipientBankInfoScreenState extends State<RecipientBankInfoScreen> {
+class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController bankNameTextEditingController = TextEditingController();
   final TextEditingController bankAccountNoTextEditingController = TextEditingController();
@@ -34,11 +34,13 @@ class _RecipientBankInfoScreenState extends State<RecipientBankInfoScreen> {
 
 
 
+
   @override
   void initState() {
     super.initState();
 
     commonController.selectedSendingPurpose = null;
+    commonController.selectedCountryWiseBank = null;
   }
 
 
@@ -247,6 +249,68 @@ class _RecipientBankInfoScreenState extends State<RecipientBankInfoScreen> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 15,),
+                  if(commonController.selectedModeOfPayment?.name!.toLowerCase() == "bank")Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Payment Bank Info',
+                              style: TextStyle(
+                                color: AppColor.textColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10,),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomDropDownFromField(
+                                validator: (value) {
+                                  if (value == null) {
+                                    return "Select Payment Bank";
+                                  }
+                                  return null;
+                                },
+
+                                items: commonController.countryWiseBanks.map((CountryWiseBank countryWiseBank) {
+                                  return DropdownMenuItem(
+                                      value: countryWiseBank,
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                                        textBaseline: TextBaseline.alphabetic,
+                                        children: [
+                                          Text(countryWiseBank.bankName!, style: const TextStyle(color: Colors.black, fontSize: 16.0),),
+                                          Text(" (Acc no: ${countryWiseBank.bankAccountNumber!})", style: const TextStyle(color: Colors.black, fontSize: 12.0),),
+                                        ],
+                                      )
+                                  );
+                                }).toList(),
+                                selectedValue: commonController.selectedCountryWiseBank,
+                                labelAndHintText: "Select Payment Bank",
+                                suffixIcon: Padding(
+                                  padding: const EdgeInsets.only(bottom: 4.0),
+                                  child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                                ),
+                                filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
+                                onChanged: (value) {
+                                  commonController.selectedCountryWiseBank = value as CountryWiseBank;
+                                }
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
 
                   const SizedBox(height: 15,),
                   Padding(
@@ -272,14 +336,15 @@ class _RecipientBankInfoScreenState extends State<RecipientBankInfoScreen> {
                             sendingPurposeId: commonController.selectedSendingPurpose!.id,
                             settlementCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
                             remarks: "Transaction from app",
-                            paymentDeliveryModeId: commonController.selectedModeOfPayment!.id,
-                            paymentReceiveModeId: commonController.selectedModeOfReceive!.id,
+                            paymentMethodId: commonController.selectedModeOfPayment!.id,
+                            receiveMethodId: commonController.selectedModeOfReceive!.id,
                             recipientId: commonController.selectedRecipient!.id,
                             recipientCityId: commonController.selectedRecipient!.city!.id,
                             recipientCountryId: commonController.selectedRecipient!.country!.id,
                             senderCountryId: commonController.serverCountryFrom.value.id,
                             senderCityId: commonController.senderCity!.id,
                             amount: commonController.currencyConversionDetails.value.amountToSend,
+                            paymentBankId: commonController.selectedCountryWiseBank!.id,
                           );
 
 

@@ -43,6 +43,7 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const SizedBox(height: 20,),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
@@ -111,7 +112,6 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20,),
                     if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bank") const SizedBox(height: 20,),
                     if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bank") Container(
                       padding: const EdgeInsets.all(15),
@@ -134,6 +134,33 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                           SendDetailsItem(title: "Branch Name",value: "${commonController.transactionRequestBody!.branchName}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
                           SendDetailsItem(title: "Bank Address",value: "${commonController.transactionRequestBody!.bankAddress}",),
+                        ],
+                      ),
+                    ),
+                    if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "bank") const SizedBox(height: 20,),
+                    if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "bank") Container(
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          color: AppColor.defaultColor.withOpacity(.1),
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Text("Payment Bank Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),),
+                          Divider(color: AppColor.defaultColor,thickness: 2,),
+                          SendDetailsItem(title: "Bank Name",value: "${commonController.selectedCountryWiseBank!.bankName}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Bank Account No",value: "${commonController.selectedCountryWiseBank!.bankAccountNumber}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Bank Account Title",value: "${commonController.selectedCountryWiseBank!.bankAccountTitle}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Branch Name",value: "${commonController.selectedCountryWiseBank!.branchName}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Bank Address",value: "${commonController.selectedCountryWiseBank!.status}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Country",value: "${commonController.selectedCountryWiseBank!.country!.name}",),
                         ],
                       ),
                     ),

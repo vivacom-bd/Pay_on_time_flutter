@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:hidmona/Models/city.dart';
+import 'package:hidmona/Models/country_wise_bank.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
 import 'package:hidmona/Models/mode_of_payment.dart';
 import 'package:hidmona/Models/sending_purpose.dart';
@@ -107,7 +108,7 @@ class CommonRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<ModeOfPayment>>(error: true, errorMessage: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'public/delivery_method/$countryId');
+    Uri url = Uri.parse(baseAPIUrl()+'public/payment_method/$countryId');
     return http.get(url)
         .then((data){
       print(data.body);
@@ -201,6 +202,32 @@ class CommonRepository{
     }).catchError((onError){
       print(onError);
       return APIResponse<List<City>>(error: true, errorMessage: "An Error Occurred!");
+    });
+  }
+
+
+  ///getCountryWiseBanks
+  static Future<APIResponse<List<CountryWiseBank>>> getCountryWiseBanks(String countryId) async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<List<CountryWiseBank>>(error: true, errorMessage: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'country_wise_bank/accepted_banks/$countryId');
+    return http.get(url,headers: headersWithAuth)
+        .then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        List<CountryWiseBank> banks = [];
+        jsonData['items'].forEach((bank){
+          banks.add(CountryWiseBank.fromJson(bank));
+        });
+        return APIResponse<List<CountryWiseBank>>(data: banks);
+      }
+      return APIResponse<List<CountryWiseBank>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<List<CountryWiseBank>>(error: true, errorMessage: "An Error Occurred!");
     });
   }
 

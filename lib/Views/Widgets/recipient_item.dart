@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hidmona/Models/recipient.dart';
+import 'package:hidmona/Repositories/api_response.dart';
+import 'package:hidmona/Repositories/recipient_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Utilities/default_dialogs.dart';
+import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Recipient/update_recepient_screen.dart';
 
 class RecipientItem extends StatefulWidget {
   const RecipientItem({
     Key? key,
     required this.recipient,
-    this.onRefresh,
+    required this.onRefresh,
   }) : super(key: key);
 
   final Recipient recipient;
-  final Function()? onRefresh;
+  final Function() onRefresh;
 
   @override
   State<RecipientItem> createState() => _RecipientItemState();
@@ -34,8 +40,8 @@ class _RecipientItemState extends State<RecipientItem> {
                   children: [
                     InkWell(
                       onTap: ()async{
-                        // await Navigator.of(context).pushNamed(EditRecipientScreen.routeName,arguments: widget.myRecipient);
-                        // widget.onRefresh();
+                        await Get.to(UpdateRecipientScreen(recipient: widget.recipient));
+                        widget.onRefresh();
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
@@ -49,30 +55,30 @@ class _RecipientItemState extends State<RecipientItem> {
                     const SizedBox(width: 5,),
                     InkWell(
                       onTap: (){
-                        // DefaultDialogs().showDialog(
-                        //     title: "Delete Beneficiary",
-                        //     text: "Do you want to delete ${widget.recipient.fullName}?",
-                        //     onCancel: (){
-                        //       Navigator.pop(context);
-                        //     },
-                        //     onSubmitText: "Yes",
-                        //     onSubmit: () async{
-                        //       Navigator.pop(context);
-                        //       Utility.showLoadingDialog();
-                        //
-                        //       APIResponse apiResponse = await CommonServices.deleteRecipient(widget.myRecipient.recipientId);
-                        //
-                        //       if(apiResponse.data != null && apiResponse.data){
-                        //         showInSnackBar(context, apiResponse.errorMessage??"Recipient Deleted", null);
-                        //         widget.onRefresh();
-                        //       }else{
-                        //         showInSnackBar(context, apiResponse.errorMessage??"Error Occurred", null);
-                        //       }
-                        //
-                        //       Navigator.pop(context);
-                        //
-                        //     }
-                        // );
+                        DefaultDialogs().showDialog(
+                            title: "Delete Beneficiary",
+                            text: "Do you want to delete ${widget.recipient.fullName}?",
+                            onCancel: (){
+                              Navigator.pop(context);
+                            },
+                            onSubmitText: "Yes",
+                            onSubmit: () async{
+                              Navigator.pop(context);
+                              Utility.showLoadingDialog();
+
+                              APIResponse apiResponse = await RecipientRepository.deleteRecipient(widget.recipient.id!);
+
+                              if(apiResponse.data != null && apiResponse.data){
+                                Utility.showSnackBar(apiResponse.errorMessage??"Recipient Deleted");
+                                widget.onRefresh();
+                              }else{
+                                Utility.showSnackBar(apiResponse.errorMessage??"An Error Occurred");
+                              }
+
+                              Get.back();
+
+                            }
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
@@ -103,7 +109,8 @@ class _RecipientItemState extends State<RecipientItem> {
                 Text("${widget.recipient.phone}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
               ],
             ),
-            Row(
+            const SizedBox(height: 7,),
+            if(widget.recipient.email != null) Row(
               children: [
                 const Icon(Icons.email,size: 20,),
                 const SizedBox(width: 5,),

@@ -1,10 +1,12 @@
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:hidmona/Models/recipient.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/recipient_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Views/Screens/Recipient/create_recepient_screen.dart';
 import 'package:hidmona/Views/Widgets/recipient_item.dart';
 
 class MyRecipientScreen extends StatefulWidget {
@@ -25,8 +27,18 @@ class _MyRecipientScreenState extends State<MyRecipientScreen> {
 
     return Scaffold(
         appBar: AppBar(
-
           title:  const Text("My Recipient"),
+          actions: [
+            InkWell(
+              onTap: (){
+                Get.to(const CreateRecipientScreen());
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Icon(Icons.add,color: Colors.white,),
+              ),
+            )
+          ],
         ),
         body: SafeArea(
           child: FutureBuilder(
@@ -81,9 +93,7 @@ class _MyRecipientScreenState extends State<MyRecipientScreen> {
                       itemBuilder: (context,index){
                         //return Text(myRecipients[index].firstName);
                         return RecipientItem(recipient:recipients[index], onRefresh: (){
-                          setState(() {
-                            
-                          });
+                          setState(() {});
                         },);
                       },
                     ),

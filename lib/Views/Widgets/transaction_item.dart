@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Utilities/colors.dart';
+import 'package:intl/intl.dart';
 
 class TransactionItem extends StatelessWidget {
   const TransactionItem({
@@ -34,13 +35,13 @@ class TransactionItem extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 5,),
-            Text("${transaction.paymentReceiveMode!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
+            Text("${transaction.receiveMethod!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
             const SizedBox(height: 7,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${transaction.totalAmount!.toStringAsFixed(2)} ${transaction.payoutCurrency}", style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
-                Text("${transaction.transactionDate}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
+                Text(DateFormat("dd MMM, yyyy").format(DateFormat("yyyy-mm-dd").parse(transaction.transactionDate!)), style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
               ],
             ),
 

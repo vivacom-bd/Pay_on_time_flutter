@@ -33,8 +33,8 @@ class Transaction {
   double? payoutAmount;
   double? totalAmount;
   double? receivingAmount;
-  ModeOfPayment? paymentReceiveMode;
-  ModeOfPayment? paymentDeliveryMode;
+  ModeOfPayment? receiveMethod;
+  ModeOfPayment? paymentMethod;
   double? totalCommission;
   ServerCountry? senderCountry;
   City? recipientCity;
@@ -71,8 +71,8 @@ class Transaction {
         this.payoutAmount,
         this.totalAmount,
         this.receivingAmount,
-        this.paymentReceiveMode,
-        this.paymentDeliveryMode,
+        this.receiveMethod,
+        this.paymentMethod,
         this.totalCommission,
         this.senderCountry,
         this.recipientCity,
@@ -113,11 +113,11 @@ class Transaction {
     payoutAmount = json['payout_amount']*1.0;
     totalAmount = json['total_amount']*1.0;
     receivingAmount = json['receiving_amount']*1.0;
-    paymentReceiveMode = json['payment_receive_mode'] != null
-        ? ModeOfPayment.fromJson(json['payment_receive_mode'])
+    receiveMethod = json['receive_method'] != null
+        ? ModeOfPayment.fromJson(json['receive_method'])
         : null;
-    paymentDeliveryMode = json['payment_delivery_mode'] != null
-        ? ModeOfPayment.fromJson(json['payment_delivery_mode'])
+    paymentMethod = json['receive_method'] != null
+        ? ModeOfPayment.fromJson(json['receive_method'])
         : null;
     totalCommission = json['total_commission']*1.0;
     senderCountry = json['sender_country'] != null
@@ -179,11 +179,11 @@ class Transaction {
     data['payout_amount'] = payoutAmount;
     data['total_amount'] = totalAmount;
     data['receiving_amount'] = receivingAmount;
-    if (paymentReceiveMode != null) {
-      data['payment_receive_mode'] = paymentReceiveMode!.toJson();
+    if (receiveMethod != null) {
+      data['receive_method'] = receiveMethod!.toJson();
     }
-    if (paymentDeliveryMode != null) {
-      data['payment_delivery_mode'] = paymentDeliveryMode!.toJson();
+    if (paymentMethod != null) {
+      data['receive_method'] = paymentMethod!.toJson();
     }
     data['total_commission'] = totalCommission;
     if (senderCountry != null) {
@@ -241,8 +241,8 @@ class TransactionRequestBody {
   String? purposeDescription;
   String? settlementCurrency;
   String? remarks;
-  int? paymentReceiveModeId;
-  int? paymentDeliveryModeId;
+  int? receiveMethodId;
+  int? paymentMethodId;
   int? recipientId;
   int? senderCountryId;
   int? recipientCityId;
@@ -267,8 +267,8 @@ class TransactionRequestBody {
         this.purposeDescription,
         this.settlementCurrency,
         this.remarks,
-        this.paymentReceiveModeId,
-        this.paymentDeliveryModeId,
+        this.receiveMethodId,
+        this.paymentMethodId,
         this.recipientId,
         this.senderCountryId,
         this.recipientCityId,
@@ -293,8 +293,8 @@ class TransactionRequestBody {
     purposeDescription = json['purpose_description'];
     settlementCurrency = json['settlement_currency'];
     remarks = json['remarks'];
-    paymentReceiveModeId = json['payment_receive_mode_id'];
-    paymentDeliveryModeId = json['payment_delivery_mode_id'];
+    receiveMethodId = json['receive_method_id'];
+    paymentMethodId = json['payment_method_id'];
     recipientId = json['recipient_id'];
     senderCountryId = json['sender_country_id'];
     recipientCityId = json['recipient_city_id'];
@@ -321,8 +321,8 @@ class TransactionRequestBody {
     data['purpose_description'] = purposeDescription;
     data['settlement_currency'] = settlementCurrency;
     data['remarks'] = remarks;
-    data['payment_receive_mode_id'] = paymentReceiveModeId;
-    data['payment_delivery_mode_id'] = paymentDeliveryModeId;
+    data['receive_method_id'] = receiveMethodId;
+    data['payment_method_id'] = paymentMethodId;
     data['recipient_id'] = recipientId;
     data['sender_country_id'] = senderCountryId;
     data['recipient_city_id'] = recipientCityId;

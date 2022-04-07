@@ -21,6 +21,7 @@ class DefaultDialogs{
           child: Container(
             padding: const EdgeInsets.all(20.0),
             decoration: BoxDecoration(
+              color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
