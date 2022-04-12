@@ -75,6 +75,34 @@ class CommonRepository{
   }
 
 
+
+  ///getCurrenciesOnCountry
+  static Future<APIResponse<List<ServerCurrency>>> getCurrenciesOnCountry(int countryId) async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<List<ServerCurrency>>(error: true, errorMessage: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'public/currencies?country_id=$countryId');
+    return http.get(url,headers: headersWithAuth)
+        .then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        List<ServerCurrency> currencies = [];
+        jsonData.forEach((currency){
+          currencies.add(ServerCurrency.fromJson(currency));
+        });
+        return APIResponse<List<ServerCurrency>>(data: currencies);
+      }
+      return APIResponse<List<ServerCurrency>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<List<ServerCurrency>>(error: true, errorMessage: "An Error Occurred!");
+    });
+  }
+
+
+
   /// getCurrencyConversion
   static Future<APIResponse<CurrencyConversionDetails>> getConversionDetails(double amount, int fromCurrencyId, int toCurrencyId) async{
 

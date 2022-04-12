@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hidmona/Models/card.dart';
+import 'package:hidmona/Models/card_info.dart';
 import 'package:hidmona/Repositories/api_constants.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Utilities/utility.dart';
@@ -8,9 +9,9 @@ import 'package:http/http.dart' as http;
 
 class PaymentRepository{
   ///getCards
-  static Future<APIResponse<List<Card>>> getCards() async{
+  static Future<APIResponse<List<PaymentCard>>> getCards() async{
     if(!await Utility.isInternetConnected()){
-      return APIResponse<List<Card>>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<List<PaymentCard>>(error: true, errorMessage: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'card');
     return http.get(url,headers: headersWithAuth)
@@ -19,16 +20,126 @@ class PaymentRepository{
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
       if(data.statusCode == 200){
-        List<Card> cards = [];
+        List<PaymentCard> cards = [];
         jsonData['items'].forEach((card){
-          cards.add(Card.fromJson(card));
+          cards.add(PaymentCard.fromJson(card));
         });
-        return APIResponse<List<Card>>(data: cards);
+        return APIResponse<List<PaymentCard>>(data: cards);
       }
-      return APIResponse<List<Card>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<PaymentCard>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<List<Card>>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<List<PaymentCard>>(error: true, errorMessage: "An Error Occurred!");
     });
   }
+
+  ///deleteCard
+  static Future<APIResponse<bool>> deleteCard(int id) async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<bool>(error: true, errorMessage: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'card/$id');
+    return http.get(url,headers: headersWithAuth)
+        .then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        return APIResponse<bool>(data: true);
+      }
+      return APIResponse<bool>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<bool>(error: true, errorMessage: "An Error Occurred!");
+    });
+  }
+
+
+
+
+  /// paymentByCardId
+  static Future<APIResponse<bool>> paymentByCardId(int cardId, String transactionNumber) async{
+
+    ///internet check
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<bool>(error: true, errorMessage: "Internet is not connected!");
+    }
+
+    Uri url = Uri.parse(baseAPIUrl()+'payment/trust_pay/transaction_with_card/$cardId?transaction_number=$transactionNumber');
+    return http.post(
+        url,
+        headers: headersWithAuth,
+    ).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 201){
+        return APIResponse<bool>(data: jsonData["detail"]);
+      }
+      return APIResponse<bool>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<bool>(error: true, errorMessage: "An Error Occurred!");
+    });
+  }
+
+
+
+  /// paymentAndSaveCard
+  static Future<APIResponse<bool>> paymentAndSaveCard(CardInfo cardInfo, String transactionNumber) async{
+
+    ///internet check
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<bool>(error: true, errorMessage: "Internet is not connected!");
+    }
+
+    Uri url = Uri.parse(baseAPIUrl()+'payment/trust_pay/card_save?transaction_number=$transactionNumber');
+    return http.post(
+      url,
+      headers: headersWithAuth,
+      body: json.encode(cardInfo.toJson())
+    ).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 201){
+        return APIResponse<bool>(data: true);
+      }
+      return APIResponse<bool>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<bool>(error: true, errorMessage: "An Error Occurred!");
+    });
+  }
+
+
+
+  /// paymentWithoutSaveCard
+  static Future<APIResponse<bool>> paymentWithoutSaveCard(CardInfo cardInfo, String transactionNumber) async{
+
+    ///internet check
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<bool>(error: true, errorMessage: "Internet is not connected!");
+    }
+
+    Uri url = Uri.parse(baseAPIUrl()+'payment/trust_pay/transaction_once?transaction_number=$transactionNumber');
+    return http.post(
+        url,
+        headers: headersWithAuth,
+        body: json.encode(cardInfo.toJson())
+    ).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 201){
+        return APIResponse<bool>(data: true);
+      }
+      return APIResponse<bool>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<bool>(error: true, errorMessage: "An Error Occurred!");
+    });
+  }
+
+
 }

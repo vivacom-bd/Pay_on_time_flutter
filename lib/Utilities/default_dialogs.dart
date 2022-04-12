@@ -30,7 +30,7 @@ class DefaultDialogs{
               children: [
                 Text(title,textAlign: TextAlign.center,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
                 Divider(color: AppColor.defaultColor,thickness: .5,),
-                Text(text,textAlign: TextAlign.left,style: const TextStyle(fontSize: 15,fontWeight: FontWeight.w700),),
+                Text(text,textAlign: TextAlign.center,style: const TextStyle(fontSize: 15,fontWeight: FontWeight.w700),),
                 const SizedBox(
                   height: 25.0,
                 ),

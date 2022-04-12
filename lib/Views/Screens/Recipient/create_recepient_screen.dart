@@ -14,6 +14,7 @@ import 'package:hidmona/Views/Widgets/country_item.dart';
 import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
+import 'package:intl/intl.dart';
 import 'package:libphonenumber/libphonenumber.dart';
 
 class CreateRecipientScreen extends StatefulWidget {
@@ -39,6 +40,8 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
   Country? selectedCountry;
   City? selectedRecipientCity;
   Country? selectedCitizenCountry;
+  DateTime? dateTime;
+
 
   bool isPhoneNumberValid = false;
 
@@ -245,20 +248,50 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                               }
                           ),
                           const SizedBox(height: 10,),
-                          CustomTextFormField(
-                              controller: dateOfBirthTextEditingController,
-                              validator: (value) {
-                                if(value!.isEmpty){
-                                  return "Field can't be empty";
-                                }
-                                return null;
-                              },
-                              labelText: "Date Of Birth (yyyy-month-day)",
-                              hindText: "2022-04-20",
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
+                          InkWell(
+                            onTap: ()async{
+                              dateTime = await showDatePicker(
+                                initialEntryMode: DatePickerEntryMode.calendar,
+                                context: context,
+                                initialDate: dateTime ?? DateTime.now(),
+                                firstDate: DateFormat("dd-mm-yyyy").parse("01-01-1930"),
+                                lastDate: DateTime.now(),
+                                currentDate: DateTime.now(),
+                                builder: (context,child) {
+                                  return Theme(
+                                    data: Get.theme.copyWith(
+                                      colorScheme: Get.theme.colorScheme.copyWith(primary: Theme.of(context).primaryColor),
+                                      buttonTheme: const ButtonThemeData(
+                                          textTheme: ButtonTextTheme.primary
+                                      ),
+                                    ),
+                                    child: child!,
+                                  );
+                                },
+                              );
 
+                              if(dateTime!=null) {
+
+                                dateOfBirthTextEditingController.text = DateFormat("dd MMM, yyyy").format(dateTime!);
+                                //FocusScope.of(context).requestFocus(FocusNode());
                               }
+                            },
+                            child: CustomTextFormField(
+                                controller: dateOfBirthTextEditingController,
+                                enabled: false,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
+                                  return null;
+                                },
+                                labelText: "Date Of Birth",
+                                hindText: "2022-04-20",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) async{
+
+                                }
+                            ),
                           ),
                           const SizedBox(height: 10,),
                           Text(
@@ -336,7 +369,7 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: DefaultButton(
-                      buttonText: "Continue", onTap: () async{
+                      buttonText: "Add", onTap: () async{
                         FocusScope.of(context).unfocus();
                         if(_formKey.currentState!.validate()){
 
@@ -348,7 +381,7 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                             phone: phoneNumber,
                             streetAddress: addressTextEditingController.text,
                             postalCode: int.tryParse(postalCodeTextEditingController.text),
-                            dateOfBirth: dateOfBirthTextEditingController.text,
+                            dateOfBirth: DateFormat("yyyy-MM-dd").format(dateTime!),
                             countryId: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id,
                             citizenCountryId: commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
                             cityId: selectedRecipientCity!.id,

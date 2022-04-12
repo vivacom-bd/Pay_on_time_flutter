@@ -1,18 +1,18 @@
-class Card {
+class PaymentCard {
   int? userId;
   String? cardInfo;
   String? referenceNumber;
   String? cardType;
   int? id;
 
-  Card(
+  PaymentCard(
       {this.userId,
         this.cardInfo,
         this.referenceNumber,
         this.cardType,
         this.id});
 
-  Card.fromJson(Map<String, dynamic> json) {
+  PaymentCard.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
     cardInfo = json['card_info'];
     referenceNumber = json['reference_number'];
@@ -29,4 +29,11 @@ class Card {
     data['id'] = id;
     return data;
   }
+
+
+  @override
+  bool operator ==(Object other) => other is PaymentCard && other.id == id;
+
+  @override
+  int get hashCode => id!;
 }

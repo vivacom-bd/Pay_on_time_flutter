@@ -200,21 +200,40 @@ class CommonController extends GetxController{
   ///UpdateCurrencies
   Future<bool> updateCurrencies() async{
 
-    APIResponse<ServerCurrency> apiResponse1 = await CommonRepository.getCountryDefaultCurrency(serverCountryFrom.value.id!);
-
-    if(apiResponse1.data!=null){
-      serverCountryFrom.value.selectedCurrency = apiResponse1.data;
+    //Country From
+    APIResponse<ServerCurrency> apiResponseFrom1 = await CommonRepository.getCountryDefaultCurrency(serverCountryFrom.value.id!);
+    if(apiResponseFrom1.data!=null){
+      serverCountryFrom.value.selectedCurrency = apiResponseFrom1.data;
     }else{
-      Utility.showSnackBar(apiResponse1.errorMessage??"No default currency for ${serverCountryFrom.value.name}");
+      Utility.showSnackBar(apiResponseFrom1.errorMessage??"No default currency for ${serverCountryFrom.value.name}");
       return false;
     }
 
-    APIResponse<ServerCurrency> apiResponse2 = await CommonRepository.getCountryDefaultCurrency(serverCountryTo.value.id!);
-
-    if(apiResponse2.data!=null){
-      serverCountryTo.value.selectedCurrency = apiResponse2.data;
+    APIResponse<List<ServerCurrency>> apiResponseFrom2 = await CommonRepository.getCurrenciesOnCountry(serverCountryFrom.value.id!);
+    if(apiResponseFrom2.data!=null){
+      serverCountryFrom.value.currencies = apiResponseFrom2.data;
     }else{
-      Utility.showSnackBar(apiResponse2.errorMessage??"No default currency for ${serverCountryTo.value.name}");
+      Utility.showSnackBar(apiResponseFrom2.errorMessage??"No Currency Found ${serverCountryFrom.value.name}");
+      return false;
+    }
+
+
+
+
+    //Country To
+    APIResponse<ServerCurrency> apiResponseTo1 = await CommonRepository.getCountryDefaultCurrency(serverCountryTo.value.id!);
+    if(apiResponseTo1.data!=null){
+      serverCountryTo.value.selectedCurrency = apiResponseTo1.data;
+    }else{
+      Utility.showSnackBar(apiResponseTo1.errorMessage??"No Currency Found ${serverCountryTo.value.name}");
+      return false;
+    }
+
+    APIResponse<List<ServerCurrency>> apiResponseTo2 = await CommonRepository.getCurrenciesOnCountry(serverCountryTo.value.id!);
+    if(apiResponseTo2.data!=null){
+      serverCountryTo.value.currencies = apiResponseTo2.data;
+    }else{
+      Utility.showSnackBar(apiResponseTo2.errorMessage??"No default currency for ${serverCountryTo.value.name}");
       return false;
     }
 

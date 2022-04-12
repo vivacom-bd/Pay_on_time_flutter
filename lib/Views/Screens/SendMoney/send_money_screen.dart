@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
 import 'package:hidmona/Models/mode_of_payment.dart';
+import 'package:hidmona/Models/server_currency.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
@@ -129,14 +130,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                           child: Column(
                             children: [
                               Center(
-                                child: Text(
-                                  'Mode of Receive',
-                                  style: TextStyle(
-                                    color: AppColor.textColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 17,
-                                  ),
-                                ),
+                                child: Text('Mode of Receive', style: TextStyle(color: AppColor.textColor, fontWeight: FontWeight.w600, fontSize: 17,),),
                               ),
                               const SizedBox(height: 7,),
                               CustomDropDownFromField(
@@ -169,8 +163,6 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                             ],
                           ),
                         ),
-                        
-                        
                       ],
                     ),
                   ),
@@ -189,6 +181,84 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                     ),
                     child: Column(
                         children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('From Currency', style: TextStyle(color: AppColor.textColor, fontWeight: FontWeight.w600, fontSize: 14,),),
+                                    const SizedBox(height: 7,),
+                                    CustomDropDownFromField(
+                                        validator: (value) {
+                                          if (value == null) {
+                                            return "Select Currency";
+                                          }
+                                          return null;
+                                        },
+
+                                        items: commonController.serverCountryFrom.value.currencies!.map((ServerCurrency currency) {
+                                          return DropdownMenuItem(
+                                              value: currency,
+                                              child: Text(currency.code!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
+                                          );
+                                        }).toList(),
+                                        selectedValue: commonController.serverCountryFrom.value.selectedCurrency,
+                                        labelAndHintText: "From currency",
+                                        suffixIcon: Padding(
+                                          padding: const EdgeInsets.only(bottom: 4.0),
+                                          child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                                        ),
+                                        filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            commonController.serverCountryFrom.value.selectedCurrency = value as ServerCurrency;
+                                          });
+                                        }
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 10,),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('To Currency', style: TextStyle(color: AppColor.textColor, fontWeight: FontWeight.w600, fontSize: 14,),),
+                                    const SizedBox(height: 7,),
+                                    CustomDropDownFromField(
+                                        validator: (value) {
+                                          if (value == null) {
+                                            return "Select Currency";
+                                          }
+                                          return null;
+                                        },
+
+                                        items: commonController.serverCountryTo.value.currencies!.map((ServerCurrency currency) {
+                                          return DropdownMenuItem(
+                                              value: currency,
+                                              child: Text(currency.code!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
+                                          );
+                                        }).toList(),
+                                        selectedValue: commonController.serverCountryTo.value.selectedCurrency,
+                                        labelAndHintText: "To currency",
+                                        suffixIcon: Padding(
+                                          padding: const EdgeInsets.only(bottom: 4.0),
+                                          child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                                        ),
+                                        filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            commonController.serverCountryTo.value.selectedCurrency = value as ServerCurrency;
+                                          });
+                                        }
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15,),
                           CustomTextFormField(
                             controller: amountTextEditingController,
                               validator: (value) {
@@ -234,7 +304,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                                           SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("rate"),
                                             title: "Our Rate",
-                                            value: "1  ${currencyConversionDetails.sendingCurrency} = ${currencyConversionDetails.ourRate!.toStringAsFixed(3)} ${currencyConversionDetails.receivingCurrency}",
+                                            value: "1 ${currencyConversionDetails.sendingCurrency} = ${currencyConversionDetails.ourRate!.toStringAsFixed(3)} ${currencyConversionDetails.receivingCurrency}",
                                           ),
                                           const SizedBox(height: 10,),
                                           SendMoneyCalculationItem(

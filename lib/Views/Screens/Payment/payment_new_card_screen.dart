@@ -5,30 +5,30 @@ import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/recipient.dart';
-import 'package:hidmona/Models/server_country.dart';
 import 'package:hidmona/Repositories/api_response.dart';
+import 'package:hidmona/Repositories/common_repository.dart';
 import 'package:hidmona/Repositories/recipient_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/utility.dart';
-import 'package:hidmona/Views/Screens/SendMoney/recepient_bank_info_screen.dart';
 import 'package:hidmona/Views/Widgets/country_item.dart';
 import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 import 'package:intl/intl.dart';
 import 'package:libphonenumber/libphonenumber.dart';
-import 'package:phone_number/phone_number.dart' as phone;
 
-class RecipientDetailsScreen extends StatefulWidget {
-  static const String routeName = "/RecipientDetailsScreen";
+class PaymentWithNewCardScreen extends StatefulWidget {
+  static const String routeName = "/PaymentWithNewCard";
 
-  const RecipientDetailsScreen({Key? key}) : super(key: key);
+  const PaymentWithNewCardScreen({Key? key, required this.transactionNumber}) : super(key: key);
+
+  final String transactionNumber;
 
   @override
-  _RecipientDetailsScreenState createState() => _RecipientDetailsScreenState();
+  _PaymentWithNewCardScreenState createState() => _PaymentWithNewCardScreenState();
 }
 
-class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
+class _PaymentWithNewCardScreenState extends State<PaymentWithNewCardScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailTextEditingController = TextEditingController();
   final TextEditingController nameTextEditingController = TextEditingController();
@@ -39,13 +39,15 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
 
   CommonController commonController = Get.find<CommonController>();
 
-  Country? selectedPhoneCountry;
+  Country? selectedCountry;
   City? selectedRecipientCity;
   Country? selectedCitizenCountry;
-  Recipient? selectedRecipient;
   DateTime? dateTime;
 
+
   bool isPhoneNumberValid = false;
+
+  RxList<City> countryCities = <City>[].obs;
 
   String? phoneNumber;
 
@@ -53,20 +55,17 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    commonController.senderCity = null;
   }
 
 
   @override
   Widget build(BuildContext context) {
 
-    selectedPhoneCountry ??= commonController.countryTo.value;
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50.0),
         child: AppBar(
-          title: const Text("Recipient Details"),
+          title: const Text("Card Information"),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: AppGradient.getColorGradient("default"),
@@ -83,112 +82,6 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
               child: Column(
                 children: [
 
-                  const SizedBox(height: 10,),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 15),
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Choose Recipient',
-                          style: TextStyle(
-                            color: AppColor.textColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(height: 7,),
-                        CustomDropDownFromField(
-                            validator: (value) {
-                              // if (value == null) {
-                              //   return "Select Recipient";
-                              // }
-                              return null;
-                            },
-
-                            items: commonController.myRecipients.map((Recipient recipient) {
-                              return DropdownMenuItem(
-                                  value: recipient,
-                                  child: Text(recipient.fullName!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
-                              );
-                            }).toList(),
-                            selectedValue: selectedRecipient,
-                            labelAndHintText: "Select Recipient",
-                            suffixIcon: Padding(
-                              padding: const EdgeInsets.only(bottom: 4.0),
-                              child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
-                            ),
-                            filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
-                            onChanged: (value) {
-
-                              selectedRecipient = value as Recipient;
-
-                              emailTextEditingController.text = selectedRecipient!.email!;
-                              nameTextEditingController.text = selectedRecipient!.fullName!;
-                              addressTextEditingController.text = selectedRecipient!.streetAddress??"";
-                              postalCodeTextEditingController.text = selectedRecipient!.postalCode.toString();
-                              dateOfBirthTextEditingController.text = selectedRecipient!.dateOfBirth.toString();
-
-                              dateTime = DateFormat("yyyy-MM-dd").parse(selectedRecipient!.dateOfBirth.toString());
-
-                              phone.PhoneNumberUtil().parse(selectedRecipient!.phone!).then((number){
-                                //phoneNumber = number.nationalNumber;
-                                print(phoneNumber);
-                                phoneTextEditingController.text = number.nationalNumber;
-
-                              });
-
-                              if(selectedRecipient!.city != null){
-                                List<City> cities = commonController.receiveCities.where((city) => selectedRecipient!.city!.id == city.id).toList();
-                                if(cities.isNotEmpty){
-                                  selectedRecipientCity = cities.first;
-                                }
-                              }
-
-                              if(selectedRecipient!.citizenCountry != null){
-                                List<ServerCountry> countries = commonController.serverCountries.where((country) => selectedRecipient!.citizenCountry!.id == country.id).toList();
-                                if (countries.isNotEmpty) {
-                                  selectedCitizenCountry = CountryPickerUtils.getCountryByIsoCode(countries.first.countryCode!);
-                                }
-                              }
-
-                              setState(() {});
-                            }
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 15,),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Recipient Info',
-                          style: TextStyle(
-                            color: AppColor.textColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: (){
-                            clear();
-                          },
-                          child: Text(
-                            'Clear',
-                            style: TextStyle(
-                              color: AppColor.textColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                   Container(
                     width: double.infinity,
                     alignment: Alignment.center,
@@ -213,7 +106,6 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                 }
                                 return null;
                               },
-                              //enabled: selectedRecipient == null,
                               labelText: "Email",
                               hindText: "",
                               keyboardType: TextInputType.emailAddress,
@@ -236,6 +128,36 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                               onChanged: (value) {
 
                               }
+                          ),
+                          const SizedBox(height: 10,),
+                          Text(
+                            'Select Country',
+                            style: TextStyle(
+                              color: AppColor.textColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 7,),
+                          InkWell(
+                            onTap: (){
+                              FocusScope.of(context).unfocus();
+                              _openCountryPickerDialog();
+                            },
+                            child: Container(
+                                padding: const EdgeInsets.only(top: 12, bottom: 12, left: 10, right: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(.2),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CountryItem(country: selectedCountry,titleType: "name",),
+                                    Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                                  ],
+                                )
+                            ),
                           ),
                           const SizedBox(height: 10,),
                           Text(
@@ -262,7 +184,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                   ),
                                   child: Row(
                                     children: [
-                                      CountryItem(country: selectedPhoneCountry,titleType: "flag",),
+                                      CountryItem(country: selectedCountry,titleType: "flag",),
                                       //const Icon(Icons.arrow_drop_down)
                                     ],
                                   )
@@ -366,7 +288,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                   return null;
                                 },
                                 labelText: "Date Of Birth",
-                                hindText: "",
+                                hindText: "2022-04-20",
                                 keyboardType: TextInputType.text,
                                 onChanged: (value) async{
 
@@ -391,7 +313,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                 return null;
                               },
 
-                              items: commonController.receiveCities.map((City city) {
+                              items: countryCities.map((City city) {
                                 return DropdownMenuItem(
                                     value: city,
                                     child: Text(city.name!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
@@ -445,57 +367,11 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                       ),
                   ),
 
-                 Container(
-                   padding: const EdgeInsets.symmetric(horizontal: 15),
-                   child: Column(
-                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                     children: [
-                       const SizedBox(height: 10,),
-                       Text(
-                         'Select Sender City',
-                         style: TextStyle(
-                           color: AppColor.textColor,
-                           fontWeight: FontWeight.w600,
-                           fontSize: 14,
-                         ),
-                       ),
-                       const SizedBox(height: 7,),
-                       CustomDropDownFromField(
-                           validator: (value) {
-                             if (value == null) {
-                               return "Select Sender city";
-                             }
-                             return null;
-                           },
-
-                           items: commonController.sendingCities.map((City city) {
-                             return DropdownMenuItem(
-                                 value: city,
-                                 child: Text(city.name!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
-                             );
-                           }).toList(),
-                           selectedValue: commonController.senderCity,
-                           labelAndHintText: "Select Sender city",
-                           suffixIcon: Padding(
-                             padding: const EdgeInsets.only(bottom: 4.0),
-                             child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
-                           ),
-                           filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
-                           onChanged: (value) {
-                             setState(() {
-                               commonController.senderCity = value as City;
-                             });
-                           }
-                       ),
-                     ],
-                   ),
-                 ),
-
                   const SizedBox(height: 15,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: DefaultButton(
-                      buttonText: "Continue", onTap: () async{
+                      buttonText: "Add", onTap: () async{
                         FocusScope.of(context).unfocus();
                         if(_formKey.currentState!.validate()){
 
@@ -508,39 +384,19 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                             streetAddress: addressTextEditingController.text,
                             postalCode: int.tryParse(postalCodeTextEditingController.text),
                             dateOfBirth: DateFormat("yyyy-MM-dd").format(dateTime!),
-                            countryId: commonController.serverCountryTo.value.id,
+                            countryId: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id,
                             citizenCountryId: commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
                             cityId: selectedRecipientCity!.id,
-                            isCitizen: commonController.serverCountryTo.value.id == commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id
+                            isCitizen: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id == commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id
                           );
 
-                          commonController.selectedRecipient = null;
-
-                          if(selectedRecipient == null){
-                            APIResponse<Recipient> value = await RecipientRepository.createRecipient(recipientRequestBody);
-                            if(value.data != null){
-                              commonController.selectedRecipient = value.data;
-                            }else{
-                              Utility.showSnackBar(value.errorMessage??"Recipient Not Created");
-                            }
-                          }else{
-                            APIResponse<Recipient> value = await RecipientRepository.updateRecipient(selectedRecipient!.id!,recipientRequestBody);
-                            if(value.data != null){
-                              commonController.selectedRecipient = value.data;
-                            }else{
-                              Utility.showSnackBar(value.errorMessage??"Recipient Not Updated");
-                            }
-                          }
-
-                          if(commonController.selectedRecipient != null){
-                            bool isGetSendingPurposes = await commonController.getSendinPurposes();
-                            bool isGetCountryWiseBanks = await commonController.getCountryWiseBanks();
+                          APIResponse<Recipient> value = await RecipientRepository.createRecipient(recipientRequestBody);
+                          Get.back();
+                          if(value.data != null){
+                            Utility.showSnackBar(value.errorMessage??"Recipient Created");
                             Get.back();
-                            if(isGetSendingPurposes && isGetCountryWiseBanks){
-                              Get.to(const TransactionBankInfoScreen());
-                            }
                           }else{
-                            Get.back();
+                            Utility.showSnackBar(value.errorMessage??"Recipient Not Created");
                           }
 
                         }
@@ -557,7 +413,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
   }
 
 
-  void _openCountryPickerDialog({String type = "Phone"}) => showDialog(
+  void _openCountryPickerDialog({String type = "Country"}) => showDialog(
     context: context,
     builder: (context) => Theme(
       data: Theme.of(context).copyWith(primaryColor: AppColor.defaultColor),
@@ -568,9 +424,10 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
         isSearchable: true,
         title: const Text('Select country',textAlign: TextAlign.center,),
         onValuePicked: (Country country){
-          if(type == "Phone"){
+          if(type == "Country"){
             setState(() {
-              selectedPhoneCountry = country;
+              selectedCountry = country;
+              getCities();
             });
           }else if(type == "Citizen"){
             setState(() {
@@ -595,8 +452,8 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
   void phoneNumberValidator(String value){
 
     Future.delayed(const Duration(seconds: 1),(){
-      PhoneNumberUtil.normalizePhoneNumber(phoneNumber: value, isoCode: selectedPhoneCountry!.isoCode!).then((normalizedPhoneNumber){
-        PhoneNumberUtil.isValidPhoneNumber(phoneNumber: normalizedPhoneNumber!, isoCode:selectedPhoneCountry!.isoCode!).then((isPhoneValid){
+      PhoneNumberUtil.normalizePhoneNumber(phoneNumber: value, isoCode: selectedCountry!.isoCode!).then((normalizedPhoneNumber){
+        PhoneNumberUtil.isValidPhoneNumber(phoneNumber: normalizedPhoneNumber!, isoCode:selectedCountry!.isoCode!).then((isPhoneValid){
 
           if(isPhoneValid!){
             phoneNumber = normalizedPhoneNumber;
@@ -615,18 +472,15 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
     });
   }
 
-  clear(){
-    selectedRecipient = null;
 
-    emailTextEditingController.text = "";
-    nameTextEditingController.text = "";
-    phoneTextEditingController.text = "";
-    addressTextEditingController.text = "";
-    postalCodeTextEditingController.text = "";
-    dateOfBirthTextEditingController.text = "";
-    selectedRecipientCity = null;
-    selectedCitizenCountry =  null;
-
-    setState(() {});
+  void getCities() async{
+    APIResponse<List<City>> apiResponse1 = await CommonRepository.getCities(commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id!);
+    if(apiResponse1.data != null){
+      countryCities.clear();
+      countryCities.addAll(apiResponse1.data!);
+    }else{
+      Utility.showSnackBar(apiResponse1.errorMessage??"An error Occurred");
+    }
   }
+
 }

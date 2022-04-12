@@ -8,6 +8,7 @@ import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/user_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Views/Screens/Login/login_screen.dart';
+import 'package:hidmona/Views/Screens/Payment/card_list_screen.dart';
 import 'package:hidmona/Views/Widgets/contact_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -121,6 +122,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         // ),
                         const SizedBox(height: 10,),
                         Divider(color: AppColor.defaultColor,),
+                        const SizedBox(height: 10,),
+                        ContactItem(
+                          iconData: CupertinoIcons.creditcard,text: "Card List",
+                          onTap: () {
+                            Get.to(const CardListScreen());
+                          },
+                        ),
                         const SizedBox(height: 10,),
                         ContactItem(
                           iconData: CupertinoIcons.arrowshape_turn_up_left_fill,text: "Logout",
