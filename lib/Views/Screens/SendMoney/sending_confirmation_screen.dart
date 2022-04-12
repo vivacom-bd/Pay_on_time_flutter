@@ -1,6 +1,4 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Repositories/transaction_repository.dart';
@@ -8,7 +6,6 @@ import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/SendMoney/sending_successful_screen.dart';
-import 'package:hidmona/Views/Widgets/default_button.dart';
 
 class SendingMoneyConfirmationScreen extends StatefulWidget {
 
@@ -58,15 +55,15 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Text("Your Money Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),),
+                          const Center(child: Text("Your Money Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                           Divider(color: AppColor.defaultColor,thickness: 2,),
-                          SendDetailsItem(title: "Amount to send",value: "${commonController.currencyConversionDetails.value.amountToSend!.toStringAsFixed(2)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
+                          SendDetailsItem(title: "Amount to send",value: "${commonController.currencyConversionDetails.value.amountToSend!.toStringAsFixed(3)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Amount to receive",value: "${commonController.currencyConversionDetails.value.amountToReceive!.toStringAsFixed(2)} ${commonController.currencyConversionDetails.value.receivingCurrency}",),
+                          SendDetailsItem(title: "Amount to receive",value: "${commonController.currencyConversionDetails.value.amountToReceive!.toStringAsFixed(3)} ${commonController.currencyConversionDetails.value.receivingCurrency}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Fees",value: "${commonController.currencyConversionDetails.value.fees!.toStringAsFixed(2)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
+                          SendDetailsItem(title: "Fees",value: "${commonController.currencyConversionDetails.value.fees!.toStringAsFixed(3)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Total to pay",value: "${commonController.currencyConversionDetails.value.amountToPay!.toStringAsFixed(2)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
+                          SendDetailsItem(title: "Total to pay",value: "${commonController.currencyConversionDetails.value.amountToPay!.toStringAsFixed(3)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
                         ],
                       ),
                     ),
@@ -100,7 +97,7 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Text("Your Recipient Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),),
+                          const Center(child: Text("Your Recipient Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                           Divider(color: AppColor.defaultColor,thickness: 2,),
                           SendDetailsItem(title: "Full name",value: "${commonController.selectedRecipient!.fullName}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
@@ -123,7 +120,7 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Text("Your Recipient Bank Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),),
+                          const Center(child: Text("Your Recipient Bank Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                           Divider(color: AppColor.defaultColor,thickness: 2,),
                           SendDetailsItem(title: "Bank Name",value: "${commonController.transactionRequestBody!.bankName}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
@@ -148,7 +145,7 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Text("Payment Bank Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),),
+                          const Center(child: Text("Payment Bank Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                           Divider(color: AppColor.defaultColor,thickness: 2,),
                           SendDetailsItem(title: "Bank Name",value: "${commonController.selectedCountryWiseBank!.bankName}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),

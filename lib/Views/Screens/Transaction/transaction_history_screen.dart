@@ -86,7 +86,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                 );
 
               }else{
-                return Center(child: Text(response.errorMessage??"An Error Occured"),);
+                return Center(child: Text(response.errorMessage??"An Error Occurred"),);
               }
 
             }

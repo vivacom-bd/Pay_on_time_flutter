@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:hidmona/Models/app_user.dart';
-import 'package:hidmona/Models/recipient.dart';
 import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Repositories/api_constants.dart';
 import 'package:hidmona/Repositories/api_response.dart';
@@ -93,11 +91,11 @@ class TransactionRepository{
 
 
   ///getRecipients
-  static Future<APIResponse<List<Transaction>>> getTransactions() async{
+  static Future<APIResponse<List<Transaction>>> getTransactions({int limit=100, offset=0}) async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<Transaction>>(error: true, errorMessage: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'transactions');
+    Uri url = Uri.parse(baseAPIUrl()+'transactions?limit=$limit&offset=$offset');
     return http.get(url,headers: headersWithAuth)
         .then((data){
       print(data.body);
@@ -114,6 +112,31 @@ class TransactionRepository{
     }).catchError((onError){
       print(onError);
       return APIResponse<List<Transaction>>(error: true, errorMessage: "An Error Occurred!");
+    });
+  }
+
+
+
+  /// getTransactionDetails
+  static Future<APIResponse<Transaction>> getTransactionDetails(int transactionNumber) async{
+
+    ///internet check
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<Transaction>(error: true, errorMessage: "Internet is not connected!");
+    }
+
+    Uri url = Uri.parse(baseAPIUrl()+'transactions/$transactionNumber');
+    return http.get(url,headers: headersWithAuth).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        return APIResponse<Transaction>(data: Transaction.fromJson(jsonData));
+      }
+      return APIResponse<Transaction>(error: true, errorMessage: jsonData["detail"]??"An error occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<Transaction>(error: true, errorMessage: "An Error Occurred!");
     });
   }
 }

@@ -60,12 +60,9 @@ class Recipient {
     id = json['id'];
     userId = json['user_id'];
     status = json['status'];
-    country =
-    json['country'] != null ? ServerCountry.fromJson(json['country']) : null;
+    country = json['country'] != null ? ServerCountry.fromJson(json['country']) : null;
     city = json['city'] != null ? City.fromJson(json['city']) : null;
-    citizenCountry = json['citizen_country'] != null
-        ? ServerCountry.fromJson(json['citizen_country'])
-        : null;
+    citizenCountry = json['citizen_country'] != null ? ServerCountry.fromJson(json['citizen_country']) : null;
     user = json['user'] != null ? AppUser.fromJson(json['user']) : null;
   }
 

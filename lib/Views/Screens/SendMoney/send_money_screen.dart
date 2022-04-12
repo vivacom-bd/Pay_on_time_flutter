@@ -234,31 +234,31 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                                           SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("rate"),
                                             title: "Our Rate",
-                                            value: "1  ${currencyConversionDetails.sendingCurrency} = ${currencyConversionDetails.ourRate!.toStringAsFixed(2)} ${currencyConversionDetails.receivingCurrency}",
+                                            value: "1  ${currencyConversionDetails.sendingCurrency} = ${currencyConversionDetails.ourRate!.toStringAsFixed(3)} ${currencyConversionDetails.receivingCurrency}",
                                           ),
                                           const SizedBox(height: 10,),
                                           SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("transfer"),
                                             title: "Transfer Fee",
-                                            value: "${currencyConversionDetails.fees!.toStringAsFixed(2)} ${currencyConversionDetails.sendingCurrency}",
+                                            value: "${currencyConversionDetails.fees!.toStringAsFixed(3)} ${currencyConversionDetails.sendingCurrency}",
                                           ),
                                           const SizedBox(height: 10,),
                                           SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("amount_to_send"),
                                             title: "Amount to send",
-                                            value: "${currencyConversionDetails.amountToSend!.toStringAsFixed(2)} ${currencyConversionDetails.sendingCurrency}",
+                                            value: "${currencyConversionDetails.amountToSend!.toStringAsFixed(3)} ${currencyConversionDetails.sendingCurrency}",
                                           ),
                                           const SizedBox(height: 10,),
                                           SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("Amount_to_receive"),
                                             title: "Amount to receive",
-                                            value: '${currencyConversionDetails.amountToReceive!.toStringAsFixed(2)} ${currencyConversionDetails.receivingCurrency}',
+                                            value: '${currencyConversionDetails.amountToReceive!.toStringAsFixed(3)} ${currencyConversionDetails.receivingCurrency}',
                                           ),
                                           const SizedBox(height: 10,),
                                           SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("Amount_to_receive"),
                                             title: "Total to pay",
-                                            value: "${currencyConversionDetails.amountToPay!.toStringAsFixed(2)} ${currencyConversionDetails.sendingCurrency}",
+                                            value: "${currencyConversionDetails.amountToPay!.toStringAsFixed(3)} ${currencyConversionDetails.sendingCurrency}",
                                           ),
                                         ],
                                       );
