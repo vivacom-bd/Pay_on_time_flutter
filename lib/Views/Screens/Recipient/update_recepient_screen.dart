@@ -57,13 +57,13 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
   void initState() {
     super.initState();
 
-    emailTextEditingController.text = widget.recipient.email!;
-    nameTextEditingController.text = widget.recipient.fullName!;
+    emailTextEditingController.text = widget.recipient.email??"";
+    nameTextEditingController.text = widget.recipient.fullName??"";
     addressTextEditingController.text = widget.recipient.streetAddress??"";
     postalCodeTextEditingController.text = widget.recipient.postalCode.toString();
     dateOfBirthTextEditingController.text = widget.recipient.dateOfBirth.toString();
 
-    dateTime = DateFormat("yyyy-MM-dd").parse(widget.recipient.dateOfBirth.toString());
+    //dateTime = DateFormat("yyyy-MM-dd").parse(widget.recipient.dateOfBirth.toString());
 
     phone.PhoneNumberUtil().parse(widget.recipient.phone!).then((number){
       //phoneNumber = number.nationalNumber;
@@ -130,25 +130,25 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomTextFormField(
-                            controller: emailTextEditingController,
-                              validator: (value) {
-                                if(value!.isEmpty){
-                                  return "Field can't be empty";
-                                }else if(!value.isEmail){
-                                  return "Enter correct email";
-                                }
-                                return null;
-                              },
-                              //enabled: false,
-                              labelText: "Email",
-                              hindText: "",
-                              keyboardType: TextInputType.emailAddress,
-                              onChanged: (value) {
-
-                              }
-                          ),
-                          const SizedBox(height: 10,),
+                          // CustomTextFormField(
+                          //   controller: emailTextEditingController,
+                          //     validator: (value) {
+                          //       if(value!.isEmpty){
+                          //         return "Field can't be empty";
+                          //       }else if(!value.isEmail){
+                          //         return "Enter correct email";
+                          //       }
+                          //       return null;
+                          //     },
+                          //     //enabled: false,
+                          //     labelText: "Email",
+                          //     hindText: "",
+                          //     keyboardType: TextInputType.emailAddress,
+                          //     onChanged: (value) {
+                          //
+                          //     }
+                          // ),
+                          // const SizedBox(height: 10,),
                           CustomTextFormField(
                               controller: nameTextEditingController,
                               validator: (value) {
@@ -252,84 +252,84 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10,),
-                          CustomTextFormField(
-                              controller: addressTextEditingController,
-                              validator: (value) {
-                                if(value!.isEmpty){
-                                  return "Field can't be empty";
-                                }
-                                return null;
-                              },
-                              labelText: "Address",
-                              hindText: "",
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
-
-                              }
-                          ),
-                          const SizedBox(height: 10,),
-                          CustomTextFormField(
-                              controller: postalCodeTextEditingController,
-                              validator: (value) {
-                                if(value!.isEmpty){
-                                  return "Field can't be empty";
-                                }
-                                return null;
-                              },
-                              labelText: "Postal Code",
-                              hindText: "",
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) {
-
-                              }
-                          ),
-                          const SizedBox(height: 10,),
-                          InkWell(
-                            onTap: ()async{
-                              dateTime = await showDatePicker(
-                                initialEntryMode: DatePickerEntryMode.calendar,
-                                context: context,
-                                initialDate: dateTime ?? DateTime.now(),
-                                firstDate: DateFormat("dd-mm-yyyy").parse("01-01-1930"),
-                                lastDate: DateTime.now(),
-                                currentDate: DateTime.now(),
-                                builder: (context,child) {
-                                  return Theme(
-                                    data: Get.theme.copyWith(
-                                      colorScheme: Get.theme.colorScheme.copyWith(primary: Theme.of(context).primaryColor),
-                                      buttonTheme: const ButtonThemeData(
-                                          textTheme: ButtonTextTheme.primary
-                                      ),
-                                    ),
-                                    child: child!,
-                                  );
-                                },
-                              );
-
-                              if(dateTime!=null) {
-
-                                dateOfBirthTextEditingController.text = DateFormat("dd MMM, yyyy").format(dateTime!);
-                                //FocusScope.of(context).requestFocus(FocusNode());
-                              }
-                            },
-                            child: CustomTextFormField(
-                                controller: dateOfBirthTextEditingController,
-                                enabled: false,
-                                validator: (value) {
-                                  if(value!.isEmpty){
-                                    return "Field can't be empty";
-                                  }
-                                  return null;
-                                },
-                                labelText: "Date Of Birth",
-                                hindText: "",
-                                keyboardType: TextInputType.text,
-                                onChanged: (value) async{
-
-                                }
-                            ),
-                          ),
+                          // const SizedBox(height: 10,),
+                          // CustomTextFormField(
+                          //     controller: addressTextEditingController,
+                          //     validator: (value) {
+                          //       if(value!.isEmpty){
+                          //         return "Field can't be empty";
+                          //       }
+                          //       return null;
+                          //     },
+                          //     labelText: "Address",
+                          //     hindText: "",
+                          //     keyboardType: TextInputType.text,
+                          //     onChanged: (value) {
+                          //
+                          //     }
+                          // ),
+                          // const SizedBox(height: 10,),
+                          // CustomTextFormField(
+                          //     controller: postalCodeTextEditingController,
+                          //     validator: (value) {
+                          //       if(value!.isEmpty){
+                          //         return "Field can't be empty";
+                          //       }
+                          //       return null;
+                          //     },
+                          //     labelText: "Postal Code",
+                          //     hindText: "",
+                          //     keyboardType: TextInputType.number,
+                          //     onChanged: (value) {
+                          //
+                          //     }
+                          // ),
+                          // const SizedBox(height: 10,),
+                          // InkWell(
+                          //   onTap: ()async{
+                          //     dateTime = await showDatePicker(
+                          //       initialEntryMode: DatePickerEntryMode.calendar,
+                          //       context: context,
+                          //       initialDate: dateTime ?? DateTime.now(),
+                          //       firstDate: DateFormat("dd-mm-yyyy").parse("01-01-1930"),
+                          //       lastDate: DateTime.now(),
+                          //       currentDate: DateTime.now(),
+                          //       builder: (context,child) {
+                          //         return Theme(
+                          //           data: Get.theme.copyWith(
+                          //             colorScheme: Get.theme.colorScheme.copyWith(primary: Theme.of(context).primaryColor),
+                          //             buttonTheme: const ButtonThemeData(
+                          //                 textTheme: ButtonTextTheme.primary
+                          //             ),
+                          //           ),
+                          //           child: child!,
+                          //         );
+                          //       },
+                          //     );
+                          //
+                          //     if(dateTime!=null) {
+                          //
+                          //       dateOfBirthTextEditingController.text = DateFormat("dd MMM, yyyy").format(dateTime!);
+                          //       //FocusScope.of(context).requestFocus(FocusNode());
+                          //     }
+                          //   },
+                          //   child: CustomTextFormField(
+                          //       controller: dateOfBirthTextEditingController,
+                          //       enabled: false,
+                          //       validator: (value) {
+                          //         if(value!.isEmpty){
+                          //           return "Field can't be empty";
+                          //         }
+                          //         return null;
+                          //       },
+                          //       labelText: "Date Of Birth",
+                          //       hindText: "",
+                          //       keyboardType: TextInputType.text,
+                          //       onChanged: (value) async{
+                          //
+                          //       }
+                          //   ),
+                          // ),
                           const SizedBox(height: 10,),
                           Text(
                             'Select City',
@@ -413,12 +413,12 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
                           Utility.showLoadingDialog();
 
                           RecipientRequestBody recipientRequestBody =  RecipientRequestBody(
-                            email: emailTextEditingController.text,
+                            //email: emailTextEditingController.text,
                             fullName: nameTextEditingController.text,
                             phone: phoneNumber,
-                            streetAddress: addressTextEditingController.text,
-                            postalCode: int.tryParse(postalCodeTextEditingController.text),
-                            dateOfBirth: DateFormat("yyyy-MM-dd").format(dateTime!),
+                            //streetAddress: addressTextEditingController.text,
+                            //postalCode: int.tryParse(postalCodeTextEditingController.text),
+                            //dateOfBirth: DateFormat("yyyy-MM-dd").format(dateTime!),
                             countryId: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id,
                             citizenCountryId: commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
                             cityId: selectedRecipientCity!.id,

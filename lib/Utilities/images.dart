@@ -54,6 +54,12 @@ class AppSvg{
       case "successful": {
         return "assets/svgs/successful.svg";
       }
+      case "gallery": {
+        return "assets/svgs/gallery.svg";
+      }
+      case "camera": {
+        return "assets/svgs/camera.svg";
+      }
       default: {
         return "assets/svgs/logo.svg";
       }

@@ -47,6 +47,7 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
                       children: [
+                        const SizedBox(height: 20,),
                         Container(
                           padding: const EdgeInsets.all(15),
                           decoration: BoxDecoration(

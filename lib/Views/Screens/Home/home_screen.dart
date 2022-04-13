@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     const SizedBox(height: 10,),
-                    DashboardExploreItem(title: "History",subtitle: "See your previous transactions",iconName: "history",
+                    DashboardExploreItem(title: "Transaction History",subtitle: "See your previous transactions",iconName: "history",
                       onTap: (){
                         Get.to(const TransactionHistoryScreen());
                       },

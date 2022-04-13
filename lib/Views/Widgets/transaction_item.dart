@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Models/transaction.dart';
+import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Views/Screens/Transaction/transaction_details_screen.dart';
+import 'package:hidmona/Views/Screens/Transaction/upload_bank_receipt_screen.dart';
 import 'package:intl/intl.dart';
 
 class TransactionItem extends StatelessWidget {
   const TransactionItem({
     Key? key,
     required this.transaction,
+    required this.index
   }) : super(key: key);
 
   final Transaction transaction;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -28,21 +32,60 @@ class TransactionItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("#${transaction.transactionNumber}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
-                  // Container(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 5),
-                  //   decoration: BoxDecoration(
-                  //       color: AppColor.defaultColor.withOpacity(.15),
-                  //       borderRadius: BorderRadius.circular(7)
-                  //   ),
-                  //   child: Text("Status: ${transaction.paymentStatus}",style: TextStyle(color: AppColor.defaultColor,fontSize: 11,fontWeight: FontWeight.w600),),
-                  // ),
+                  Container(
+                    height: 30,
+                    width: 30,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: AppColor.defaultColor.withOpacity(.15),
+                        borderRadius: BorderRadius.circular(20)
+                    ),
+                    child: Text("${index+1}",style: TextStyle(color: AppColor.defaultColor,fontSize: 14,fontWeight: FontWeight.w600),),
+                  ),
+                  Row(
+                    children: [
+                      //Text("${index+1}.", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
+                      Container(
+                        height: 30,
+                        width: 30,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: AppColor.defaultColor.withOpacity(.15),
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: Icon(Icons.visibility,size: 17,color: AppColor.defaultColor,)
+                      ),
+                      if(transaction.paymentMethod!.name!.toLowerCase() == "bank") const SizedBox(width: 7,),
+                      if(transaction.paymentMethod!.name!.toLowerCase() == "bank") InkWell(
+                        onTap: (){
+                          Get.to(UploadBankReceiptScreen(transactionId: transaction.id!));
+                        },
+                        child: Container(
+                            height: 30,
+                            width: 30,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: AppColor.defaultColor.withOpacity(.15),
+                                borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: Icon(Icons.cloud_upload,size: 17,color: AppColor.defaultColor,)
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 7,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(" #${transaction.transactionNumber}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
                   Text(DateFormat("dd MMM, yyyy hh:mm").format(DateFormat("yyyy-MM-ddThh:mm:ss").parse(transaction.transactionDate!)), style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
                 ],
               ),
               const SizedBox(height: 5,),
-              Text("${transaction.receiveMethod!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
-              const SizedBox(height: 7,),
+              Text("${transaction.recipient!.fullName}", style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w700),),
+              const SizedBox(height: 5,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -52,7 +95,9 @@ class TransactionItem extends StatelessWidget {
                       children: [
                         const Text("Payout Amount", style: TextStyle(fontSize: 13,fontWeight: FontWeight.w300),),
                         const SizedBox(height: 3,),
-                        Text("${transaction.payoutAmount!.toStringAsFixed(2)} ${transaction.payoutCurrency}", style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
+                        Text("${transaction.payoutAmount!.toStringAsFixed(2)} ${transaction.payoutCurrency}", style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w600),),
+                        const SizedBox(height: 3,),
+                        Text("${transaction.paymentMethod!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w500),),
                       ],
                     ),
                   ),
@@ -62,7 +107,9 @@ class TransactionItem extends StatelessWidget {
                       children: [
                         const Text("Receiving Amount", style: TextStyle(fontSize: 13,fontWeight: FontWeight.w300),),
                         const SizedBox(height: 3,),
-                        Text("${transaction.receivingAmount!.toStringAsFixed(2)} ${transaction.receivingCurrency}", style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
+                        Text("${transaction.receivingAmount!.toStringAsFixed(2)} ${transaction.receivingCurrency}", style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w600),),
+                        const SizedBox(height: 3,),
+                        Text("${transaction.receiveMethod!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w500),),
                       ],
                     ),
                   )

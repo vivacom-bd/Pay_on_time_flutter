@@ -148,13 +148,13 @@ class RecipientRequestBody {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['email'] = email;
+    //data['email'] = email;
     data['full_name'] = fullName;
     data['phone'] = phone;
     data['country_id'] = countryId;
-    data['street_address'] = streetAddress;
-    data['postal_code'] = postalCode;
-    data['date_of_birth'] = dateOfBirth;
+    //data['street_address'] = streetAddress;
+    //data['postal_code'] = postalCode;
+    //data['date_of_birth'] = dateOfBirth;
     data['city_id'] = cityId;
     data['citizen_country_id'] = citizenCountryId;
     data['is_citizen'] = isCitizen;

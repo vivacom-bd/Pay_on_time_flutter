@@ -80,7 +80,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                     separatorBuilder: (context,index)=>const SizedBox(height: 10,),
                     itemCount: transactions.length,
                     itemBuilder: (context,index){
-                      return TransactionItem(transaction:transactions[index]);
+                      return TransactionItem(transaction:transactions[index],index: index,);
                     },
                   ),
                 );
