@@ -116,8 +116,8 @@ class Transaction {
     receiveMethod = json['receive_method'] != null
         ? ModeOfPayment.fromJson(json['receive_method'])
         : null;
-    paymentMethod = json['receive_method'] != null
-        ? ModeOfPayment.fromJson(json['receive_method'])
+    paymentMethod = json['payment_method'] != null
+        ? ModeOfPayment.fromJson(json['payment_method'])
         : null;
     totalCommission = json['total_commission']*1.0;
     senderCountry = json['sender_country'] != null
@@ -183,7 +183,7 @@ class Transaction {
       data['receive_method'] = receiveMethod!.toJson();
     }
     if (paymentMethod != null) {
-      data['receive_method'] = paymentMethod!.toJson();
+      data['payment_method'] = paymentMethod!.toJson();
     }
     data['total_commission'] = totalCommission;
     if (senderCountry != null) {

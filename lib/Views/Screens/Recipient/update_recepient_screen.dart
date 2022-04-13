@@ -323,7 +323,7 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
                                   return null;
                                 },
                                 labelText: "Date Of Birth",
-                                hindText: "2022-04-20",
+                                hindText: "",
                                 keyboardType: TextInputType.text,
                                 onChanged: (value) async{
 

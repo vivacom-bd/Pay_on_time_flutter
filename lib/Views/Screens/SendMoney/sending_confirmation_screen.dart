@@ -106,6 +106,8 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                           SendDetailsItem(title: "City",value: "${commonController.selectedRecipient!.city!.name}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
                           SendDetailsItem(title: "Country",value: "${commonController.selectedRecipient!.country!.name}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Mode of Receive",value: "${commonController.selectedModeOfReceive!.name}",),
                         ],
                       ),
                     ),
@@ -158,6 +160,25 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                           SendDetailsItem(title: "Bank Address",value: "${commonController.selectedCountryWiseBank!.status}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
                           SendDetailsItem(title: "Country",value: "${commonController.selectedCountryWiseBank!.country!.name}",),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20,),
+                    Container(
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          color: AppColor.defaultColor.withOpacity(.1),
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Center(child: Text("Transaction Details",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
+                          Divider(color: AppColor.defaultColor,thickness: 2,),
+                          SendDetailsItem(title: "Mode of Payment",value: "${commonController.selectedModeOfPayment!.name}",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Purpose",value: "${commonController.selectedSendingPurpose!.name}",),
                         ],
                       ),
                     ),

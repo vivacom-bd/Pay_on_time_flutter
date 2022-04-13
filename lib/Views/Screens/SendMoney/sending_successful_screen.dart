@@ -165,8 +165,8 @@ class _SendingSuccessFulScreenState extends State<SendingSuccessFulScreen> {
                                       });
                                     }).toList(),
                                   ),
-                                  const SizedBox(height: 5,),
-                                  DefaultButton(buttonText: "Submit",onTap: () async{
+                                  if(cards.isNotEmpty)const SizedBox(height: 5,),
+                                  if(cards.isNotEmpty)DefaultButton(buttonText: "Submit",onTap: () async{
                                     if(selectedCard != null){
                                       Utility.showLoadingDialog();
 
@@ -186,7 +186,7 @@ class _SendingSuccessFulScreenState extends State<SendingSuccessFulScreen> {
                                     }
                                   },),
                                   const SizedBox(height: 15,),
-                                  DefaultButton(buttonText: "Use Another Card",onTap: () async{
+                                  DefaultButton(buttonText: cards.isEmpty?"Add Card":"Use Another Card",onTap: () async{
                                     Get.to(PaymentWithNewCardScreen(transactionNumber: commonController.currentTransaction!.transactionNumber!,));
                                   },),
                                 ],

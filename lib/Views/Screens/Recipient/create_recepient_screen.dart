@@ -286,7 +286,7 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                                   return null;
                                 },
                                 labelText: "Date Of Birth",
-                                hindText: "2022-04-20",
+                                hindText: "",
                                 keyboardType: TextInputType.text,
                                 onChanged: (value) async{
 

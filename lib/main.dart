@@ -40,6 +40,10 @@ class MyApp extends StatelessWidget {
                   getPages: [
                     GetPage(name: SplashScreen.routeName, page: ()=>const SplashScreen()),
                   ],
+                  localizationsDelegates: const [
+                    DefaultWidgetsLocalizations.delegate,
+                    DefaultMaterialLocalizations.delegate,
+                  ],
                 );
               }
           );

@@ -135,6 +135,8 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                               Divider(color: AppColor.defaultColor,thickness: 2,),
                               SendDetailsItem(title: "Mode of Payment",value: "${transaction.paymentMethod!.name}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
+                              SendDetailsItem(title: "Payment Status",value: "${transaction.paymentStatus}",),
+                              Divider(color: AppColor.defaultColor,thickness: .5,),
                               // SendDetailsItem(title: "Mode of Receive",value: "${transaction.receiveMethod!.name}",),
                               // Divider(color: AppColor.defaultColor,thickness: .5,),
                               SendDetailsItem(title: "Purpose",value: "${transaction.purpose}",),
