@@ -79,12 +79,18 @@ class TransactionItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(" #${transaction.transactionNumber}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
+                  Text("#${transaction.transactionNumber}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
                   Text(DateFormat("dd MMM, yyyy hh:mm").format(DateFormat("yyyy-MM-ddThh:mm:ss").parse(transaction.transactionDate!)), style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
                 ],
               ),
               const SizedBox(height: 5,),
-              Text("${transaction.recipient!.fullName}", style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w700),),
+              Row(
+                children: [
+                  const Icon(Icons.person,size: 21),
+                  const SizedBox(width: 7,),
+                  Text("${transaction.recipient!.fullName}", style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                ],
+              ),
               const SizedBox(height: 5,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

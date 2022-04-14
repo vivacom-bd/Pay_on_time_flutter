@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/transaction_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Views/Screens/SendMoney/sending_confirmation_screen.dart';
+import 'package:hidmona/Views/Screens/Transaction/upload_bank_receipt_screen.dart';
 import 'package:intl/intl.dart';
 
 class TransactionDetailsScreen extends StatefulWidget {
@@ -148,6 +150,35 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                               Divider(color: AppColor.defaultColor,thickness: .5,),
                               SendDetailsItem(title: "Transaction Status",value: "${transaction.transactionStatus}",),
                             ],
+                          ),
+                        ),
+                        const SizedBox(height: 20,),
+                        if(transaction.paymentMethod!.name!.toLowerCase() == "bank") InkWell(
+                          onTap: (){
+                            Get.to(UploadBankReceiptScreen(transactionId: transaction.id!));
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                            decoration: BoxDecoration(
+                                color: AppColor.defaultColor.withOpacity(.1),
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("Upload Bank Receipt",style: TextStyle(fontWeight: FontWeight.w600),),
+                                Container(
+                                    height: 30,
+                                    width: 30,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        color: AppColor.defaultColor.withOpacity(.15),
+                                        borderRadius: BorderRadius.circular(20)
+                                    ),
+                                    child: Icon(Icons.cloud_upload,size: 17,color: AppColor.defaultColor,)
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         const SizedBox(height: 20,),

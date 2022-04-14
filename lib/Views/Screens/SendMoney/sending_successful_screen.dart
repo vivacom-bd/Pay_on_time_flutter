@@ -1,18 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/card.dart';
-import 'package:hidmona/Repositories/api_response.dart';
-import 'package:hidmona/Repositories/payment_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
-import 'package:hidmona/Utilities/payment_dialog.dart';
-import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Home/home_screen.dart';
-import 'package:hidmona/Views/Screens/Payment/payment_new_card_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/sending_confirmation_screen.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
@@ -79,7 +73,7 @@ class _SendingSuccessFulScreenState extends State<SendingSuccessFulScreen> {
                     children: [
                       const Center(child: Text("Payment Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                       Divider(color: AppColor.defaultColor,thickness: 2,),
-                      SendDetailsItem(title: "Amount to pay",value: "${commonController.currentTransaction!.totalAmount!.toStringAsFixed(3)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
+                      SendDetailsItem(title: "Amount",value: "${commonController.currentTransaction!.totalAmount!.toStringAsFixed(3)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
                       Divider(color: AppColor.defaultColor,thickness: .5,),
                       SendDetailsItem(title: "Transaction ID",value: commonController.currentTransaction!.transactionNumber??"--"),
                     ],
@@ -120,107 +114,6 @@ class _SendingSuccessFulScreenState extends State<SendingSuccessFulScreen> {
                       SendDetailsItem(title: "Branch Name",value: "${commonController.selectedCountryWiseBank!.branchName}",),
                       Divider(color: AppColor.defaultColor,thickness: .5,),
                       SendDetailsItem(title: "Bank Address",value: "${commonController.selectedCountryWiseBank!.status}",),
-                    ],
-                  ),
-                ),
-
-
-                if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit")Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                      color: AppColor.defaultColor.withOpacity(.1),
-                      borderRadius: BorderRadius.circular(10)
-                  ),
-                  child:  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Center(child: Text("Pay the amount",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w600),)),
-                      Divider(color: AppColor.defaultColor,thickness: 2,),
-                      FutureBuilder(
-                        future: PaymentRepository.getCards(),
-                        builder: (context,AsyncSnapshot< APIResponse<List<PaymentCard>>> snapshot){
-
-                          if(snapshot.data!=null){
-
-                            APIResponse<List<PaymentCard>> response = snapshot.data!;
-
-                            if(response.data != null){
-                              List<PaymentCard> cards = response.data!;
-
-                              //transactions = transactions.reversed.toList();
-
-
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children:cards.map((card){
-                                      return CardRadioWidget(card: card, isSelected: selectedCard==null? false : selectedCard!.id == card.id, onChanged: (){
-                                        setState(() {
-                                          selectedCard = card;
-                                        });
-                                      });
-                                    }).toList(),
-                                  ),
-                                  if(cards.isNotEmpty)const SizedBox(height: 5,),
-                                  if(cards.isNotEmpty)DefaultButton(buttonText: "Submit",onTap: () async{
-                                    if(selectedCard != null){
-                                      Utility.showLoadingDialog();
-
-                                      APIResponse<bool> apiResponse = await PaymentRepository.paymentByCardId(selectedCard!.id!, commonController.currentTransaction!.transactionNumber!);
-
-                                      Get.back();
-
-                                      if(apiResponse.data != null && apiResponse.data!){
-                                        PaymentDialog.showDialog();
-                                      }else{
-                                        Utility.showSnackBar(apiResponse.errorMessage?? "An Error Occurred",durationInSeconds: 5);
-                                      }
-
-
-                                    }else{
-                                      Utility.showSnackBar("Please Choose One Card");
-                                    }
-                                  },),
-                                  const SizedBox(height: 15,),
-                                  DefaultButton(buttonText: cards.isEmpty?"Add Card":"Use Another Card",onTap: () async{
-                                    Get.to(PaymentWithNewCardScreen(transactionNumber: commonController.currentTransaction!.transactionNumber!,));
-                                  },),
-                                ],
-                              );
-
-                              // return ListView.separated(
-                              //   padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-                              //   separatorBuilder: (context,index)=>const SizedBox(height: 10,),
-                              //   itemCount: cards.length,
-                              //   itemBuilder: (context,index){
-                              //     return CardRadioWidget(card: cards[index], isSelected: selectCard==null? false : selectCard!.id == cards[index].id, onChanged: (){
-                              //       setState(() {
-                              //         selectCard = cards[index];
-                              //       });
-                              //     });
-                              //   },
-                              // );
-
-
-                            }else{
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 15.0),
-                                child: Center(child: Text(response.errorMessage??"An Error Occurred"),),
-                              );
-                            }
-
-                          }
-
-                          return Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Center(child: SpinKitCircle(color: AppColor.defaultColor,)),
-                          );
-                        },
-                      )
                     ],
                   ),
                 ),

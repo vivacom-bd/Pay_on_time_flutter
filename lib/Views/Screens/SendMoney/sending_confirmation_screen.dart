@@ -5,6 +5,7 @@ import 'package:hidmona/Repositories/transaction_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Payment/payment_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/sending_successful_screen.dart';
 
 class SendingMoneyConfirmationScreen extends StatefulWidget {
@@ -209,7 +210,11 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                       if(value.data != null){
                         commonController.currentTransaction = value.data;
 
-                        Get.offAll(const SendingSuccessFulScreen());
+                        if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit"){
+                          Get.offAll(const PaymentScreen());
+                        }else{
+                          Get.offAll(const SendingSuccessFulScreen());
+                        }
 
                       }else{
                         Utility.showSnackBar(value.errorMessage??"An Error Occurred");
