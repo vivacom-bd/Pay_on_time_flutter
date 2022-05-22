@@ -391,10 +391,10 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                           APIResponse<Recipient> value = await RecipientRepository.createRecipient(recipientRequestBody);
                           Get.back();
                           if(value.data != null){
-                            Utility.showSnackBar(value.errorMessage??"Recipient Created");
+                            Utility.showSnackBar(value.message??"Recipient Created");
                             Get.back();
                           }else{
-                            Utility.showSnackBar(value.errorMessage??"Recipient Not Created");
+                            Utility.showSnackBar(value.message??"Recipient Not Created");
                           }
 
                         }
@@ -474,10 +474,11 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
   void getCities() async{
     APIResponse<List<City>> apiResponse1 = await CommonRepository.getCities(commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id!);
     if(apiResponse1.data != null){
+      selectedRecipientCity = null;
       countryCities.clear();
       countryCities.addAll(apiResponse1.data!);
     }else{
-      Utility.showSnackBar(apiResponse1.errorMessage??"An error Occurred");
+      Utility.showSnackBar(apiResponse1.message??"An error Occurred");
     }
   }
 

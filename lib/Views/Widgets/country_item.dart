@@ -19,11 +19,11 @@ class CountryItem extends StatelessWidget {
         if(titleType != "flag")const SizedBox(width: 6.0),
         //Text("+${country.phoneCode}"),
         //SizedBox(width: 8.0),
-        if(titleType == "name") Flexible(child: Text(country!.name!,style:  const TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)),
-        if(titleType == "currencyCode") Flexible(child: Text(country!.currencyCode!,style: TextStyle(color: AppColor.boxColor,fontSize: 13,fontWeight: FontWeight.w600),)),
+        if(titleType == "name") Flexible(child: Text(country!.name!,style:  const TextStyle(fontSize: 15,fontWeight: FontWeight.w600),)),
+        if(titleType == "currencyCode") Flexible(child: Text(country!.currencyCode!,style: TextStyle(color: AppColor.boxColor,fontSize: 15,fontWeight: FontWeight.w600),)),
         if(titleType == "iso3Code") Flexible(child: Text(country!.iso3Code!,style:  TextStyle(color: AppColor.boxColor,fontSize: 15,fontWeight: FontWeight.w600),)),
-        if(titleType == "phoneCode") Flexible(child: Text(country!.phoneCode!,style: const TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)),
-        if(titleType == "countryWithPhoneCode") Flexible(child: Text("${country!.phoneCode} (${country!.name})",style: const TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)),
+        if(titleType == "phoneCode") Flexible(child: Text(country!.phoneCode!,style: const TextStyle(fontSize: 15,fontWeight: FontWeight.w600),)),
+        if(titleType == "countryWithPhoneCode") Flexible(child: Text("${country!.phoneCode} (${country!.name})",style: const TextStyle(fontSize: 15,fontWeight: FontWeight.w600),)),
       ],
     );
   }

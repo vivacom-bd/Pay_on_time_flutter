@@ -12,7 +12,7 @@ class RecipientRepository{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
-      return APIResponse<Recipient>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<Recipient>(error: true, message: "Internet is not connected!");
     }
 
     Uri url = Uri.parse(baseAPIUrl()+'recipients');
@@ -27,10 +27,10 @@ class RecipientRepository{
       if(data.statusCode == 201){
         return APIResponse<Recipient>(data: Recipient.fromJson(jsonData['data']));
       }
-      return APIResponse<Recipient>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<Recipient>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
-      return APIResponse<Recipient>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<Recipient>(error: true, message: "An Error Occurred!");
     });
   }
 
@@ -40,7 +40,7 @@ class RecipientRepository{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
-      return APIResponse<Recipient>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<Recipient>(error: true, message: "Internet is not connected!");
     }
 
     Uri url = Uri.parse(baseAPIUrl()+'recipients/$recipientId');
@@ -55,10 +55,10 @@ class RecipientRepository{
       if(data.statusCode == 202){
         return APIResponse<Recipient>(data: Recipient.fromJson(jsonData['data']));
       }
-      return APIResponse<Recipient>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<Recipient>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
-      return APIResponse<Recipient>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<Recipient>(error: true, message: "An Error Occurred!");
     });
   }
 
@@ -68,7 +68,7 @@ class RecipientRepository{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
-      return APIResponse<bool>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<bool>(error: true, message: "Internet is not connected!");
     }
 
     Uri url = Uri.parse(baseAPIUrl()+'recipients/$recipientId');
@@ -82,10 +82,10 @@ class RecipientRepository{
       if(data.statusCode == 200){
         return APIResponse<bool>(data: true);
       }
-      return APIResponse<bool>(error: true, errorMessage: jsonData["detail"]??"An error occurred");
+      return APIResponse<bool>(error: true, message: jsonData["detail"]??"An error occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<bool>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<bool>(error: true, message: "An Error Occurred!");
     });
   }
 
@@ -93,7 +93,7 @@ class RecipientRepository{
   ///getRecipients
   static Future<APIResponse<List<Recipient>>> getRecipients() async{
     if(!await Utility.isInternetConnected()){
-      return APIResponse<List<Recipient>>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<List<Recipient>>(error: true, message: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'recipients');
     return http.get(url,headers: headersWithAuth).then((data){
@@ -107,10 +107,10 @@ class RecipientRepository{
         });
         return APIResponse<List<Recipient>>(data: recipients);
       }
-      return APIResponse<List<Recipient>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<Recipient>>(error: true, message: jsonData["detail"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<List<Recipient>>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<List<Recipient>>(error: true, message: "An Error Occurred!");
     });
   }
 }

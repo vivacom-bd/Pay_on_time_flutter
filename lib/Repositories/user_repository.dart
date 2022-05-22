@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/user_profile.dart';
+import 'package:hidmona/Models/user_signup.dart';
 import 'package:hidmona/Repositories/api_constants.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Utilities/utility.dart';
@@ -13,7 +14,7 @@ class UserRepository{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
-      return APIResponse<AppUser>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<AppUser>(error: true, message: "Internet is not connected!");
     }
 
     Uri url = Uri.parse(baseAPIUrl()+'login');
@@ -28,10 +29,10 @@ class UserRepository{
       if(data.statusCode == 200){
         return APIResponse<AppUser>(data: AppUser.fromJson(jsonData));
       }
-      return APIResponse<AppUser>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<AppUser>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
-      return APIResponse<AppUser>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<AppUser>(error: true, message: "An Error Occurred!");
     });
   }
 
@@ -41,7 +42,7 @@ class UserRepository{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
-      return APIResponse<AppUser>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<AppUser>(error: true, message: "Internet is not connected!");
     }
 
     Uri url = Uri.parse(baseAPIUrl()+'customer-login');
@@ -56,13 +57,40 @@ class UserRepository{
       if(data.statusCode == 200){
         return APIResponse<AppUser>(data: AppUser.fromJson(jsonData));
       }
-      return APIResponse<AppUser>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<AppUser>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
-      return APIResponse<AppUser>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<AppUser>(error: true, message: "An Error Occurred!");
     });
   }
 
+
+  /// customerSignup
+  static Future<APIResponse<bool>> signUp(UserSignupRequest userSignupRequest) async{
+
+    ///internet check
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<bool>(error: true, message: "Internet is not connected!");
+    }
+
+    Uri url = Uri.parse(baseAPIUrl()+'signup');
+    return http.post(
+        url,
+        headers: headers,
+        body: json.encode(userSignupRequest.toJson())
+    ).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 201){
+        return APIResponse<bool>(data: true,error: false,message:jsonData["detail"] );
+      }
+      return APIResponse<bool>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<bool>(error: true, message: "An Error Occurred!");
+    });
+  }
 
 
   /// getUserProfile
@@ -70,7 +98,7 @@ class UserRepository{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
-      return APIResponse<UserProfile>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<UserProfile>(error: true, message: "Internet is not connected!");
     }
 
     Uri url = Uri.parse(baseAPIUrl()+'my_profile');
@@ -81,10 +109,10 @@ class UserRepository{
       if(data.statusCode == 200){
         return APIResponse<UserProfile>(data: UserProfile.fromJson(jsonData));
       }
-      return APIResponse<UserProfile>(error: true, errorMessage: jsonData["detail"]??"An error occurred");
+      return APIResponse<UserProfile>(error: true, message: jsonData["detail"]??"An error occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<UserProfile>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<UserProfile>(error: true, message: "An Error Occurred!");
     });
   }
 

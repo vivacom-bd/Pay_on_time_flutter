@@ -333,7 +333,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                                         ],
                                       );
                                     }else{
-                                      return Center(child: Text(apiResponse.errorMessage?? "An Error Occurred"));
+                                      return Center(child: Text(apiResponse.message?? "An Error Occurred"));
                                     }
 
                                   }else{

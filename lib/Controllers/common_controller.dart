@@ -1,6 +1,7 @@
 import 'package:country_currency_pickers/country.dart';
 import 'package:country_currency_pickers/utils/utils.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/country_wise_bank.dart';
@@ -14,7 +15,9 @@ import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Repositories/common_repository.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/recipient_repository.dart';
+import 'package:hidmona/Repositories/user_repository.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Home/home_screen.dart';
 import 'package:hidmona/Views/Screens/Login/login_screen.dart';
 
 class CommonController extends GetxController{
@@ -50,27 +53,64 @@ class CommonController extends GetxController{
   CountryWiseBank? selectedCountryWiseBank;
 
 
+  final getStorage = GetStorage();
+
+
   @override
   void onInit() {
     super.onInit();
-    getCountries();
+    getStarted();
   }
 
 
   ///getCountries
-  void getCountries(){
-    CommonRepository.getCountries().then((APIResponse<List<ServerCountry>> apiResponse){
+  void getStarted(){
+    CommonRepository.getCountries().then((APIResponse<List<ServerCountry>> apiResponse) async {
       if(apiResponse.data != null){
         serverCountries.addAll(apiResponse.data!);
 
-        Get.to(()=> const LoginScreen());
+
+        //savedLogin
+        String? email = getStorage.read<String>("email");
+        String? password = getStorage.read<String>("password");
+
+        if(email != null && password != null){
+          bool isSuccessful = await customerLogin(email,password);
+
+          if(isSuccessful){
+            Get.offAll(()=> const HomeScreen());
+            return;
+          }
+        }
+
+        Get.offAll(()=> const LoginScreen());
 
       }else{
-        Utility.showSnackBar(apiResponse.errorMessage??"An error occurred");
+        Utility.showSnackBar(apiResponse.message??"An error occurred");
       }
     });
   }
-  
+
+
+  Future<bool> customerLogin(String email, String password){
+
+    return UserRepository.customerLogin(email,password).then((value){
+      if(value.data != null){
+        currentUser.value = value.data!;
+
+        getStorage.write("email", email);
+        getStorage.write("password", password);
+
+        return true;
+
+      }else{
+        return false;
+      }
+
+    });
+
+  }
+
   
   ///getModeOfReceives
   Future<bool> getModeOfReceives(String countryCode) async{
@@ -83,7 +123,7 @@ class CommonController extends GetxController{
         modeOfReceives.addAll(apiResponse.data!);
         return true;
       }else{
-        Utility.showSnackBar(apiResponse.errorMessage??"An error Occurred");
+        Utility.showSnackBar(apiResponse.message??"An error Occurred");
         return false;
       }
     });
@@ -100,7 +140,7 @@ class CommonController extends GetxController{
         modeOfPayments.addAll(apiResponse.data!);
         return true;
       }else{
-        Utility.showSnackBar(apiResponse.errorMessage??"An error Occurred");
+        Utility.showSnackBar(apiResponse.message??"An error Occurred");
         return false;
       }
     });
@@ -116,7 +156,7 @@ class CommonController extends GetxController{
         myRecipients.addAll(apiResponse.data!);
         return true;
       }else{
-        Utility.showSnackBar(apiResponse.errorMessage??"An error Occurred");
+        Utility.showSnackBar(apiResponse.message??"An error Occurred");
         return false;
       }
     });
@@ -132,7 +172,7 @@ class CommonController extends GetxController{
       receiveCities.clear();
       receiveCities.addAll(apiResponse1.data!);
     }else{
-      Utility.showSnackBar(apiResponse1.errorMessage??"An error Occurred");
+      Utility.showSnackBar(apiResponse1.message??"An error Occurred");
       return false;
     }
 
@@ -142,7 +182,7 @@ class CommonController extends GetxController{
       sendingCities.clear();
       sendingCities.addAll(apiResponse2.data!);
     }else{
-      Utility.showSnackBar(apiResponse2.errorMessage??"An error Occurred");
+      Utility.showSnackBar(apiResponse2.message??"An error Occurred");
       return false;
     }
 
@@ -162,7 +202,7 @@ class CommonController extends GetxController{
         sendingPurposes.addAll(apiResponse.data!);
         return true;
       }else{
-        Utility.showSnackBar(apiResponse.errorMessage??"An error Occurred");
+        Utility.showSnackBar(apiResponse.message??"An error Occurred");
         return false;
       }
     });
@@ -180,7 +220,7 @@ class CommonController extends GetxController{
         countryWiseBanks.addAll(apiResponse.data!);
         return true;
       }else{
-        Utility.showSnackBar(apiResponse.errorMessage??"An error Occurred");
+        Utility.showSnackBar(apiResponse.message??"An error Occurred");
         return false;
       }
     });
@@ -191,7 +231,7 @@ class CommonController extends GetxController{
 
   /// getConversionDetails
   Future<APIResponse<CurrencyConversionDetails>> getConversionDetails(double amount, ServerCurrency serverCurrencyFrom, ServerCurrency serverCurrencyTo) async{
-    APIResponse<CurrencyConversionDetails> apiResponse = await CommonRepository.getConversionDetails(amount, serverCurrencyFrom.id!, serverCurrencyTo.id!);
+    APIResponse<CurrencyConversionDetails> apiResponse = await CommonRepository.getConversionDetails(amount, serverCurrencyFrom.id!, serverCurrencyTo.id!, serverCountryFrom.value.id!, serverCountryTo.value.id!);
 
     return apiResponse;
   }
@@ -205,7 +245,7 @@ class CommonController extends GetxController{
     if(apiResponseFrom1.data!=null){
       serverCountryFrom.value.selectedCurrency = apiResponseFrom1.data;
     }else{
-      Utility.showSnackBar(apiResponseFrom1.errorMessage??"No default currency for ${serverCountryFrom.value.name}");
+      Utility.showSnackBar(apiResponseFrom1.message??"No default currency for ${serverCountryFrom.value.name}");
       return false;
     }
 
@@ -213,7 +253,7 @@ class CommonController extends GetxController{
     if(apiResponseFrom2.data!=null){
       serverCountryFrom.value.currencies = apiResponseFrom2.data;
     }else{
-      Utility.showSnackBar(apiResponseFrom2.errorMessage??"No Currency Found ${serverCountryFrom.value.name}");
+      Utility.showSnackBar(apiResponseFrom2.message??"No Currency Found ${serverCountryFrom.value.name}");
       return false;
     }
 
@@ -225,7 +265,7 @@ class CommonController extends GetxController{
     if(apiResponseTo1.data!=null){
       serverCountryTo.value.selectedCurrency = apiResponseTo1.data;
     }else{
-      Utility.showSnackBar(apiResponseTo1.errorMessage??"No Currency Found ${serverCountryTo.value.name}");
+      Utility.showSnackBar(apiResponseTo1.message??"No Currency Found ${serverCountryTo.value.name}");
       return false;
     }
 
@@ -233,7 +273,7 @@ class CommonController extends GetxController{
     if(apiResponseTo2.data!=null){
       serverCountryTo.value.currencies = apiResponseTo2.data;
     }else{
-      Utility.showSnackBar(apiResponseTo2.errorMessage??"No default currency for ${serverCountryTo.value.name}");
+      Utility.showSnackBar(apiResponseTo2.message??"No default currency for ${serverCountryTo.value.name}");
       return false;
     }
 

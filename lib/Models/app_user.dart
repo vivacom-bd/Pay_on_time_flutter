@@ -3,31 +3,37 @@ class AppUser {
   String? phone;
   String? fullName;
   String? email;
-  String? version;
+  // Null? version;
   String? accessToken;
   String? refreshToken;
   String? tokenType;
   String? expiryTime;
   List<Permissions>? permissions;
+  String? detail;
+  String? kycApplicationId;
+  String? kycUserToken;
 
   AppUser(
       {this.username,
         this.phone,
         this.fullName,
         this.email,
-        this.version,
+        // this.version,
         this.accessToken,
         this.refreshToken,
         this.tokenType,
         this.expiryTime,
-        this.permissions});
+        this.permissions,
+        this.detail,
+        this.kycApplicationId,
+        this.kycUserToken});
 
   AppUser.fromJson(Map<String, dynamic> json) {
     username = json['username'];
     phone = json['phone'];
     fullName = json['full_name'];
     email = json['email'];
-    version = json['version'];
+    // version = json['version'];
     accessToken = json['access_token'];
     refreshToken = json['refresh_token'];
     tokenType = json['token_type'];
@@ -38,6 +44,9 @@ class AppUser {
         permissions!.add(Permissions.fromJson(v));
       });
     }
+    detail = json['detail'];
+    kycApplicationId = json['kyc_application_id'];
+    kycUserToken = json['kyc_user_token'];
   }
 
   Map<String, dynamic> toJson() {
@@ -46,7 +55,7 @@ class AppUser {
     data['phone'] = phone;
     data['full_name'] = fullName;
     data['email'] = email;
-    data['version'] = version;
+    // data['version'] = version;
     data['access_token'] = accessToken;
     data['refresh_token'] = refreshToken;
     data['token_type'] = tokenType;
@@ -54,15 +63,11 @@ class AppUser {
     if (permissions != null) {
       data['permissions'] = permissions!.map((v) => v.toJson()).toList();
     }
+    data['detail'] = detail;
+    data['kyc_application_id'] = kycApplicationId;
+    data['kyc_user_token'] = kycUserToken;
     return data;
   }
-
-
-  @override
-  bool operator ==(Object other) => other is AppUser && other.email == email;
-
-  @override
-  int get hashCode => 1;
 }
 
 class Permissions {
@@ -99,37 +104,37 @@ class MenuPermission {
   int? id;
   String? name;
   String? url;
-  String? menuSlug;
-  int? parentId;
+  String? icon;
+  // int? parentId;
   bool? canCreate;
-  bool? canEdit;
   bool? canView;
   bool? canList;
   bool? canDelete;
+  bool? canEdit;
 
   MenuPermission(
       {this.id,
         this.name,
         this.url,
-        this.menuSlug,
-        this.parentId,
+        this.icon,
+        // this.parentId,
         this.canCreate,
-        this.canEdit,
         this.canView,
         this.canList,
-        this.canDelete});
+        this.canDelete,
+        this.canEdit});
 
   MenuPermission.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     url = json['url'];
-    menuSlug = json['menu_slug'];
-    parentId = json['parent_id'];
+    icon = json['icon'];
+    // parentId = json['parent_id'];
     canCreate = json['can_create'];
-    canEdit = json['can_edit'];
     canView = json['can_view'];
     canList = json['can_list'];
     canDelete = json['can_delete'];
+    canEdit = json['can_edit'];
   }
 
   Map<String, dynamic> toJson() {
@@ -137,13 +142,13 @@ class MenuPermission {
     data['id'] = id;
     data['name'] = name;
     data['url'] = url;
-    data['menu_slug'] = menuSlug;
-    data['parent_id'] = parentId;
+    data['icon'] = icon;
+    // data['parent_id'] = parentId;
     data['can_create'] = canCreate;
-    data['can_edit'] = canEdit;
     data['can_view'] = canView;
     data['can_list'] = canList;
     data['can_delete'] = canDelete;
+    data['can_edit'] = canEdit;
     return data;
   }
 }

@@ -69,10 +69,10 @@ class _RecipientItemState extends State<RecipientItem> {
                               APIResponse apiResponse = await RecipientRepository.deleteRecipient(widget.recipient.id!);
 
                               if(apiResponse.data != null && apiResponse.data){
-                                Utility.showSnackBar(apiResponse.errorMessage??"Recipient Deleted");
+                                Utility.showSnackBar(apiResponse.message??"Recipient Deleted");
                                 widget.onRefresh();
                               }else{
-                                Utility.showSnackBar(apiResponse.errorMessage??"An Error Occurred");
+                                Utility.showSnackBar(apiResponse.message??"An Error Occurred");
                               }
 
                               Get.back();

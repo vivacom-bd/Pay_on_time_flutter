@@ -126,7 +126,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
                                         //PaymentDialog.showDialog();
                                       }else{
-                                        Utility.showSnackBar(apiResponse.errorMessage?? "An Error Occurred",durationInSeconds: 5);
+                                        Utility.showSnackBar(apiResponse.message?? "An Error Occurred",durationInSeconds: 5);
                                       }
 
 
@@ -144,7 +144,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             }else{
                               return Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 15.0),
-                                child: Center(child: Text(response.errorMessage??"An Error Occurred"),),
+                                child: Center(child: Text(response.message??"An Error Occurred"),),
                               );
                             }
 

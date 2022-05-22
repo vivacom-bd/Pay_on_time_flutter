@@ -100,7 +100,7 @@ class _MyRecipientScreenState extends State<MyRecipientScreen> {
                   );
 
                 }else{
-                  return Center(child: Text(response.errorMessage??"An Error Occurred"),);
+                  return Center(child: Text(response.message??"An Error Occurred"),);
                 }
 
               }

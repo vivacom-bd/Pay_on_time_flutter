@@ -18,7 +18,7 @@ class CommonRepository{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
-      return APIResponse<List<ServerCountry>>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<List<ServerCountry>>(error: true, message: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'public/country');
     return http.get(url).then((data) async {
@@ -42,10 +42,10 @@ class CommonRepository{
 
         return APIResponse<List<ServerCountry>>(data: countries);
       }
-      return APIResponse<List<ServerCountry>>(error: true, errorMessage: jsonData["detail"]??"An error occurred");
+      return APIResponse<List<ServerCountry>>(error: true, message: jsonData["detail"]??"An error occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<List<ServerCountry>>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<List<ServerCountry>>(error: true, message: "An Error Occurred!");
     });
   }
 
@@ -56,7 +56,7 @@ class CommonRepository{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
-      return APIResponse<ServerCurrency>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<ServerCurrency>(error: true, message: "Internet is not connected!");
     }
 
     Uri url = Uri.parse(baseAPIUrl()+'public/country_to_default_currency?country_id=$countryId');
@@ -67,10 +67,10 @@ class CommonRepository{
       if(data.statusCode == 200){
         return APIResponse<ServerCurrency>(data: ServerCurrency.fromJson(jsonData));
       }
-      return APIResponse<ServerCurrency>(error: true, errorMessage: jsonData["detail"]??"An error occurred");
+      return APIResponse<ServerCurrency>(error: true, message: jsonData["detail"]??"An error occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<ServerCurrency>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<ServerCurrency>(error: true, message: "An Error Occurred!");
     });
   }
 
@@ -79,7 +79,7 @@ class CommonRepository{
   ///getCurrenciesOnCountry
   static Future<APIResponse<List<ServerCurrency>>> getCurrenciesOnCountry(int countryId) async{
     if(!await Utility.isInternetConnected()){
-      return APIResponse<List<ServerCurrency>>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<List<ServerCurrency>>(error: true, message: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'public/currencies?country_id=$countryId');
     return http.get(url,headers: headersWithAuth)
@@ -94,24 +94,24 @@ class CommonRepository{
         });
         return APIResponse<List<ServerCurrency>>(data: currencies);
       }
-      return APIResponse<List<ServerCurrency>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<ServerCurrency>>(error: true, message: jsonData["detail"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<List<ServerCurrency>>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<List<ServerCurrency>>(error: true, message: "An Error Occurred!");
     });
   }
 
 
 
   /// getCurrencyConversion
-  static Future<APIResponse<CurrencyConversionDetails>> getConversionDetails(double amount, int fromCurrencyId, int toCurrencyId) async{
+  static Future<APIResponse<CurrencyConversionDetails>> getConversionDetails(double amount, int fromCurrencyId, int toCurrencyId, int fromCountryId, int toCountryId) async{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
-      return APIResponse<CurrencyConversionDetails>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<CurrencyConversionDetails>(error: true, message: "Internet is not connected!");
     }
 
-    Uri url = Uri.parse(baseAPIUrl()+'public/currency_conversion?from_currency_id=$fromCurrencyId&to_currency_id=$toCurrencyId');
+    Uri url = Uri.parse(baseAPIUrl()+'public/currency_conversion?from_currency_id=$fromCurrencyId&to_currency_id=$toCurrencyId&from_country_id=$fromCountryId&to_country_id=$toCountryId');
     return http.post(
         url,
         headers: headers,
@@ -124,20 +124,20 @@ class CommonRepository{
         return APIResponse<CurrencyConversionDetails>(data: CurrencyConversionDetails.fromJson(jsonData));
       }
       print(jsonData["detail"].runtimeType);
-      return APIResponse<CurrencyConversionDetails>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<CurrencyConversionDetails>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
-      return APIResponse<CurrencyConversionDetails>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<CurrencyConversionDetails>(error: true, message: "An Error Occurred!");
     });
   }
 
   ///getPaymentMethod
   static Future<APIResponse<List<ModeOfPayment>>> getModeOfPayment(int countryId) async{
     if(!await Utility.isInternetConnected()){
-      return APIResponse<List<ModeOfPayment>>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<List<ModeOfPayment>>(error: true, message: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'public/payment_method/$countryId');
-    return http.get(url)
+    return http.get(url,headers: headersWithAuth)
         .then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
@@ -149,20 +149,20 @@ class CommonRepository{
         });
         return APIResponse<List<ModeOfPayment>>(data: modes);
       }
-      return APIResponse<List<ModeOfPayment>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<ModeOfPayment>>(error: true, message: jsonData["detail"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<List<ModeOfPayment>>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<List<ModeOfPayment>>(error: true, message: "An Error Occurred!");
     });
   }
 
   ///getPaymentMethod
   static Future<APIResponse<List<ModeOfPayment>>> getModeOfReceive(int countryId) async{
     if(!await Utility.isInternetConnected()){
-      return APIResponse<List<ModeOfPayment>>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<List<ModeOfPayment>>(error: true, message: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'public/receive_method/$countryId');
-    return http.get(url)
+    return http.get(url,headers: headersWithAuth)
         .then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
@@ -174,17 +174,17 @@ class CommonRepository{
         });
         return APIResponse<List<ModeOfPayment>>(data: modes);
       }
-      return APIResponse<List<ModeOfPayment>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<ModeOfPayment>>(error: true, message: jsonData["detail"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<List<ModeOfPayment>>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<List<ModeOfPayment>>(error: true, message: "An Error Occurred!");
     });
   }
 
   ///getSendingPurposes
   static Future<APIResponse<List<SendingPurpose>>> getSendingPurposes() async{
     if(!await Utility.isInternetConnected()){
-      return APIResponse<List<SendingPurpose>>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<List<SendingPurpose>>(error: true, message: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'sending_purposes');
     return http.get(url,headers: headersWithAuth)
@@ -199,10 +199,10 @@ class CommonRepository{
         });
         return APIResponse<List<SendingPurpose>>(data: purposes);
       }
-      return APIResponse<List<SendingPurpose>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<SendingPurpose>>(error: true, message: jsonData["detail"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<List<SendingPurpose>>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<List<SendingPurpose>>(error: true, message: "An Error Occurred!");
     });
   }
 
@@ -211,7 +211,7 @@ class CommonRepository{
   ///getPaymentMethod
   static Future<APIResponse<List<City>>> getCities(int countryId) async{
     if(!await Utility.isInternetConnected()){
-      return APIResponse<List<City>>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<List<City>>(error: true, message: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'public/city_list_based_on_country/$countryId');
     return http.get(url,headers: headersWithAuth)
@@ -226,10 +226,10 @@ class CommonRepository{
         });
         return APIResponse<List<City>>(data: cities);
       }
-      return APIResponse<List<City>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<City>>(error: true, message: jsonData["detail"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<List<City>>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<List<City>>(error: true, message: "An Error Occurred!");
     });
   }
 
@@ -237,7 +237,7 @@ class CommonRepository{
   ///getCountryWiseBanks
   static Future<APIResponse<List<CountryWiseBank>>> getCountryWiseBanks(String countryId) async{
     if(!await Utility.isInternetConnected()){
-      return APIResponse<List<CountryWiseBank>>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<List<CountryWiseBank>>(error: true, message: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'country_wise_bank/accepted_banks/$countryId');
     return http.get(url,headers: headersWithAuth)
@@ -252,10 +252,10 @@ class CommonRepository{
         });
         return APIResponse<List<CountryWiseBank>>(data: banks);
       }
-      return APIResponse<List<CountryWiseBank>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<CountryWiseBank>>(error: true, message: jsonData["detail"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<List<CountryWiseBank>>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<List<CountryWiseBank>>(error: true, message: "An Error Occurred!");
     });
   }
 

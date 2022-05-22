@@ -228,7 +228,7 @@ class _PaymentWithNewCardScreenState extends State<PaymentWithNewCardScreen> {
                     if(apiResponse.data != null && apiResponse.data!){
                       PaymentDialog.showDialog();
                     }else{
-                      Utility.showSnackBar(apiResponse.errorMessage?? "An Error Occurred",durationInSeconds: 5);
+                      Utility.showSnackBar(apiResponse.message?? "An Error Occurred",durationInSeconds: 5);
                     }
 
                   }

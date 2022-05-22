@@ -133,6 +133,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ContactItem(
                           iconData: CupertinoIcons.arrowshape_turn_up_left_fill,text: "Logout",
                           onTap: () {
+
+                            commonController.getStorage.erase();
                             Get.offAll(const LoginScreen());
                           },
                         ),
@@ -151,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 );
               }else{
-                return Center(child: Text(apiResponse.errorMessage??"An Error Occurred"),);
+                return Center(child: Text(apiResponse.message??"An Error Occurred"),);
               }
 
             }else{

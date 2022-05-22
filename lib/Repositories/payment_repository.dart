@@ -11,7 +11,7 @@ class PaymentRepository{
   ///getCards
   static Future<APIResponse<List<PaymentCard>>> getCards() async{
     if(!await Utility.isInternetConnected()){
-      return APIResponse<List<PaymentCard>>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<List<PaymentCard>>(error: true, message: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'card');
     return http.get(url,headers: headersWithAuth)
@@ -26,17 +26,17 @@ class PaymentRepository{
         });
         return APIResponse<List<PaymentCard>>(data: cards);
       }
-      return APIResponse<List<PaymentCard>>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<PaymentCard>>(error: true, message: jsonData["detail"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<List<PaymentCard>>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<List<PaymentCard>>(error: true, message: "An Error Occurred!");
     });
   }
 
   ///deleteCard
   static Future<APIResponse<bool>> deleteCard(int id) async{
     if(!await Utility.isInternetConnected()){
-      return APIResponse<bool>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<bool>(error: true, message: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'card/$id');
     return http.get(url,headers: headersWithAuth)
@@ -47,10 +47,10 @@ class PaymentRepository{
       if(data.statusCode == 200){
         return APIResponse<bool>(data: true);
       }
-      return APIResponse<bool>(error: true, errorMessage: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<bool>(error: true, message: jsonData["detail"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<bool>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<bool>(error: true, message: "An Error Occurred!");
     });
   }
 
@@ -62,7 +62,7 @@ class PaymentRepository{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
-      return APIResponse<bool>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<bool>(error: true, message: "Internet is not connected!");
     }
 
     Uri url = Uri.parse(baseAPIUrl()+'payment/trust_pay/transaction_with_card/$cardId?transaction_number=$transactionNumber');
@@ -76,10 +76,10 @@ class PaymentRepository{
       if(data.statusCode == 201){
         return APIResponse<bool>(data: jsonData["detail"]);
       }
-      return APIResponse<bool>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<bool>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
-      return APIResponse<bool>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<bool>(error: true, message: "An Error Occurred!");
     });
   }
 
@@ -90,7 +90,7 @@ class PaymentRepository{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
-      return APIResponse<bool>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<bool>(error: true, message: "Internet is not connected!");
     }
 
     Uri url = Uri.parse(baseAPIUrl()+'payment/trust_pay/card_save?transaction_number=$transactionNumber');
@@ -105,10 +105,10 @@ class PaymentRepository{
       if(data.statusCode == 201){
         return APIResponse<bool>(data: true);
       }
-      return APIResponse<bool>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<bool>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
-      return APIResponse<bool>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<bool>(error: true, message: "An Error Occurred!");
     });
   }
 
@@ -119,7 +119,7 @@ class PaymentRepository{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
-      return APIResponse<bool>(error: true, errorMessage: "Internet is not connected!");
+      return APIResponse<bool>(error: true, message: "Internet is not connected!");
     }
 
     Uri url = Uri.parse(baseAPIUrl()+'payment/trust_pay/transaction_once?transaction_number=$transactionNumber');
@@ -134,10 +134,10 @@ class PaymentRepository{
       if(data.statusCode == 201){
         return APIResponse<bool>(data: true);
       }
-      return APIResponse<bool>(error: true, errorMessage:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<bool>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
-      return APIResponse<bool>(error: true, errorMessage: "An Error Occurred!");
+      return APIResponse<bool>(error: true, message: "An Error Occurred!");
     });
   }
 

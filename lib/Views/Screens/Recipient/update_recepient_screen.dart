@@ -429,9 +429,9 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
                           APIResponse<Recipient> value = await RecipientRepository.updateRecipient(widget.recipient.id!,recipientRequestBody);
                           Get.back();
                           if(value.data != null){
-                            Utility.showSnackBar(value.errorMessage??"Recipient Updated");
+                            Utility.showSnackBar(value.message??"Recipient Updated");
                           }else{
-                            Utility.showSnackBar(value.errorMessage??"Recipient Not Updated");
+                            Utility.showSnackBar(value.message??"Recipient Not Updated");
                           }
 
 
@@ -524,7 +524,7 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
       }
 
     }else{
-      Utility.showSnackBar(apiResponse1.errorMessage??"An error Occurred");
+      Utility.showSnackBar(apiResponse1.message??"An error Occurred");
     }
   }
 }

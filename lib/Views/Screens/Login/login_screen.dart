@@ -10,6 +10,7 @@ import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Home/home_screen.dart';
+import 'package:hidmona/Views/Screens/Login/signup_screen.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
@@ -54,24 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Text(
-                        'Hidmona',
-                        style: TextStyle(
-                          color: AppColor.defaultColorLight,
-                          fontFamily: 'AkayaTelivigala',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 50,
-                        ),
-                      ),
-                      Text(
-                        'Money Transfer',
-                        style: TextStyle(
-                          color: AppColor.defaultColorLight,
-                          fontFamily: 'AkayaTelivigala',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                        ),
-                      ),
+                      Center(child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.7,),),
                       const SizedBox(height: 150.0),
                       Container(
                         alignment: Alignment.center,
@@ -139,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                       }
                                   ),
-                                  const SizedBox(height: 7,),
+                                  const SizedBox(height: 10,),
                                   Obx((){
                                     return CustomTextFormField(
                                         controller: passwordController,
@@ -147,8 +131,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         validator: (value) {
                                           if(value!.isEmpty){
                                             return "Password can't be empty";
-                                          }else if(value.length <6){
-                                            return "Password at least 6 digits";
+                                          }else if(value.length <8){
+                                            return "Password at least 8 digits";
                                           }
                                           return null;
                                         },
@@ -166,8 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         }
                                     );
                                   }),
-                                  const SizedBox(height: 7,),
-                                  const SizedBox(height: 30.0),
+                                  const SizedBox(height: 20,),
                                   DefaultButton(buttonText: "Login", onTap: (){
 
                                     FocusScope.of(context).unfocus();
@@ -180,16 +163,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                         if(value.data != null){
                                           controller.currentUser.value = value.data!;
 
+                                          controller.getStorage.write("email", emailController.text);
+                                          controller.getStorage.write("password", passwordController.text);
+
                                           Get.back();
-                                          Get.to(()=> const HomeScreen());
+                                          Get.offAll(()=> const HomeScreen());
 
                                         }else{
                                           Get.back();
-                                          Utility.showSnackBar(value.errorMessage??"An Error Occurred");
+                                          Utility.showSnackBar(value.message??"An Error Occurred");
                                         }
 
                                       });
                                     }
+                                  },),
+                                  const SizedBox(height: 20,),
+                                  DefaultButton(linearGradient: AppGradient.getColorGradient("grey"),buttonText: "Signup", textColor: AppColor.defaultColorLight, onTap: (){
+
+                                    FocusScope.of(context).unfocus();
+
+                                    Get.to(()=>const SignUpScreen());
+
                                   },),
                                 ],
                               ),

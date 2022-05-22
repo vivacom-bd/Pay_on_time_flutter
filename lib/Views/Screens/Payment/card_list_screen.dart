@@ -101,10 +101,10 @@ class _CardListScreenState extends State<CardListScreen> {
                                               APIResponse apiResponse = await PaymentRepository.deleteCard(cards[index].id!);
 
                                               if(apiResponse.data != null && apiResponse.data){
-                                                Utility.showSnackBar(apiResponse.errorMessage??"Card Deleted");
+                                                Utility.showSnackBar(apiResponse.message??"Card Deleted");
                                                 setState(() {});
                                               }else{
-                                                Utility.showSnackBar(apiResponse.errorMessage??"An Error Occurred");
+                                                Utility.showSnackBar(apiResponse.message??"An Error Occurred");
                                               }
 
                                               Get.back();
@@ -134,7 +134,7 @@ class _CardListScreenState extends State<CardListScreen> {
                   );
 
                 }else{
-                  return Center(child: Text(response.errorMessage??"An Error Occurred"),);
+                  return Center(child: Text(response.message??"An Error Occurred"),);
                 }
 
               }

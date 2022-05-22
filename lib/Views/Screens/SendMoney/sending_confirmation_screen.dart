@@ -217,7 +217,7 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         }
 
                       }else{
-                        Utility.showSnackBar(value.errorMessage??"An Error Occurred");
+                        Utility.showSnackBar(value.message??"An Error Occurred");
                       }
                     });
 

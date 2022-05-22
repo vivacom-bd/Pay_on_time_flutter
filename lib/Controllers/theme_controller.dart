@@ -11,7 +11,7 @@ class ThemeController extends GetxController{
     colorScheme: ThemeData.light().colorScheme.copyWith(primary: AppColor.defaultColor,),
     appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.light,
-      color: AppColor.defaultColor,
+      color: AppColor.defaultColorLight,
       // titleTextStyle: TextStyle(color: Colors.red,fontSize: 23,fontWeight: FontWeight.w700),
       // iconTheme: IconThemeData(color: Colors.red,size: 30)
     ),
@@ -25,8 +25,8 @@ class ThemeController extends GetxController{
     colorScheme: ThemeData.dark().colorScheme.copyWith(primary: AppColor.defaultColor),
     appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.dark,
-      color: AppColor.defaultColor,
-      shadowColor: AppColor.defaultColor,
+      color: AppColor.defaultColorLight,
+      //shadowColor: AppColor.defaultColor,
       // titleTextStyle: TextStyle(color: Colors.redAccent[700],fontSize: 23,fontWeight: FontWeight.w700),
       // iconTheme: IconThemeData(color: Colors.redAccent[700],size: 30)
     ),

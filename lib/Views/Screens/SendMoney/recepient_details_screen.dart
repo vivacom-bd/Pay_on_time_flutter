@@ -519,14 +519,14 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                             if(value.data != null){
                               commonController.selectedRecipient = value.data;
                             }else{
-                              Utility.showSnackBar(value.errorMessage??"Recipient Not Created");
+                              Utility.showSnackBar(value.message??"Recipient Not Created");
                             }
                           }else{
                             APIResponse<Recipient> value = await RecipientRepository.updateRecipient(selectedRecipient!.id!,recipientRequestBody);
                             if(value.data != null){
                               commonController.selectedRecipient = value.data;
                             }else{
-                              Utility.showSnackBar(value.errorMessage??"Recipient Not Updated");
+                              Utility.showSnackBar(value.message??"Recipient Not Updated");
                             }
                           }
 

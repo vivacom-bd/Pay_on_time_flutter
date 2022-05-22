@@ -15,6 +15,7 @@ import 'package:hidmona/Views/Screens/Transaction/transaction_history_screen.dar
 import 'package:hidmona/Views/Widgets/country_item.dart';
 import 'package:hidmona/Views/Widgets/dashboard_item.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = "/HomeScreen";
@@ -69,7 +70,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 const SizedBox(height: 15,),
-                Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),),
+                (controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty) ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),height: 25,),
+                    DefaultButton(buttonText: "Apply for KYC",onTap: ()async{
+                      String url = 'https://kyc.dev.hidmona.ch/api/v2/applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      }
+                    },),
+                    Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),height: 25,),
+                  ],
+                ):const SizedBox(height: 10,),
                 const SizedBox(height: 15,),
                 Center(
                   child: Text(
@@ -188,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return;
                               }
 
-                              bool isSuccessModeOfPayments = await controller.getModeOfPayments(controller.countryTo.value.isoCode!);
+                              bool isSuccessModeOfPayments = await controller.getModeOfPayments(controller.countryFrom.value.isoCode!);
                               if(!isSuccessModeOfPayments){
                                 Get.back();
                                 return;

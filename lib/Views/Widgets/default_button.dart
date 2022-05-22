@@ -7,11 +7,13 @@ class DefaultButton extends StatelessWidget {
     required this.buttonText,
     this.iconData,
     this.onTap,
+    this.textColor = Colors.white,
     this.linearGradient,
   }) : super(key: key);
 
 
   final String buttonText;
+  final Color textColor;
   final IconData? iconData;
   final LinearGradient? linearGradient;
   final Function()? onTap;
@@ -24,12 +26,12 @@ class DefaultButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical:12,horizontal:20),
         decoration: BoxDecoration(
           gradient : linearGradient?? AppGradient.getColorGradient('default'),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(30),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(buttonText,style: const TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),),
+            Text(buttonText,style: TextStyle(color: textColor,fontSize: 16,fontWeight: FontWeight.bold),),
             if(iconData!=null) Expanded(
               child: Container(
                 alignment: Alignment.centerRight,
