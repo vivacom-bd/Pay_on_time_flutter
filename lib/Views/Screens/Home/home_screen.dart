@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
+import 'package:hidmona/Repositories/api_constants.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
@@ -30,6 +31,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   CommonController controller = Get.find<CommonController>();
+  
+  @override
+  initState(){
+    super.initState();
+    
+    if(controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty){
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
+        Utility.showSnackBar("Your KYC application is not approved yet",durationInSeconds: 3);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),height: 25,),
                     DefaultButton(buttonText: "Apply for KYC",onTap: ()async{
-                      String url = 'https://kyc.dev.hidmona.ch/api/v2/applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
-                      if (await canLaunch(url)) {
-                        await launch(url);
+                      String url = '${kycBaseUrl()}applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
+                      Uri uri = Uri.parse(url);
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri,mode: LaunchMode.externalApplication);
                       }
                     },),
                     Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),height: 25,),

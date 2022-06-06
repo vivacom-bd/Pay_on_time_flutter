@@ -30,15 +30,15 @@ class CurrencyConversionDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['our_rate'] = this.ourRate;
-    data['amount_to_send'] = this.amountToSend;
-    data['sending_currency'] = this.sendingCurrency;
-    data['fees'] = this.fees;
-    data['amount_to_pay'] = this.amountToPay;
-    data['amount_to_receive'] = this.amountToReceive;
-    data['receiving_currency'] = this.receivingCurrency;
-    data['total_payment'] = this.totalPayment;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['our_rate'] = ourRate;
+    data['amount_to_send'] = amountToSend;
+    data['sending_currency'] = sendingCurrency;
+    data['fees'] = fees;
+    data['amount_to_pay'] = amountToPay;
+    data['amount_to_receive'] = amountToReceive;
+    data['receiving_currency'] = receivingCurrency;
+    data['total_payment'] = totalPayment;
     return data;
   }
 }

@@ -458,7 +458,7 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
             print(phoneNumber);
           }
 
-          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             if(mounted){
               setState(() {
                 isPhoneNumberValid = isPhoneValid;

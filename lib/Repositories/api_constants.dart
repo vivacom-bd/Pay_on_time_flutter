@@ -8,6 +8,10 @@ String baseAPIUrl(){
   return isDev ? 'https://api.hidmona.ch/api/v1/' : 'https://api.hidmona.ch/api/v1/';
 }
 
+String kycBaseUrl(){
+  return isDev ? "https://kyc.hidmona.ch/api/v2/" : "https://kyc.hidmona.ch/api/v2/";
+}
+
 final headers = {
   "Content-Type": "application/json",
   "x-org-domain": "hidmona"

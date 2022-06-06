@@ -520,7 +520,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             print(phoneNumber);
           }
 
-          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             if(mounted){
               setState(() {
                 isPhoneNumberValid = isPhoneValid;

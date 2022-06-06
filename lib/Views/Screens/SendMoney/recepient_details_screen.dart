@@ -132,7 +132,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
 
                               phone.PhoneNumberUtil().parse(selectedRecipient!.phone!).then((number){
                                 //phoneNumber = number.nationalNumber;
-                                print(phoneNumber);
+                                phoneNumber = selectedRecipient!.phone!;
                                 phoneTextEditingController.text = number.nationalNumber;
 
                               });
@@ -151,7 +151,9 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                 }
                               }
 
-                              setState(() {});
+                              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                                setState(() {});
+                              });
                             }
                         ),
                       ],
@@ -601,7 +603,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
             print(phoneNumber);
           }
 
-          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             if(mounted){
               setState(() {
                 isPhoneNumberValid = isPhoneValid;

@@ -119,7 +119,7 @@ class _SendingSuccessFulScreenState extends State<SendingSuccessFulScreen> {
                 ),
 
                 const SizedBox(height: 45,),
-                DefaultButton(buttonText: "Goto Home",onTap: (){
+                DefaultButton(buttonText: "Go to Home",onTap: (){
                   Get.offAll(const HomeScreen());
                 },),
                 const SizedBox(height: 15,),
