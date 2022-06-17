@@ -95,6 +95,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 CustomTextFormField(
+                                    controller: fullNameController,
+                                    validator: (value) {
+                                      if(value!.isEmpty){
+                                        return "Name can't be empty";
+                                      }
+                                      return null;
+                                    },
+                                    labelText: "Full Name",
+                                    hindText: "Enter your full name",
+                                    keyboardType: TextInputType.text,
+                                    onChanged: (value) {
+
+                                    }
+                                ),
+                                const SizedBox(height: 10,),
+                                CustomTextFormField(
                                     controller: emailController,
                                     validator: (value) {
                                       if(value!.isEmpty){
@@ -112,68 +128,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     }
                                 ),
                                 const SizedBox(height: 10,),
-                                CustomTextFormField(
-                                    controller: fullNameController,
-                                    validator: (value) {
-                                      if(value!.isEmpty){
-                                        return "Name can't be empty";
-                                      }
-                                      return null;
-                                    },
-                                    labelText: "Full Name",
-                                    hindText: "Enter your full name",
-                                    keyboardType: TextInputType.text,
-                                    onChanged: (value) {
-
-                                    }
-                                ),
-                                const SizedBox(height: 10,),
-                                InkWell(
-                                  onTap: ()async{
-                                    dateOfBirth = await showDatePicker(
-                                      initialEntryMode: DatePickerEntryMode.calendar,
-                                      context: context,
-                                      initialDate: dateOfBirth ?? DateTime.now(),
-                                      firstDate: DateFormat("dd-mm-yyyy").parse("01-01-1930"),
-                                      lastDate: DateTime.now(),
-                                      currentDate: DateTime.now(),
-                                      builder: (context,child) {
-                                        return Theme(
-                                          data: Get.theme.copyWith(
-                                            colorScheme: Get.theme.colorScheme.copyWith(primary: Theme.of(context).primaryColor),
-                                            buttonTheme: const ButtonThemeData(
-                                                textTheme: ButtonTextTheme.primary
-                                            ),
-                                          ),
-                                          child: child!,
-                                        );
-                                      },
-                                    );
-
-                                    if(dateOfBirth!=null) {
-
-                                      dateOfBirthController.text = DateFormat("dd MMM, yyyy").format(dateOfBirth!);
-                                      //FocusScope.of(context).requestFocus(FocusNode());
-                                    }
-                                  },
-                                  child: CustomTextFormField(
-                                      controller: dateOfBirthController,
-                                      enabled: false,
-                                      validator: (value) {
-                                        if(value!.isEmpty){
-                                          return "Field can't be empty";
-                                        }
-                                        return null;
-                                      },
-                                      labelText: "Date Of Birth",
-                                      hindText: "Enter your date of birth",
-                                      keyboardType: TextInputType.text,
-                                      onChanged: (value) async{
-
-                                      }
-                                  ),
-                                ),
-                                const SizedBox(height: 10,),
+                                // InkWell(
+                                //   onTap: ()async{
+                                //     dateOfBirth = await showDatePicker(
+                                //       initialEntryMode: DatePickerEntryMode.calendar,
+                                //       context: context,
+                                //       initialDate: dateOfBirth ?? DateTime.now(),
+                                //       firstDate: DateFormat("dd-mm-yyyy").parse("01-01-1930"),
+                                //       lastDate: DateTime.now(),
+                                //       currentDate: DateTime.now(),
+                                //       builder: (context,child) {
+                                //         return Theme(
+                                //           data: Get.theme.copyWith(
+                                //             colorScheme: Get.theme.colorScheme.copyWith(primary: Theme.of(context).primaryColor),
+                                //             buttonTheme: const ButtonThemeData(
+                                //                 textTheme: ButtonTextTheme.primary
+                                //             ),
+                                //           ),
+                                //           child: child!,
+                                //         );
+                                //       },
+                                //     );
+                                //
+                                //     if(dateOfBirth!=null) {
+                                //
+                                //       dateOfBirthController.text = DateFormat("dd MMM, yyyy").format(dateOfBirth!);
+                                //       //FocusScope.of(context).requestFocus(FocusNode());
+                                //     }
+                                //   },
+                                //   child: CustomTextFormField(
+                                //       controller: dateOfBirthController,
+                                //       enabled: false,
+                                //       validator: (value) {
+                                //         if(value!.isEmpty){
+                                //           return "Field can't be empty";
+                                //         }
+                                //         return null;
+                                //       },
+                                //       labelText: "Date Of Birth",
+                                //       hindText: "Enter your date of birth",
+                                //       keyboardType: TextInputType.text,
+                                //       onChanged: (value) async{
+                                //
+                                //       }
+                                //   ),
+                                // ),
+                                // const SizedBox(height: 10,),
                                 Text(
                                   'Select Country',
                                   style: TextStyle(
@@ -203,77 +203,77 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       )
                                   ),
                                 ),
-                                const SizedBox(height: 10,),
-                                Text(
-                                  'Select City',
-                                  style: TextStyle(
-                                    color: AppColor.textColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                const SizedBox(height: 7,),
-                                CustomDropDownFromField(
-                                    validator: (value) {
-                                      if (value == null) {
-                                        return "Select city";
-                                      }
-                                      return null;
-                                    },
-
-                                    items: countryCities.map((City city) {
-                                      return DropdownMenuItem(
-                                          value: city,
-                                          child: Text(city.name!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
-                                      );
-                                    }).toList(),
-                                    selectedValue: selectedCity,
-                                    labelAndHintText: "Select city",
-                                    suffixIcon: Padding(
-                                      padding: const EdgeInsets.only(bottom: 4.0),
-                                      child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
-                                    ),
-                                    filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedCity = value as City;
-                                      });
-                                    }
-                                ),
-                                const SizedBox(height: 10,),
-                                CustomTextFormField(
-                                    controller: addressController,
-                                    validator: (value) {
-                                      if(value!.isEmpty){
-                                        return "Address can't be empty";
-                                      }
-                                      return null;
-                                    },
-                                    labelText: "Address",
-                                    hindText: "Enter Address",
-                                    keyboardType: TextInputType.text,
-                                    onChanged: (value) {
-
-                                    }
-                                ),
-                                const SizedBox(height: 10,),
-                                CustomTextFormField(
-                                    controller: postCodeController,
-                                    validator: (value) {
-                                      if(value!.isEmpty){
-                                        return "Postal Code can't be empty";
-                                      }else if(int.tryParse(value)==null){
-                                        return "Enter correct postal code";
-                                      }
-                                      return null;
-                                    },
-                                    labelText: "Postal Code",
-                                    hindText: "Enter Postal Code",
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) {
-
-                                    }
-                                ),
+                                // const SizedBox(height: 10,),
+                                // Text(
+                                //   'Select City',
+                                //   style: TextStyle(
+                                //     color: AppColor.textColor,
+                                //     fontWeight: FontWeight.w600,
+                                //     fontSize: 14,
+                                //   ),
+                                // ),
+                                // const SizedBox(height: 7,),
+                                // CustomDropDownFromField(
+                                //     validator: (value) {
+                                //       if (value == null) {
+                                //         return "Select city";
+                                //       }
+                                //       return null;
+                                //     },
+                                //
+                                //     items: countryCities.map((City city) {
+                                //       return DropdownMenuItem(
+                                //           value: city,
+                                //           child: Text(city.name!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
+                                //       );
+                                //     }).toList(),
+                                //     selectedValue: selectedCity,
+                                //     labelAndHintText: "Select city",
+                                //     suffixIcon: Padding(
+                                //       padding: const EdgeInsets.only(bottom: 4.0),
+                                //       child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                                //     ),
+                                //     filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
+                                //     onChanged: (value) {
+                                //       setState(() {
+                                //         selectedCity = value as City;
+                                //       });
+                                //     }
+                                // ),
+                                // const SizedBox(height: 10,),
+                                // CustomTextFormField(
+                                //     controller: addressController,
+                                //     validator: (value) {
+                                //       if(value!.isEmpty){
+                                //         return "Address can't be empty";
+                                //       }
+                                //       return null;
+                                //     },
+                                //     labelText: "Address",
+                                //     hindText: "Enter Address",
+                                //     keyboardType: TextInputType.text,
+                                //     onChanged: (value) {
+                                //
+                                //     }
+                                // ),
+                                // const SizedBox(height: 10,),
+                                // CustomTextFormField(
+                                //     controller: postCodeController,
+                                //     validator: (value) {
+                                //       if(value!.isEmpty){
+                                //         return "Postal Code can't be empty";
+                                //       }else if(int.tryParse(value)==null){
+                                //         return "Enter correct postal code";
+                                //       }
+                                //       return null;
+                                //     },
+                                //     labelText: "Postal Code",
+                                //     hindText: "Enter Postal Code",
+                                //     keyboardType: TextInputType.number,
+                                //     onChanged: (value) {
+                                //
+                                //     }
+                                // ),
                                 const SizedBox(height: 10,),
                                 Text(
                                   'Phone No.',
@@ -332,36 +332,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 10,),
-                                Text(
-                                  'Select Citizen Country',
-                                  style: TextStyle(
-                                    color: AppColor.textColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                const SizedBox(height: 7,),
-                                InkWell(
-                                  onTap: (){
-                                    FocusScope.of(context).unfocus();
-                                    _openCountryPickerDialog(type: "Citizen");
-                                  },
-                                  child: Container(
-                                      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(.2),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          CountryItem(country: selectedCitizenCountry),
-                                          Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
-                                        ],
-                                      )
-                                  ),
-                                ),
+                                // const SizedBox(height: 10,),
+                                // Text(
+                                //   'Select Citizen Country',
+                                //   style: TextStyle(
+                                //     color: AppColor.textColor,
+                                //     fontWeight: FontWeight.w600,
+                                //     fontSize: 14,
+                                //   ),
+                                // ),
+                                // const SizedBox(height: 7,),
+                                // InkWell(
+                                //   onTap: (){
+                                //     FocusScope.of(context).unfocus();
+                                //     _openCountryPickerDialog(type: "Citizen");
+                                //   },
+                                //   child: Container(
+                                //       padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+                                //       decoration: BoxDecoration(
+                                //         color: Colors.grey.withOpacity(.2),
+                                //         borderRadius: BorderRadius.circular(4),
+                                //       ),
+                                //       child: Row(
+                                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //         children: [
+                                //           CountryItem(country: selectedCitizenCountry),
+                                //           Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                                //         ],
+                                //       )
+                                //   ),
+                                // ),
                                 const SizedBox(height: 10,),
                                 CustomTextFormField(
                                     controller: usernameController,
@@ -423,13 +423,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     UserSignupRequest userSignupRequest = UserSignupRequest(
                                       email: emailController.text,
                                       fullName: fullNameController.text,
-                                      dateOfBirth: DateFormat("yyyy-MM-dd").format(dateOfBirth!),
+                                      //dateOfBirth: DateFormat("yyyy-MM-dd").format(dateOfBirth!),
                                       countryId: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id,
-                                      citizenCountryId: commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
-                                      isCitizen: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id == commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
-                                      cityId: selectedCity!.id!,
-                                      streetAddress: addressController.text,
-                                      postalCode: int.parse(postCodeController.text),
+                                      // citizenCountryId: commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
+                                      // isCitizen: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id == commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
+                                      // cityId: selectedCity!.id!,
+                                      // streetAddress: addressController.text,
+                                      // postalCode: int.parse(postCodeController.text),
                                       phone: phoneNumber,
                                       username: usernameController.text,
                                       password: passwordController.text

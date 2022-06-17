@@ -82,7 +82,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                 children: [
 
                   const SizedBox(height: 10,),
-                  Container(
+                  if(commonController.myRecipients.isNotEmpty)Container(
                     margin: const EdgeInsets.symmetric(horizontal: 15),
                     padding: const EdgeInsets.only(top: 15),
                     child: Column(
@@ -159,7 +159,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 15,),
+                  if(commonController.myRecipients.isNotEmpty)const SizedBox(height: 15,),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Row(

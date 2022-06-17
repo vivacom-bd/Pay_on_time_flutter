@@ -39,7 +39,7 @@
     </queries>
 
    <application
-        android:label="Hidmona Money Transfer"
+        android:label="Hidmona"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name="com.mahmud.hidmona.MainActivity"
