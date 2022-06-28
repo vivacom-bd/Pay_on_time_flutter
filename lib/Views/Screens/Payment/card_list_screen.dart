@@ -87,7 +87,7 @@ class _CardListScreenState extends State<CardListScreen> {
                                     Text("${cards[index].cardType!}  **** **** **** ${cards[index].cardInfo!}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
                                     InkWell(
                                       onTap: (){
-                                        DefaultDialogs().showDialog(
+                                        DefaultDialogs.showDialog(
                                             title: "Delete ${cards[index].cardType!} Card",
                                             text: "${cards[index].cardType} **** **** **** ${cards[index].cardInfo!}\n\nDo you want to delete the card?",
                                             onCancel: (){

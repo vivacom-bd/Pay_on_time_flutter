@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Repositories/api_constants.dart';
 import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Utilities/default_dialogs.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
@@ -38,7 +39,26 @@ class _HomeScreenState extends State<HomeScreen> {
     
     if(controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty){
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
-        Utility.showSnackBar("Your KYC application is not approved yet",durationInSeconds: 3);
+        //Utility.showSnackBar("Your KYC application is not approved yet",durationInSeconds: 3);
+
+        DefaultDialogs.showDialog(
+          title: "Apply for KYC",
+          text: "Your KYC application is not approved yet. Please apply for KYC.",
+          onCancel: (){
+            Get.back();
+          },
+          onSubmitText: "Continue",
+          onSubmit: ()async{
+
+            Get.back();
+
+            String url = '${kycBaseUrl()}applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
+            Uri uri = Uri.parse(url);
+            if (await canLaunchUrl(uri)) {
+              await launchUrl(uri,mode: LaunchMode.externalApplication);
+            }
+          }
+        );
       });
     }
   }

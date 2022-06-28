@@ -55,7 +55,7 @@ class _RecipientItemState extends State<RecipientItem> {
                     const SizedBox(width: 5,),
                     InkWell(
                       onTap: (){
-                        DefaultDialogs().showDialog(
+                        DefaultDialogs.showDialog(
                             title: "Delete Beneficiary",
                             text: "Do you want to delete ${widget.recipient.fullName}?",
                             onCancel: (){

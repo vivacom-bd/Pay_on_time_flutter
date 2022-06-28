@@ -6,7 +6,7 @@ import 'package:hidmona/Views/Widgets/default_button.dart';
 
 class DefaultDialogs{
   //showDeleteDialog
-  Future<dynamic> showDialog({String title = "Title",String text = "Stay with AIID", String onSubmitText = "Submit", Function()? onSubmit, String cancelText="Cancel",Function()? onCancel}) {
+  static Future<dynamic> showDialog({String title = "Title",String text = "Stay with AIID", String onSubmitText = "Submit", Function()? onSubmit, String cancelText="Cancel",Function()? onCancel}) {
 
 
     return showModal(

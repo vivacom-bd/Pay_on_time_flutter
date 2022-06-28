@@ -4,20 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
-import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/user_signup.dart';
-import 'package:hidmona/Repositories/api_response.dart';
-import 'package:hidmona/Repositories/common_repository.dart';
 import 'package:hidmona/Repositories/user_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
-import 'package:hidmona/Views/Screens/Home/home_screen.dart';
-import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
-import 'package:intl/intl.dart';
 import 'package:libphonenumber/libphonenumber.dart';
 
 import '../../Widgets/country_item.dart';
@@ -36,10 +30,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController fullNameController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController dateOfBirthController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
-  TextEditingController postCodeController = TextEditingController();
+  // TextEditingController usernameController = TextEditingController();
+  // TextEditingController dateOfBirthController = TextEditingController();
+  // TextEditingController addressController = TextEditingController();
+  // TextEditingController postCodeController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -50,13 +44,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Country? selectedCountry;
   Country? selectedCitizenCountry;
-  City? selectedCity;
-  DateTime? dateOfBirth;
+  //City? selectedCity;
+  //DateTime? dateOfBirth;
 
 
   bool isPhoneNumberValid = false;
 
-  RxList<City> countryCities = <City>[].obs;
+  // RxList<City> countryCities = <City>[].obs;
 
   String? phoneNumber;
 
@@ -362,22 +356,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 //       )
                                 //   ),
                                 // ),
-                                const SizedBox(height: 10,),
-                                CustomTextFormField(
-                                    controller: usernameController,
-                                    validator: (value) {
-                                      if(value!.isEmpty){
-                                        return "Username can't be empty";
-                                      }
-                                      return null;
-                                    },
-                                    labelText: "Username",
-                                    hindText: "Username",
-                                    keyboardType: TextInputType.text,
-                                    onChanged: (value) {
-
-                                    }
-                                ),
+                                // const SizedBox(height: 10,),
+                                // CustomTextFormField(
+                                //     controller: usernameController,
+                                //     validator: (value) {
+                                //       if(value!.isEmpty){
+                                //         return "Username can't be empty";
+                                //       }
+                                //       return null;
+                                //     },
+                                //     labelText: "Username",
+                                //     hindText: "Username",
+                                //     keyboardType: TextInputType.text,
+                                //     onChanged: (value) {
+                                //
+                                //     }
+                                // ),
                                 const SizedBox(height: 10,),
                                 Obx((){
                                   return CustomTextFormField(
@@ -414,8 +408,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                                     if(selectedCountry==null){
                                       Utility.showSnackBar("Please select country");
-                                    }else if(selectedCitizenCountry == null){
-                                      Utility.showSnackBar("Please select citizen country");
+                                      return;
                                     }
 
                                     Utility.showLoadingDialog();
@@ -431,7 +424,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       // streetAddress: addressController.text,
                                       // postalCode: int.parse(postCodeController.text),
                                       phone: phoneNumber,
-                                      username: usernameController.text,
+                                      // username: usernameController.text,
                                       password: passwordController.text
                                     );
 
@@ -488,7 +481,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           if(type == "Country"){
             setState(() {
               selectedCountry = country;
-              getCities();
+              //getCities();
             });
           }else if(type == "Citizen"){
             setState(() {
@@ -533,15 +526,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
 
-  void getCities() async{
-    APIResponse<List<City>> apiResponse1 = await CommonRepository.getCities(commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id!);
-    if(apiResponse1.data != null){
-      selectedCity=null;
-      countryCities.clear();
-      countryCities.addAll(apiResponse1.data!);
-    }else{
-      Utility.showSnackBar(apiResponse1.message??"An error Occurred");
-    }
-  }
+  // void getCities() async{
+  //   APIResponse<List<City>> apiResponse1 = await CommonRepository.getCities(commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id!);
+  //   if(apiResponse1.data != null){
+  //     selectedCity=null;
+  //     countryCities.clear();
+  //     countryCities.addAll(apiResponse1.data!);
+  //   }else{
+  //     Utility.showSnackBar(apiResponse1.message??"An error Occurred");
+  //   }
+  // }
 
 }

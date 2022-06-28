@@ -64,10 +64,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 10,),
-                        ContactItem(
-                          iconData: Icons.person,text: "Username: ${userProfile.username}",
-                        ),
+                        // const SizedBox(height: 10,),
+                        // ContactItem(
+                        //   iconData: Icons.person,text: "Username: ${userProfile.username}",
+                        // ),
                         const SizedBox(height: 10,),
                         ContactItem(
                           iconData: Icons.account_circle_outlined,text: "${userProfile.fullName?? userProfile.username}",
@@ -92,13 +92,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             }
                           },
                         ),
-                        const SizedBox(height: 10,),
-                        ContactItem(
-                          iconData: Icons.location_city,text: "City: ${userProfile.city==null? "--": userProfile.city!.name??"--"}",
-                          onTap: () async{
-
-                          },
-                        ),
+                        // const SizedBox(height: 10,),
+                        // ContactItem(
+                        //   iconData: Icons.location_city,text: "City: ${userProfile.city==null? "--": userProfile.city!.name??"--"}",
+                        //   onTap: () async{
+                        //
+                        //   },
+                        // ),
                         const SizedBox(height: 10,),
                         ContactItem(
                           iconData: Icons.location_on_rounded,text: "Country: ${userProfile.country==null? "--": userProfile.country!.name??"--"}",
@@ -121,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         //   },
                         // ),
                         const SizedBox(height: 10,),
-                        Divider(color: AppColor.defaultColor,),
+                        Divider(color: AppColor.defaultColor),
                         const SizedBox(height: 10,),
                         ContactItem(
                           iconData: CupertinoIcons.creditcard,text: "Card List",
