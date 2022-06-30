@@ -12,6 +12,7 @@ import 'package:hidmona/Models/sending_purpose.dart';
 import 'package:hidmona/Models/server_country.dart';
 import 'package:hidmona/Models/server_currency.dart';
 import 'package:hidmona/Models/transaction.dart';
+import 'package:hidmona/Models/user_profile.dart';
 import 'package:hidmona/Repositories/common_repository.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/recipient_repository.dart';
@@ -22,13 +23,14 @@ import 'package:hidmona/Views/Screens/Login/login_screen.dart';
 
 class CommonController extends GetxController{
 
-  Rx<Country> countryFrom = CountryPickerUtils.getCountryByIsoCode("SE").obs;
-  Rx<Country> countryTo = CountryPickerUtils.getCountryByIsoCode("SE").obs;
+  Rx<Country> countryFrom = Country().obs; // CountryPickerUtils.getCountryByIsoCode("SE").obs;
+  Rx<Country> countryTo = Country().obs; // CountryPickerUtils.getCountryByIsoCode("SE").obs;
 
   Rx<ServerCountry> serverCountryFrom = ServerCountry().obs;
   Rx<ServerCountry> serverCountryTo = ServerCountry().obs;
 
   Rx<AppUser> currentUser = AppUser().obs;
+  Rx<UserProfile> userProfile = UserProfile().obs;
 
   RxList<ServerCountry> serverCountries = <ServerCountry>[].obs;
   RxList<ModeOfPayment> modeOfReceives = <ModeOfPayment>[].obs;
@@ -94,9 +96,23 @@ class CommonController extends GetxController{
 
   Future<bool> customerLogin(String email, String password){
 
-    return UserRepository.customerLogin(email,password).then((value){
+    return UserRepository.customerLogin(email,password).then((value)async{
       if(value.data != null){
         currentUser.value = value.data!;
+
+
+        //get User Profile
+        var userProfileResponse =  await UserRepository.getUserProfile();
+        if(userProfileResponse.data != null){
+          userProfile.value = userProfileResponse.data!;
+          if(userProfile.value.country != null){
+            List<ServerCountry> countries = serverCountries.where((country) => userProfile.value.country!.id == country.id).toList();
+            if (countries.isNotEmpty) {
+              //serverCountryFrom.value = userProfile.value.country!;
+              countryFrom.value = CountryPickerUtils.getCountryByIsoCode(countries.first.countryCode!);
+            }
+          }
+        }
 
         getStorage.write("email", email);
         getStorage.write("password", password);

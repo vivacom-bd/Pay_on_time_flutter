@@ -53,6 +53,11 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
   void initState() {
     super.initState();
     commonController.senderCity = null;
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      phoneTextEditingController.text = "+${selectedPhoneCountry!.phoneCode??""}";
+    });
+
   }
 
 
@@ -621,7 +626,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
 
     emailTextEditingController.text = "";
     nameTextEditingController.text = "";
-    phoneTextEditingController.text = "";
+    phoneTextEditingController.text = "+${selectedPhoneCountry!.phoneCode??""}";
     addressTextEditingController.text = "";
     postalCodeTextEditingController.text = "";
     dateOfBirthTextEditingController.text = "";

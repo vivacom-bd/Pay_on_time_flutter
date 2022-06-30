@@ -12,7 +12,7 @@ class CountryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return country==null? const Text("Select Country",style:  TextStyle(fontSize: 13,fontWeight: FontWeight.w600),) : Row(
+    return (country==null || country!.isoCode==null)? const Align(alignment: Alignment.centerLeft,child: Text("Select Country",style:  TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)) : Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         CountryPickerUtils.getDefaultFlagImage(country!),

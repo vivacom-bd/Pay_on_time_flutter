@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 
@@ -37,7 +39,13 @@ class _SplashScreenState extends State<SplashScreen> {
             alignment: Alignment.topCenter,
             child: Image.asset(AppImage.getPath("splash_top"),width: SizeConfig.screenWidth,),
           ),
-          Center(child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.8,),),
+          Center(child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.8,),
+              SpinKitCircle(color: AppColor.defaultColor,)
+            ],
+          ),),
           Align(
             alignment: Alignment.bottomCenter,
             child: Image.asset(AppImage.getPath("splash_bottom"),width: SizeConfig.screenWidth,),

@@ -156,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 7,),
                           InkWell(
                             onTap: (){
-                              _openFromCountryPickerDialog();
+                              //_openFromCountryPickerDialog();
                             },
                             child: Container(
                               height: 45,
@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 20) ,
                                       decoration: BoxDecoration(
                                         //color: AppColor.defaultColorLight,
-                                        gradient: AppGradient.getColorGradient('default')
+                                        gradient: AppGradient.getColorGradient('grey')
                                       ),
                                       child: const Icon(Icons.keyboard_arrow_down_rounded,color: Colors.white,size: 30,)
                                   ),
@@ -226,30 +226,33 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 30.0),
                           DefaultButton(
                             buttonText: "Continue", onTap: ()async{
+                              if(controller.countryFrom.value.isoCode != null && controller.countryTo.value.isoCode != null){
+                                Utility.showLoadingDialog();
 
-                              Utility.showLoadingDialog();
+                                bool isSuccessModeOfReceives = await controller.getModeOfReceives(controller.countryTo.value.isoCode!);
+                                if(!isSuccessModeOfReceives){
+                                  Get.back();
+                                  return;
+                                }
 
-                              bool isSuccessModeOfReceives = await controller.getModeOfReceives(controller.countryTo.value.isoCode!);
-                              if(!isSuccessModeOfReceives){
+                                bool isSuccessModeOfPayments = await controller.getModeOfPayments(controller.countryFrom.value.isoCode!);
+                                if(!isSuccessModeOfPayments){
+                                  Get.back();
+                                  return;
+                                }
+
+                                controller.serverCountryFrom.value = controller.getServerCountryFromCountryCode(controller.countryFrom.value.isoCode!);
+                                controller.serverCountryTo.value = controller.getServerCountryFromCountryCode(controller.countryTo.value.isoCode!);
+
+                                bool value = await controller.updateCurrencies();
+
                                 Get.back();
-                                return;
-                              }
 
-                              bool isSuccessModeOfPayments = await controller.getModeOfPayments(controller.countryFrom.value.isoCode!);
-                              if(!isSuccessModeOfPayments){
-                                Get.back();
-                                return;
-                              }
-
-                              controller.serverCountryFrom.value = controller.getServerCountryFromCountryCode(controller.countryFrom.value.isoCode!);
-                              controller.serverCountryTo.value = controller.getServerCountryFromCountryCode(controller.countryTo.value.isoCode!);
-
-                              bool value = await controller.updateCurrencies();
-
-                              Get.back();
-
-                              if(value){
-                                Get.to(()=> SendMoneyScreen());
+                                if(value){
+                                  Get.to(()=> SendMoneyScreen());
+                                }
+                              }else{
+                                Utility.showSnackBar("Select Country!");
                               }
                             },
                           ),

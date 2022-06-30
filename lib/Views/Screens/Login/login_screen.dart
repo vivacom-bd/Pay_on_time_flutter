@@ -1,9 +1,11 @@
 import 'package:country_currency_pickers/country.dart';
 import 'package:country_currency_pickers/country_picker_dialog.dart';
+import 'package:country_currency_pickers/country_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
+import 'package:hidmona/Models/server_country.dart';
 import 'package:hidmona/Repositories/user_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
@@ -160,12 +162,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                       Utility.showLoadingDialog();
 
-                                      UserRepository.customerLogin(emailController.text, passwordController.text).then((value){
+                                      UserRepository.customerLogin(emailController.text, passwordController.text).then((value)async{
                                         if(value.data != null){
                                           controller.currentUser.value = value.data!;
 
                                           controller.getStorage.write("email", emailController.text);
                                           controller.getStorage.write("password", passwordController.text);
+
+                                          //get User Profile
+                                          var userProfileResponse =  await UserRepository.getUserProfile();
+                                          if(userProfileResponse.data != null){
+                                            controller.userProfile.value = userProfileResponse.data!;
+                                            if(controller.userProfile.value.country != null){
+                                              List<ServerCountry> countries = controller.serverCountries.where((country) => controller.userProfile.value.country!.id == country.id).toList();
+                                              if (countries.isNotEmpty) {
+                                                //serverCountryFrom.value = userProfile.value.country!;
+                                                controller.countryFrom.value = CountryPickerUtils.getCountryByIsoCode(countries.first.countryCode!);
+                                              }
+                                            }
+                                          }
 
                                           Get.back();
                                           Get.offAll(()=> const HomeScreen());
