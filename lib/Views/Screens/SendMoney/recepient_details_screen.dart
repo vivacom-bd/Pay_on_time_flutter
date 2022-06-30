@@ -276,7 +276,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                       if(value!.isEmpty){
                                         return "Field can't be empty";
                                       }else{
-                                        if(value.length<3) return "Phone number is not valid formatted";
+                                        if(value.length<7) return "Phone number is not valid formatted";
 
                                         phoneNumberValidator(value);
 
@@ -571,6 +571,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
           if(type == "Phone"){
             setState(() {
               selectedPhoneCountry = country;
+              phoneTextEditingController.text = "+${selectedPhoneCountry!.phoneCode??""}";
             });
           }else if(type == "Citizen"){
             setState(() {

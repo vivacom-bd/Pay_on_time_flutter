@@ -36,8 +36,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // TextEditingController postCodeController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
   Rx<bool> isPasswordHide = true.obs;
+  Rx<bool> isConfirmPasswordHide = true.obs;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -307,7 +309,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             if(value!.isEmpty){
                                               return "Field can't be empty";
                                             }else{
-                                              if(value.length<3) return "Phone number is not valid formatted";
+                                              if(value.length<7) return "Phone number is not valid formatted";
 
                                               phoneNumberValidator(value);
 
@@ -399,6 +401,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       }
                                   );
                                 }),
+                                const SizedBox(height: 10,),
+                                Obx((){
+                                  return CustomTextFormField(
+                                      controller: confirmPasswordController,
+                                      obscureText: isConfirmPasswordHide.value,
+                                      validator: (value) {
+                                        if(value!.isEmpty){
+                                          return "Field can't be empty";
+                                        }else if(value != passwordController.text){
+                                          return "Password does not match";
+                                        }
+                                        return null;
+                                      },
+                                      suffixIcon: InkWell(
+                                        onTap: (){
+                                          isConfirmPasswordHide.toggle();
+                                        },
+                                        child: Icon(isConfirmPasswordHide.value? Icons.visibility : Icons.visibility_off,color: AppColor.textColor,size: 25,),
+                                      ),
+                                      labelText: "Confirm Password",
+                                      hindText: "*******",
+                                      keyboardType: TextInputType.text,
+                                      onChanged: (value) {
+
+                                      }
+                                  );
+                                }),
                                 const SizedBox(height: 20,),
                                 DefaultButton(buttonText: "Sign up", onTap: (){
 
@@ -481,6 +510,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           if(type == "Country"){
             setState(() {
               selectedCountry = country;
+              phoneController.text = "+${selectedCountry!.phoneCode??""}";
               //getCities();
             });
           }else if(type == "Citizen"){

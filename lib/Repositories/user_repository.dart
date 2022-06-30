@@ -116,4 +116,32 @@ class UserRepository{
     });
   }
 
+
+  /// customerLogin
+  static Future<APIResponse<String>> resetPassword(String email) async{
+
+    ///internet check
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<String>(error: true, message: "Internet is not connected!");
+    }
+
+    Uri url = Uri.parse(baseAPIUrl()+'forget_password');
+    return http.post(
+        url,
+        headers: headers,
+        body: json.encode({"email" : email})
+    ).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      // if(data.statusCode == 200){
+      //   return APIResponse<String>(data: AppUser.fromJson(jsonData));
+      // }
+      return APIResponse<String>(error: false, data:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<String>(error: true, message: "An Error Occurred!");
+    });
+  }
+
 }

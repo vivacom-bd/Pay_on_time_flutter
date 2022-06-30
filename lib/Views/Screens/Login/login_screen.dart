@@ -10,6 +10,7 @@ import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Home/home_screen.dart';
+import 'package:hidmona/Views/Screens/Login/reset_password_screen.dart';
 import 'package:hidmona/Views/Screens/Login/signup_screen.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
@@ -177,6 +178,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                       });
                                     }
                                   },),
+                                  const SizedBox(height: 5,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      InkWell(
+                                        onTap: (){
+                                          Get.to(()=>const ResetPasswordScreen());
+                                        },
+                                        child: Text("Forgot password?",style: TextStyle(color: AppColor.defaultColor,fontWeight: FontWeight.bold,fontSize: 17),)
+                                      )
+                                    ],
+                                  ),
                                   const SizedBox(height: 20,),
                                   DefaultButton(linearGradient: AppGradient.getColorGradient("grey"),buttonText: "Signup", textColor: AppColor.defaultColorLight, onTap: (){
 
