@@ -230,16 +230,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Utility.showLoadingDialog();
 
                                 bool isSuccessModeOfReceives = await controller.getModeOfReceives(controller.countryTo.value.isoCode!);
-                                if(!isSuccessModeOfReceives){
-                                  Get.back();
-                                  return;
-                                }
+                                // if(!isSuccessModeOfReceives){
+                                //   Get.back();
+                                //   return;
+                                // }
 
                                 bool isSuccessModeOfPayments = await controller.getModeOfPayments(controller.countryFrom.value.isoCode!);
-                                if(!isSuccessModeOfPayments){
-                                  Get.back();
-                                  return;
-                                }
+                                // if(!isSuccessModeOfPayments){
+                                //   Get.back();
+                                //   return;
+                                // }
 
                                 controller.serverCountryFrom.value = controller.getServerCountryFromCountryCode(controller.countryFrom.value.isoCode!);
                                 controller.serverCountryTo.value = controller.getServerCountryFromCountryCode(controller.countryTo.value.isoCode!);

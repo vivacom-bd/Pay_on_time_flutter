@@ -205,6 +205,7 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
                           ),
                           const SizedBox(height: 7,),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               InkWell(
                                 onTap: (){

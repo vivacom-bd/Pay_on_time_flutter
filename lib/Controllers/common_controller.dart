@@ -139,7 +139,7 @@ class CommonController extends GetxController{
         modeOfReceives.addAll(apiResponse.data!);
         return true;
       }else{
-        Utility.showSnackBar(apiResponse.message??"An error Occurred");
+        Utility.showSnackBar("ModeOfReceives: ${apiResponse.message??"An error Occurred"}");
         return false;
       }
     });
@@ -156,7 +156,7 @@ class CommonController extends GetxController{
         modeOfPayments.addAll(apiResponse.data!);
         return true;
       }else{
-        Utility.showSnackBar(apiResponse.message??"An error Occurred");
+        Utility.showSnackBar("ModeOfPayments: ${apiResponse.message??"An error Occurred"}");
         return false;
       }
     });
@@ -257,17 +257,23 @@ class CommonController extends GetxController{
   Future<bool> updateCurrencies() async{
 
     //Country From
+    serverCountryFrom.value.selectedCurrency = null;
     APIResponse<ServerCurrency> apiResponseFrom1 = await CommonRepository.getCountryDefaultCurrency(serverCountryFrom.value.id!);
     if(apiResponseFrom1.data!=null){
       serverCountryFrom.value.selectedCurrency = apiResponseFrom1.data;
-    }else{
+    }/*else{
       Utility.showSnackBar(apiResponseFrom1.message??"No default currency for ${serverCountryFrom.value.name}");
       return false;
-    }
+    }*/
 
     APIResponse<List<ServerCurrency>> apiResponseFrom2 = await CommonRepository.getCurrenciesOnCountry(serverCountryFrom.value.id!);
     if(apiResponseFrom2.data!=null){
       serverCountryFrom.value.currencies = apiResponseFrom2.data;
+      if((serverCountryFrom.value.currencies??[]).isEmpty){
+        Utility.showSnackBar("No default currency for ${serverCountryFrom.value.name}");
+        return false;
+      }
+      serverCountryFrom.value.selectedCurrency ??= serverCountryFrom.value.currencies?.first;
     }else{
       Utility.showSnackBar(apiResponseFrom2.message??"No Currency Found ${serverCountryFrom.value.name}");
       return false;
@@ -277,17 +283,23 @@ class CommonController extends GetxController{
 
 
     //Country To
+    serverCountryTo.value.selectedCurrency = null;
     APIResponse<ServerCurrency> apiResponseTo1 = await CommonRepository.getCountryDefaultCurrency(serverCountryTo.value.id!);
     if(apiResponseTo1.data!=null){
       serverCountryTo.value.selectedCurrency = apiResponseTo1.data;
-    }else{
+    }/*else{
       Utility.showSnackBar(apiResponseTo1.message??"No Currency Found ${serverCountryTo.value.name}");
       return false;
-    }
+    }*/
 
     APIResponse<List<ServerCurrency>> apiResponseTo2 = await CommonRepository.getCurrenciesOnCountry(serverCountryTo.value.id!);
     if(apiResponseTo2.data!=null){
       serverCountryTo.value.currencies = apiResponseTo2.data;
+      if((serverCountryTo.value.currencies??[]).isEmpty){
+        Utility.showSnackBar("No default currency for ${serverCountryTo.value.name}");
+        return false;
+      }
+      serverCountryTo.value.selectedCurrency ??= serverCountryTo.value.currencies?.first;
     }else{
       Utility.showSnackBar(apiResponseTo2.message??"No default currency for ${serverCountryTo.value.name}");
       return false;

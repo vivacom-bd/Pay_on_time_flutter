@@ -281,6 +281,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 const SizedBox(height: 7,),
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     InkWell(
                                       onTap: (){

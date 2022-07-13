@@ -109,7 +109,7 @@ class _PaymentWithNewCardScreenState extends State<PaymentWithNewCardScreen> {
                         );
 
                         if(dateTime!=null) {
-                          expiryDateTextEditingController.text = DateFormat("MM/yyyy").format(dateTime!);
+                          expiryDateTextEditingController.text = DateFormat("MM/YY").format(dateTime!);
                           //FocusScope.of(context).requestFocus(FocusNode());
                         }
                       },

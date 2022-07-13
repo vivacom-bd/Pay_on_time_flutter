@@ -168,6 +168,7 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                           ),
                           const SizedBox(height: 7,),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               InkWell(
                                 onTap: (){
