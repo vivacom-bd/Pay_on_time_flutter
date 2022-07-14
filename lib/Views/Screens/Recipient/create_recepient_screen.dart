@@ -197,12 +197,12 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                                       if(value!.isEmpty){
                                         return "Field can't be empty";
                                       }else{
-                                        if(value.length<7) return "Phone number is not valid formatted";
+                                        if(value.length<7) return "Invalid phone number";
 
                                         phoneNumberValidator(value);
 
                                         if(!isPhoneNumberValid){
-                                          return "Phone number is not valid formatted";
+                                          return "Invalid phone number";
                                         }
                                       }
                                     },
@@ -217,22 +217,22 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                             ],
                           ),
                           const SizedBox(height: 10,),
-                          // CustomTextFormField(
-                          //     controller: addressTextEditingController,
-                          //     validator: (value) {
-                          //       if(value!.isEmpty){
-                          //         return "Field can't be empty";
-                          //       }
-                          //       return null;
-                          //     },
-                          //     labelText: "Address",
-                          //     hindText: "",
-                          //     keyboardType: TextInputType.text,
-                          //     onChanged: (value) {
-                          //
-                          //     }
-                          // ),
-                          // const SizedBox(height: 10,),
+                          CustomTextFormField(
+                              controller: addressTextEditingController,
+                              validator: (value) {
+                                if(value!.isEmpty){
+                                  return "Field can't be empty";
+                                }
+                                return null;
+                              },
+                              labelText: "Address",
+                              hindText: "",
+                              keyboardType: TextInputType.text,
+                              onChanged: (value) {
+
+                              }
+                          ),
+                          const SizedBox(height: 10,),
                           // CustomTextFormField(
                           //     controller: postalCodeTextEditingController,
                           //     validator: (value) {
@@ -331,36 +331,36 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                                 });
                               }
                           ),
-                          const SizedBox(height: 10,),
-                          Text(
-                            'Select Citizen Country',
-                            style: TextStyle(
-                              color: AppColor.textColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-                          const SizedBox(height: 7,),
-                          InkWell(
-                            onTap: (){
-                              FocusScope.of(context).unfocus();
-                              _openCountryPickerDialog(type: "Citizen");
-                            },
-                            child: Container(
-                                padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(.2),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    CountryItem(country: selectedCitizenCountry),
-                                    Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
-                                  ],
-                                )
-                            ),
-                          ),
+                          // const SizedBox(height: 10,),
+                          // Text(
+                          //   'Select Citizen Country',
+                          //   style: TextStyle(
+                          //     color: AppColor.textColor,
+                          //     fontWeight: FontWeight.w600,
+                          //     fontSize: 14,
+                          //   ),
+                          // ),
+                          // const SizedBox(height: 7,),
+                          // InkWell(
+                          //   onTap: (){
+                          //     FocusScope.of(context).unfocus();
+                          //     _openCountryPickerDialog(type: "Citizen");
+                          //   },
+                          //   child: Container(
+                          //       padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+                          //       decoration: BoxDecoration(
+                          //         color: Colors.grey.withOpacity(.2),
+                          //         borderRadius: BorderRadius.circular(4),
+                          //       ),
+                          //       child: Row(
+                          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //         children: [
+                          //           CountryItem(country: selectedCitizenCountry),
+                          //           Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                          //         ],
+                          //       )
+                          //   ),
+                          // ),
                           const SizedBox(height: 5,),
                         ],
                       ),
@@ -380,13 +380,13 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                             //email: emailTextEditingController.text,
                             fullName: nameTextEditingController.text,
                             phone: phoneNumber,
-                            //streetAddress: addressTextEditingController.text,
+                            streetAddress: addressTextEditingController.text,
                             //postalCode: int.tryParse(postalCodeTextEditingController.text),
                             //dateOfBirth: DateFormat("yyyy-MM-dd").format(dateTime!),
                             countryId: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id,
-                            citizenCountryId: commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
+                            //citizenCountryId: commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
                             cityId: selectedRecipientCity!.id,
-                            isCitizen: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id == commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id
+                            // isCitizen: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id == commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id
                           );
 
                           APIResponse<Recipient> value = await RecipientRepository.createRecipient(recipientRequestBody);

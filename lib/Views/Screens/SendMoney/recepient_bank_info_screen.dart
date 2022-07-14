@@ -342,7 +342,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             recipientCityId: commonController.selectedRecipient!.city!.id,
                             recipientCountryId: commonController.selectedRecipient!.country!.id,
                             senderCountryId: commonController.serverCountryFrom.value.id,
-                            senderCityId: commonController.senderCity!.id,
+                            //senderCityId: commonController.senderCity!.id,
                             amount: commonController.currencyConversionDetails.value.amountToSend,
                             paymentBankId: commonController.selectedCountryWiseBank == null? null : commonController.selectedCountryWiseBank!.id,
                           );

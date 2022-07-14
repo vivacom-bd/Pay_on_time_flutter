@@ -29,7 +29,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  CommonController controller = Get.find<CommonController>();
+  CommonController commonController = Get.find<CommonController>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Container(
                         alignment: Alignment.center,
                         child: Obx((){
-                          if(controller.serverCountries.isEmpty){
+                          if(commonController.serverCountries.isEmpty){
                             return SpinKitCircle(color: Get.theme.primaryColor,);
                           }else{
                             return Form(
@@ -164,23 +164,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                       UserRepository.customerLogin(emailController.text, passwordController.text).then((value)async{
                                         if(value.data != null){
-                                          controller.currentUser.value = value.data!;
-
-                                          controller.getStorage.write("email", emailController.text);
-                                          controller.getStorage.write("password", passwordController.text);
+                                          commonController.currentUser.value = value.data!;
 
                                           //get User Profile
                                           var userProfileResponse =  await UserRepository.getUserProfile();
                                           if(userProfileResponse.data != null){
-                                            controller.userProfile.value = userProfileResponse.data!;
-                                            if(controller.userProfile.value.country != null){
-                                              List<ServerCountry> countries = controller.serverCountries.where((country) => controller.userProfile.value.country!.id == country.id).toList();
+                                            commonController.userProfile.value = userProfileResponse.data!;
+                                            if(commonController.userProfile.value.country != null){
+                                              List<ServerCountry> countries = commonController.serverCountries.where((country) => commonController.userProfile.value.country!.id == country.id).toList();
                                               if (countries.isNotEmpty) {
                                                 //serverCountryFrom.value = userProfile.value.country!;
-                                                controller.countryFrom.value = CountryPickerUtils.getCountryByIsoCode(countries.first.countryCode!);
+                                                commonController.countryFrom.value = CountryPickerUtils.getCountryByIsoCode(countries.first.countryCode!);
                                               }
                                             }
                                           }
+
+                                          commonController.getStorage.write("email", emailController.text);
+                                          commonController.getStorage.write("password", passwordController.text);
 
                                           Get.back();
                                           Get.offAll(()=> const HomeScreen());
@@ -242,10 +242,10 @@ class _LoginScreenState extends State<LoginScreen> {
         isSearchable: true,
         title: const Text('Select country',textAlign: TextAlign.center,),
         onValuePicked: (Country country){
-            controller.countryFrom.value = country;
+            commonController.countryFrom.value = country;
         },
         itemBuilder: (Country country)=>CountryItem(country: country),
-        itemFilter: (c) => controller.serverCountries.map((element) => element.countryCode).contains(c.isoCode),
+        itemFilter: (c) => commonController.serverCountries.map((element) => element.countryCode).contains(c.isoCode),
         //itemFilter: (c) => ['AGO', 'AUS', 'AUT', 'BHR', 'BEL'].contains(c.iso3Code),
         //itemFilter: (c)=>commonSingleTon.getCountries().map((e) => e.countryCode).contains(c.iso3Code),
         // priorityList: [

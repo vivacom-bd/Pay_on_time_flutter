@@ -310,12 +310,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             if(value!.isEmpty){
                                               return "Field can't be empty";
                                             }else{
-                                              if(value.length<7) return "Phone number is not valid formatted";
+                                              if(value.length<7) return "Invalid phone number";
 
                                               phoneNumberValidator(value);
 
                                               if(!isPhoneNumberValid){
-                                                return "Phone number is not valid formatted";
+                                                return "Invalid phone number";
                                               }
                                             }
                                           },

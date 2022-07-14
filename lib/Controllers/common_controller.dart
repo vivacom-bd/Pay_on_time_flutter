@@ -37,7 +37,7 @@ class CommonController extends GetxController{
   RxList<ModeOfPayment> modeOfPayments = <ModeOfPayment>[].obs;
   RxList<Recipient> myRecipients = <Recipient>[].obs;
   RxList<City> receiveCities = <City>[].obs;
-  RxList<City> sendingCities = <City>[].obs;
+  // RxList<City> sendingCities = <City>[].obs;
   RxList<SendingPurpose> sendingPurposes = <SendingPurpose>[].obs;
   RxList<CountryWiseBank> countryWiseBanks = <CountryWiseBank>[].obs;
 
@@ -51,7 +51,7 @@ class CommonController extends GetxController{
   ModeOfPayment? selectedModeOfPayment;
   SendingPurpose? selectedSendingPurpose;
   Recipient? selectedRecipient;
-  City? senderCity;
+  // City? senderCity;
   CountryWiseBank? selectedCountryWiseBank;
 
 
@@ -193,14 +193,14 @@ class CommonController extends GetxController{
     }
 
 
-    APIResponse<List<City>> apiResponse2 = await CommonRepository.getCities(serverCountryFrom.value.id!);
-    if(apiResponse2.data != null){
-      sendingCities.clear();
-      sendingCities.addAll(apiResponse2.data!);
-    }else{
-      Utility.showSnackBar(apiResponse2.message??"An error Occurred");
-      return false;
-    }
+    // APIResponse<List<City>> apiResponse2 = await CommonRepository.getCities(serverCountryFrom.value.id!);
+    // if(apiResponse2.data != null){
+    //   sendingCities.clear();
+    //   sendingCities.addAll(apiResponse2.data!);
+    // }else{
+    //   Utility.showSnackBar(apiResponse2.message??"An error Occurred");
+    //   return false;
+    // }
 
 
     return true;

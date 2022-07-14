@@ -152,13 +152,13 @@ class RecipientRequestBody {
     data['full_name'] = fullName;
     data['phone'] = phone;
     data['country_id'] = countryId;
-    //data['street_address'] = streetAddress;
+    data['street_address'] = streetAddress;
     //data['postal_code'] = postalCode;
     //data['date_of_birth'] = dateOfBirth;
     data['city_id'] = cityId;
-    data['citizen_country_id'] = citizenCountryId;
-    data['is_citizen'] = isCitizen;
-    // data['status'] = status;
+    //data['citizen_country_id'] = citizenCountryId;
+    //data['is_citizen'] = isCitizen;
+    //data['status'] = status;
     return data;
   }
 }

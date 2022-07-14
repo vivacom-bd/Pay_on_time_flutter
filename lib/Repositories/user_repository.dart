@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
+import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/user_profile.dart';
 import 'package:hidmona/Models/user_signup.dart';
@@ -100,6 +102,8 @@ class UserRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<UserProfile>(error: true, message: "Internet is not connected!");
     }
+
+    print(Get.find<CommonController>().currentUser.value.email??"");
 
     Uri url = Uri.parse(baseAPIUrl()+'my_profile');
     return http.get(url,headers: headersWithAuth).then((data){

@@ -19,5 +19,6 @@ final headers = {
 
 final headersWithAuth = {
   'Content-Type': 'application/json',
+  "x-org-domain": "hidmona",
   'Authorization': '${Get.find<CommonController>().currentUser.value.tokenType??'bearer'} '+ (Get.find<CommonController>().currentUser.value.accessToken??""),
 };

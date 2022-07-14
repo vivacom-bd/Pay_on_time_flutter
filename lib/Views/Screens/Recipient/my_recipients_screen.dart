@@ -31,7 +31,9 @@ class _MyRecipientScreenState extends State<MyRecipientScreen> {
           actions: [
             InkWell(
               onTap: (){
-                Get.to(const CreateRecipientScreen());
+                Get.to(const CreateRecipientScreen())?.then((value){
+                  setState(()=>{});
+                });
               },
               child: const Padding(
                 padding: EdgeInsets.all(15.0),

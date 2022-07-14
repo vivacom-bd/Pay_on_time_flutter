@@ -103,6 +103,22 @@ class _SendingSuccessFulScreenState extends State<SendingSuccessFulScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      Center(child: Text("Note: Your transaction was successful but awaiting bank receipt upload for verification. After banking please upload the bank receipt from Transaction History page.",textAlign: TextAlign.justify,style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700,color: AppColor.defaultColorLight),)),
+                    ],
+                  ),
+                ),
+
+                if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "bank")Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                      color: AppColor.defaultColor.withOpacity(.1),
+                      borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                       const Center(child: Text("Pay the amount through bank",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w600),)),
                       Divider(color: AppColor.defaultColor,thickness: 2,),
                       SendDetailsItem(title: "Bank Name",value: "${commonController.selectedCountryWiseBank!.bankName}",),
@@ -112,8 +128,8 @@ class _SendingSuccessFulScreenState extends State<SendingSuccessFulScreen> {
                       SendDetailsItem(title: "Bank Account Title",value: "${commonController.selectedCountryWiseBank!.bankAccountTitle}",),
                       Divider(color: AppColor.defaultColor,thickness: .5,),
                       SendDetailsItem(title: "Branch Name",value: "${commonController.selectedCountryWiseBank!.branchName}",),
-                      Divider(color: AppColor.defaultColor,thickness: .5,),
-                      SendDetailsItem(title: "Bank Address",value: "${commonController.selectedCountryWiseBank!.status}",),
+                      // Divider(color: AppColor.defaultColor,thickness: .5,),
+                      // SendDetailsItem(title: "Bank Address",value: "${commonController.selectedCountryWiseBank!.status}",),
                     ],
                   ),
                 ),

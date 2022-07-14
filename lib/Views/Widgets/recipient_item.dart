@@ -13,10 +13,12 @@ class RecipientItem extends StatefulWidget {
     Key? key,
     required this.recipient,
     required this.onRefresh,
+    this.isHideButtons = false
   }) : super(key: key);
 
   final Recipient recipient;
   final Function() onRefresh;
+  final bool isHideButtons;
 
   @override
   State<RecipientItem> createState() => _RecipientItemState();
@@ -36,7 +38,7 @@ class _RecipientItemState extends State<RecipientItem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("#${widget.recipient.id}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
-                Row(
+                if(!widget.isHideButtons)Row(
                   children: [
                     InkWell(
                       onTap: ()async{

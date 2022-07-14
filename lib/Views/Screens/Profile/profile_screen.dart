@@ -1,11 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
-import 'package:hidmona/Models/user_profile.dart';
-import 'package:hidmona/Repositories/api_response.dart';
-import 'package:hidmona/Repositories/user_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Views/Screens/Login/login_screen.dart';
 import 'package:hidmona/Views/Screens/Payment/card_list_screen.dart';
@@ -46,7 +42,100 @@ class _ProfileScreenState extends State<ProfileScreen> {
         // ],
       ),
       body: SafeArea(
-        child: FutureBuilder(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10,),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // const SizedBox(height: 10,),
+                // ContactItem(
+                //   iconData: Icons.person,text: "Username: ${userProfile.username}",
+                // ),
+                const SizedBox(height: 10,),
+                ContactItem(
+                  iconData: Icons.account_circle_outlined,text: "${commonController.userProfile.value.fullName?? commonController.userProfile.value.username}",
+                ),
+                const SizedBox(height: 10,),
+                ContactItem(
+                  iconData: Icons.phone,text: "${commonController.userProfile.value.phone}",
+                  onTap: () async{
+                    String url = 'tel:${commonController.userProfile.value.phone}';
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    }
+                  },
+                ),
+                const SizedBox(height: 10,),
+                ContactItem(
+                  iconData: Icons.email_rounded,text: "${commonController.userProfile.value.email}",
+                  onTap: () async{
+                    String url = 'mailto:${commonController.userProfile.value.email}';
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    }
+                  },
+                ),
+                // const SizedBox(height: 10,),
+                // ContactItem(
+                //   iconData: Icons.location_city,text: "City: ${userProfile.city==null? "--": userProfile.city!.name??"--"}",
+                //   onTap: () async{
+                //
+                //   },
+                // ),
+                const SizedBox(height: 10,),
+                ContactItem(
+                  iconData: Icons.location_on_rounded,text: "Country: ${commonController.userProfile.value.country==null? "--": commonController.userProfile.value.country!.name??"--"}",
+                  onTap: () async{
+
+                  },
+                ),
+                // const SizedBox(height: 10,),
+                // ContactItem(
+                //   iconData: CupertinoIcons.location,text: "Country: ${currentUser.appUser.country==null? "--": currentUser.appUser.country}",
+                //   onTap: () async{
+                //
+                //   },
+                // ),
+                // const SizedBox(height: 10,),
+                // ContactItem(
+                //   iconData: Icons.date_range_rounded,text: "Birth Date: ${currentUser.appUser.dob}",
+                //   onTap: () async{
+                //
+                //   },
+                // ),
+                const SizedBox(height: 10,),
+                Divider(color: AppColor.defaultColor),
+                const SizedBox(height: 10,),
+                ContactItem(
+                  iconData: CupertinoIcons.creditcard,text: "Card List",
+                  onTap: () {
+                    Get.to(const CardListScreen());
+                  },
+                ),
+                const SizedBox(height: 10,),
+                ContactItem(
+                  iconData: CupertinoIcons.arrowshape_turn_up_left_fill,text: "Logout",
+                  onTap: () {
+
+                    commonController.getStorage.erase();
+                    Get.offAll(()=>const LoginScreen());
+                  },
+                ),
+                // SizedBox(height: 10,),
+                // ContactItem(
+                //   themeProvider: themeProvider,iconData: Icons.help,text: "Help",
+                //   onTap: () async{
+                //     String url = 'https://www.getbetal.com/help';
+                //     if (await canLaunch(url)) {
+                //       await launch(url);
+                //     }
+                //   },
+                // ),
+              ],
+            ),
+          ),
+        ) /*FutureBuilder(
           future: UserRepository.getUserProfile(),
           builder: (context, AsyncSnapshot<APIResponse<UserProfile>> snapshot){
 
@@ -135,7 +224,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           onTap: () {
 
                             commonController.getStorage.erase();
-                            Get.offAll(const LoginScreen());
+
+                            Get.offAll(()=>const LoginScreen());
                           },
                         ),
                         // SizedBox(height: 10,),
@@ -161,7 +251,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
 
           },
-        )
+        )*/
       )
     );
   }
