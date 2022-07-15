@@ -91,7 +91,7 @@ class TransactionRepository{
 
 
   ///getRecipients
-  static Future<APIResponse<List<Transaction>>> getTransactions({int limit=50, offset=0}) async{
+  static Future<APIResponse<List<Transaction>>> getTransactions({int limit=100, offset=0}) async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<Transaction>>(error: true, message: "Internet is not connected!");
     }

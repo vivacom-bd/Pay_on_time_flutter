@@ -73,7 +73,7 @@ class _SendingSuccessFulScreenState extends State<SendingSuccessFulScreen> {
                     children: [
                       const Center(child: Text("Payment Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                       Divider(color: AppColor.defaultColor,thickness: 2,),
-                      SendDetailsItem(title: "Amount",value: "${commonController.currentTransaction!.totalAmount!.toStringAsFixed(3)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
+                      SendDetailsItem(title: "Amount",value: "${commonController.currentTransaction!.totalAmount!.toStringAsFixed(3)} ${commonController.currentTransaction!.payoutCurrency}",),
                       Divider(color: AppColor.defaultColor,thickness: .5,),
                       SendDetailsItem(title: "Transaction ID",value: commonController.currentTransaction!.transactionNumber??"--"),
                     ],

@@ -57,7 +57,13 @@ class UserRepository{
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
       if(data.statusCode == 200){
-        return APIResponse<AppUser>(data: AppUser.fromJson(jsonData));
+
+        Get.find<CommonController>().getStorage.write("email", email);
+        Get.find<CommonController>().getStorage.write("password", password);
+
+        AppUser appUser = AppUser.fromJson(jsonData);
+        Get.find<CommonController>().currentUser.value = appUser;
+        return APIResponse<AppUser>(data: appUser);
       }
       return APIResponse<AppUser>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
@@ -103,7 +109,7 @@ class UserRepository{
       return APIResponse<UserProfile>(error: true, message: "Internet is not connected!");
     }
 
-    print(Get.find<CommonController>().currentUser.value.email??"");
+    print(headersWithAuth);
 
     Uri url = Uri.parse(baseAPIUrl()+'my_profile');
     return http.get(url,headers: headersWithAuth).then((data){

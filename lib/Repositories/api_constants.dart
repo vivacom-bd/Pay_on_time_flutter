@@ -17,8 +17,17 @@ final headers = {
   "x-org-domain": "hidmona"
 };
 
-final headersWithAuth = {
-  'Content-Type': 'application/json',
-  "x-org-domain": "hidmona",
-  'Authorization': '${Get.find<CommonController>().currentUser.value.tokenType??'bearer'} '+ (Get.find<CommonController>().currentUser.value.accessToken??""),
-};
+// final headersWithAuth = {
+//   'Content-Type': 'application/json',
+//   "x-org-domain": "hidmona",
+//   'Authorization': '${Get.find<CommonController>().currentUser.value.tokenType??'bearer'} '+ (Get.find<CommonController>().currentUser.value.accessToken??""),
+// };
+
+
+get headersWithAuth{
+  return {
+    'Content-Type': 'application/json',
+    "x-org-domain": "hidmona",
+    'Authorization': '${Get.find<CommonController>().currentUser.value.tokenType??'bearer'} '+ (Get.find<CommonController>().currentUser.value.accessToken??""),
+  };
+}

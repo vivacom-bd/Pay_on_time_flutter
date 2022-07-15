@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Views/Screens/Payment/payment_screen.dart';
 import 'package:hidmona/Views/Screens/Transaction/transaction_details_screen.dart';
 import 'package:hidmona/Views/Screens/Transaction/upload_bank_receipt_screen.dart';
 import 'package:intl/intl.dart';
@@ -69,6 +71,23 @@ class TransactionItem extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(20)
                             ),
                             child: Icon(Icons.cloud_upload,size: 17,color: AppColor.defaultColor,)
+                        ),
+                      ),
+                      if(transaction.remitterStatus != null && transaction.remitterStatus!.toUpperCase() == "INPROCESS") const SizedBox(width: 7,),
+                      if(transaction.remitterStatus != null && transaction.remitterStatus!.toUpperCase() == "INPROCESS") InkWell(
+                        onTap: (){
+                          Get.find<CommonController>().currentTransaction = transaction;
+                          Get.to(const PaymentScreen());
+                        },
+                        child: Container(
+                            height: 30,
+                            width: 30,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: AppColor.defaultColor.withOpacity(.15),
+                                borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: Icon(Icons.credit_card_rounded,size: 17,color: AppColor.defaultColor,)
                         ),
                       ),
                     ],

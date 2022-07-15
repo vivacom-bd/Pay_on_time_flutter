@@ -1,7 +1,10 @@
+import 'package:country_currency_pickers/country.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
+import 'package:hidmona/Models/app_user.dart';
+import 'package:hidmona/Models/user_profile.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Views/Screens/Login/login_screen.dart';
 import 'package:hidmona/Views/Screens/Payment/card_list_screen.dart';
@@ -119,6 +122,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: () {
 
                     commonController.getStorage.erase();
+                    commonController.currentUser.value = AppUser();
+                    commonController.userProfile.value = UserProfile();
+                    commonController.countryTo.value = Country();
+                    commonController.countryFrom.value = Country();
                     Get.offAll(()=>const LoginScreen());
                   },
                 ),

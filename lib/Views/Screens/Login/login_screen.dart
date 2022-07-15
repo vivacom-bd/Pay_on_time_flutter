@@ -162,9 +162,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                       Utility.showLoadingDialog();
 
-                                      UserRepository.customerLogin(emailController.text, passwordController.text).then((value)async{
+                                      UserRepository.customerLogin(emailController.text.trim(), passwordController.text).then((value)async{
                                         if(value.data != null){
-                                          commonController.currentUser.value = value.data!;
 
                                           //get User Profile
                                           var userProfileResponse =  await UserRepository.getUserProfile();
@@ -178,9 +177,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                               }
                                             }
                                           }
-
-                                          commonController.getStorage.write("email", emailController.text);
-                                          commonController.getStorage.write("password", passwordController.text);
 
                                           Get.back();
                                           Get.offAll(()=> const HomeScreen());

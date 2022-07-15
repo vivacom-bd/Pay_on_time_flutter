@@ -25,8 +25,8 @@ class Transaction {
   int? id;
   Recipient? recipient;
   String? transactionNumber;
-  String? paymentStatus;
-  String? transactionStatus;
+  String? remitterStatus;
+  String? benificiaryStatus;
   String? paymentReceiveStatus;
   Recipient? sender;
   Agent? agent;
@@ -63,8 +63,8 @@ class Transaction {
         this.id,
         this.recipient,
         this.transactionNumber,
-        this.paymentStatus,
-        this.transactionStatus,
+        this.remitterStatus,
+        this.benificiaryStatus,
         this.paymentReceiveStatus,
         this.sender,
         this.agent,
@@ -103,8 +103,8 @@ class Transaction {
         ? Recipient.fromJson(json['recipient'])
         : null;
     transactionNumber = json['transaction_number'];
-    paymentStatus = json['payment_status'];
-    transactionStatus = json['transaction_status'];
+    remitterStatus = json['remitter_status'];
+    benificiaryStatus = json['benificiary_status'];
     paymentReceiveStatus = json['payment_receive_status'];
     sender =
     json['sender'] != null ? Recipient.fromJson(json['sender']) : null;
@@ -167,8 +167,8 @@ class Transaction {
       data['recipient'] = recipient!.toJson();
     }
     data['transaction_number'] = transactionNumber;
-    data['payment_status'] = paymentStatus;
-    data['transaction_status'] = transactionStatus;
+    data['remitter_status'] = remitterStatus;
+    data['benificiary_status'] = benificiaryStatus;
     data['payment_receive_status'] = paymentReceiveStatus;
     if (sender != null) {
       data['sender'] = sender!.toJson();

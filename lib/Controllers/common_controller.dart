@@ -98,9 +98,6 @@ class CommonController extends GetxController{
 
     return UserRepository.customerLogin(email,password).then((value)async{
       if(value.data != null){
-        currentUser.value = value.data!;
-
-
         //get User Profile
         var userProfileResponse =  await UserRepository.getUserProfile();
         if(userProfileResponse.data != null){
@@ -113,9 +110,6 @@ class CommonController extends GetxController{
             }
           }
         }
-
-        getStorage.write("email", email);
-        getStorage.write("password", password);
 
         return true;
 

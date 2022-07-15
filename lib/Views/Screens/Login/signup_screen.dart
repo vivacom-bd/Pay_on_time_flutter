@@ -444,8 +444,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     Utility.showLoadingDialog();
 
                                     UserSignupRequest userSignupRequest = UserSignupRequest(
-                                      email: emailController.text,
-                                      fullName: fullNameController.text,
+                                      email: emailController.text.trim(),
+                                      fullName: fullNameController.text.trim(),
                                       //dateOfBirth: DateFormat("yyyy-MM-dd").format(dateOfBirth!),
                                       countryId: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id,
                                       // citizenCountryId: commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,

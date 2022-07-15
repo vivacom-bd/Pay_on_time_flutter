@@ -210,7 +210,7 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                       if(value.data != null){
                         commonController.currentTransaction = value.data;
 
-                        if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit"){
+                        if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debit or credit" || commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit"){
                           Get.offAll(const PaymentScreen());
                         }else{
                           Get.offAll(const SendingSuccessFulScreen());

@@ -42,7 +42,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Payment"),
-        automaticallyImplyLeading: false,
       ),
       body:SafeArea(
         child: SingleChildScrollView(
@@ -64,14 +63,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     children: [
                       const Center(child: Text("Payment Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                       Divider(color: AppColor.defaultColor,thickness: 2,),
-                      SendDetailsItem(title: "Amount to pay",value: "${commonController.currentTransaction!.totalAmount!.toStringAsFixed(3)} ${commonController.currencyConversionDetails.value.sendingCurrency}",),
+                      SendDetailsItem(title: "Amount to pay",value: "${commonController.currentTransaction!.totalAmount!.toStringAsFixed(3)} ${commonController.currentTransaction!.payoutCurrency}",),
                       Divider(color: AppColor.defaultColor,thickness: .5,),
                       SendDetailsItem(title: "Transaction ID",value: commonController.currentTransaction!.transactionNumber??"--"),
                     ],
                   ),
                 ),
 
-                if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit")Container(
+                Container(
                   margin: const EdgeInsets.only(top: 20),
                   padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
