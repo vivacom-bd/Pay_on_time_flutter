@@ -543,7 +543,7 @@ class _RecipientDetailsNewScreenState extends State<RecipientDetailsNewScreen> {
                             bool isGetCountryWiseBanks = await commonController.getCountryWiseBanks();
                             Get.back();
                             if(isGetSendingPurposes && isGetCountryWiseBanks){
-                              Get.to(const TransactionBankInfoScreen());
+                              Get.off(const TransactionBankInfoScreen());
                             }
                           }else{
                             Get.back();

@@ -2,7 +2,7 @@
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 
-bool isDev = true;
+bool isDev = false;
 
 String baseAPIUrl(){
   return isDev ? 'https://apidev.hidmona.ch/api/v1/' : 'https://api.hidmona.ch/api/v1/';
