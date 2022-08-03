@@ -109,7 +109,7 @@ class _PaymentWithNewCardScreenState extends State<PaymentWithNewCardScreen> {
                         );
 
                         if(dateTime!=null) {
-                          expiryDateTextEditingController.text = DateFormat("MM/yy").format(dateTime!);
+                          expiryDateTextEditingController.text = DateFormat("MM/yyyy").format(dateTime!);
                           //FocusScope.of(context).requestFocus(FocusNode());
                         }
                       },
@@ -209,7 +209,7 @@ class _PaymentWithNewCardScreenState extends State<PaymentWithNewCardScreen> {
 
                     CardInfo cardInfo = CardInfo(
                         pan: cardNumberTextEditingController.text,
-                        expiryDate: DateFormat("MM/yy").format(dateTime!),
+                        expiryDate: DateFormat("MM/yyyy").format(dateTime!),
                         securityCode: securityCodeTextEditingController.text,
                         billingPremise: billingAddressTextEditingController.text,
                         billingPostcode: billingPostCodeTextEditingController.text
