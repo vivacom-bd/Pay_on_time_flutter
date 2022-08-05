@@ -54,7 +54,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    // commonController.senderCity = null;
+    commonController.recipientCity = null;
     commonController.selectedRecipient = null;
     //
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -509,51 +509,51 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                   //     ),
                   // ),
 
-                 // Container(
-                 //   padding: const EdgeInsets.symmetric(horizontal: 15),
-                 //   child: Column(
-                 //     crossAxisAlignment: CrossAxisAlignment.stretch,
-                 //     children: [
-                 //       const SizedBox(height: 10,),
-                 //       Text(
-                 //         'Select Sender City',
-                 //         style: TextStyle(
-                 //           color: AppColor.textColor,
-                 //           fontWeight: FontWeight.w600,
-                 //           fontSize: 14,
-                 //         ),
-                 //       ),
-                 //       const SizedBox(height: 7,),
-                 //       CustomDropDownFromField(
-                 //           validator: (value) {
-                 //             if (value == null) {
-                 //               return "Select Sender city";
-                 //             }
-                 //             return null;
-                 //           },
-                 //
-                 //           items: commonController.sendingCities.map((City city) {
-                 //             return DropdownMenuItem(
-                 //                 value: city,
-                 //                 child: Text(city.name!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
-                 //             );
-                 //           }).toList(),
-                 //           selectedValue: commonController.senderCity,
-                 //           labelAndHintText: "Select Sender city",
-                 //           suffixIcon: Padding(
-                 //             padding: const EdgeInsets.only(bottom: 4.0),
-                 //             child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
-                 //           ),
-                 //           filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
-                 //           onChanged: (value) {
-                 //             setState(() {
-                 //               commonController.senderCity = value as City;
-                 //             });
-                 //           }
-                 //       ),
-                 //     ],
-                 //   ),
-                 // ),
+                 Container(
+                   padding: const EdgeInsets.symmetric(horizontal: 15),
+                   child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.stretch,
+                     children: [
+                       const SizedBox(height: 10,),
+                       Text(
+                         'Select Recipient City',
+                         style: TextStyle(
+                           color: AppColor.textColor,
+                           fontWeight: FontWeight.w600,
+                           fontSize: 14,
+                         ),
+                       ),
+                       const SizedBox(height: 7,),
+                       CustomDropDownFromField(
+                           validator: (value) {
+                             if (value == null) {
+                               return "Select Recipient city";
+                             }
+                             return null;
+                           },
+
+                           items: commonController.receiveCities.map((City city) {
+                             return DropdownMenuItem(
+                                 value: city,
+                                 child: Text(city.name!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
+                             );
+                           }).toList(),
+                           selectedValue: commonController.recipientCity,
+                           labelAndHintText: "Select Recipient city",
+                           suffixIcon: Padding(
+                             padding: const EdgeInsets.only(bottom: 4.0),
+                             child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                           ),
+                           filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
+                           onChanged: (value) {
+                             setState(() {
+                               commonController.recipientCity = value as City;
+                             });
+                           }
+                       ),
+                     ],
+                   ),
+                 ),
 
                   const SizedBox(height: 15,),
                   Padding(
@@ -561,7 +561,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                     child: DefaultButton(
                       buttonText: "Continue", onTap: () async{
                         FocusScope.of(context).unfocus();
-                        //if(_formKey.currentState!.validate()){
+                        if(_formKey.currentState!.validate()){
 
                            Utility.showLoadingDialog();
 
@@ -607,7 +607,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                             Get.back();
                           }
 
-                        //}
+                        }
                     },),
                   ),
                   const SizedBox(height: 15,)
@@ -684,6 +684,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
    clear(){
     selectedRecipient = null;
     commonController.selectedRecipient = null;
+    commonController.recipientCity = null;
 
     // emailTextEditingController.text = "";
     // nameTextEditingController.text = "";

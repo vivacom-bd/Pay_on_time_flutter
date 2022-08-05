@@ -6,6 +6,8 @@ import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Controllers/theme_controller.dart';
 import 'package:hidmona/Views/Screens/Login/splash_screen.dart';
 
+import 'Views/Screens/Home/home_screen.dart';
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
@@ -39,6 +41,7 @@ class MyApp extends StatelessWidget {
                   initialRoute: SplashScreen.routeName,
                   getPages: [
                     GetPage(name: SplashScreen.routeName, page: ()=>const SplashScreen()),
+                    GetPage(name: HomeScreen.routeName, page: ()=>const HomeScreen()),
                   ],
                   localizationsDelegates: const [
                     DefaultWidgetsLocalizations.delegate,

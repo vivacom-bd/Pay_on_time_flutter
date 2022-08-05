@@ -51,7 +51,7 @@ class CommonController extends GetxController{
   ModeOfPayment? selectedModeOfPayment;
   SendingPurpose? selectedSendingPurpose;
   Recipient? selectedRecipient;
-  // City? senderCity;
+  City? recipientCity;
   CountryWiseBank? selectedCountryWiseBank;
 
 

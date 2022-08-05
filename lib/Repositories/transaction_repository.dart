@@ -15,6 +15,8 @@ class TransactionRepository{
       return APIResponse<Transaction>(error: true, message: "Internet is not connected!");
     }
 
+    print(json.encode(requestBody.toJson()));
+
     Uri url = Uri.parse(baseAPIUrl()+'transactions');
     return http.post(
         url,

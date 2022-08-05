@@ -52,7 +52,6 @@ class _RecipientDetailsNewScreenState extends State<RecipientDetailsNewScreen> {
   @override
   void initState() {
     super.initState();
-    //commonController.senderCity = null;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       phoneTextEditingController.text = "+${selectedPhoneCountry!.phoneCode??""}";
@@ -413,6 +412,9 @@ class _RecipientDetailsNewScreenState extends State<RecipientDetailsNewScreen> {
                               onChanged: (value) {
                                 setState(() {
                                   selectedRecipientCity = value as City;
+
+                                  commonController.recipientCity = selectedRecipientCity;
+
                                 });
                               }
                           ),
