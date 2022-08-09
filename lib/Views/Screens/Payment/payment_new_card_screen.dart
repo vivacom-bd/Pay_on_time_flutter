@@ -28,6 +28,8 @@ class _PaymentWithNewCardScreenState extends State<PaymentWithNewCardScreen> {
   final TextEditingController cardNumberTextEditingController = TextEditingController();
   final TextEditingController securityCodeTextEditingController = TextEditingController();
   final TextEditingController expiryDateTextEditingController = TextEditingController();
+  final TextEditingController firstNameTextEditingController = TextEditingController();
+  final TextEditingController lastNameTextEditingController = TextEditingController();
   final TextEditingController billingAddressTextEditingController = TextEditingController();
   final TextEditingController billingPostCodeTextEditingController = TextEditingController();
 
@@ -146,8 +148,8 @@ class _PaymentWithNewCardScreenState extends State<PaymentWithNewCardScreen> {
 
                         }
                     ),
-                    if(isCardSave)const SizedBox(height: 10,),
-                    if(isCardSave)CustomTextFormField(
+                    const SizedBox(height: 10,),
+                    isCardSave? CustomTextFormField(
                         controller: billingAddressTextEditingController,
                         validator: (value) {
                           if(value!.isEmpty){
@@ -161,9 +163,23 @@ class _PaymentWithNewCardScreenState extends State<PaymentWithNewCardScreen> {
                         onChanged: (value) {
 
                         }
+                    ):CustomTextFormField(
+                        controller: firstNameTextEditingController,
+                        validator: (value) {
+                          if(value!.isEmpty){
+                            return "Field can't be empty";
+                          }
+                          return null;
+                        },
+                        labelText: "First Name",
+                        hindText: "",
+                        keyboardType: TextInputType.text,
+                        onChanged: (value) {
+
+                        }
                     ),
-                    if(isCardSave)const SizedBox(height: 10,),
-                    if(isCardSave)CustomTextFormField(
+                    const SizedBox(height: 10,),
+                    isCardSave ? CustomTextFormField(
                         controller: billingPostCodeTextEditingController,
                         validator: (value) {
                           if(value!.isEmpty){
@@ -174,6 +190,20 @@ class _PaymentWithNewCardScreenState extends State<PaymentWithNewCardScreen> {
                         labelText: "Billing PostCode",
                         hindText: "",
                         keyboardType: TextInputType.number,
+                        onChanged: (value) {
+
+                        }
+                    ) : CustomTextFormField(
+                        controller: lastNameTextEditingController,
+                        validator: (value) {
+                          if(value!.isEmpty){
+                            return "Field can't be empty";
+                          }
+                          return null;
+                        },
+                        labelText: "Last Name",
+                        hindText: "",
+                        keyboardType: TextInputType.text,
                         onChanged: (value) {
 
                         }
@@ -211,6 +241,8 @@ class _PaymentWithNewCardScreenState extends State<PaymentWithNewCardScreen> {
                         pan: cardNumberTextEditingController.text,
                         expiryDate: DateFormat("MM/yyyy").format(dateTime!),
                         securityCode: securityCodeTextEditingController.text,
+                        firstName: firstNameTextEditingController.text,
+                        lastName: lastNameTextEditingController.text,
                         billingPremise: billingAddressTextEditingController.text,
                         billingPostcode: billingPostCodeTextEditingController.text
                     );

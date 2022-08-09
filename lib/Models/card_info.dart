@@ -2,6 +2,8 @@ class CardInfo {
   String? pan;
   String? expiryDate;
   String? securityCode;
+  String? firstName;
+  String? lastName;
   String? billingPremise;
   String? billingPostcode;
 
@@ -9,6 +11,8 @@ class CardInfo {
       {this.pan,
         this.expiryDate,
         this.securityCode,
+        this.firstName,
+        this.lastName,
         this.billingPremise,
         this.billingPostcode});
 
@@ -16,6 +20,8 @@ class CardInfo {
     pan = json['pan'];
     expiryDate = json['expirydate'];
     securityCode = json['securitycode'];
+    firstName = json['billingfirstname'];
+    lastName = json['billinglastname'];
     billingPremise = json['billingpremise'];
     billingPostcode = json['billingpostcode'];
   }
@@ -25,6 +31,8 @@ class CardInfo {
     data['pan'] = pan;
     data['expirydate'] = expiryDate;
     data['securitycode'] = securityCode;
+    data['billingfirstname'] = firstName;
+    data['billinglastname'] = lastName;
     data['billingpremise'] = billingPremise;
     data['billingpostcode'] = billingPostcode;
     return data;
