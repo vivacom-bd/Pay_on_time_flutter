@@ -114,7 +114,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 15,),
+                  if(commonController.selectedModeOfReceive?.name!.toLowerCase() == "bank")const SizedBox(height: 15,),
 
                   if(commonController.selectedModeOfReceive?.name!.toLowerCase() == "bank")Column(
                     children: [
@@ -180,28 +180,28 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                 }
                             ),
                             const SizedBox(height: 10,),
-                            // CustomTextFormField(
-                            //     controller: bankAccountTitleTextEditingController,
-                            //     validator: (value) {
-                            //       if(value!.isEmpty){
-                            //         return "Field can't be empty";
-                            //       }
-                            //       return null;
-                            //     },
-                            //     labelText: "Bank Account Title",
-                            //     hindText: "",
-                            //     keyboardType: TextInputType.text,
-                            //     onChanged: (value) {
-                            //
-                            //     }
-                            // ),
-                            // const SizedBox(height: 10,),
+                            CustomTextFormField(
+                                controller: bankAccountTitleTextEditingController,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
+                                  return null;
+                                },
+                                labelText: "Bank Account Title",
+                                hindText: "",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+
+                                }
+                            ),
+                            const SizedBox(height: 10,),
                             CustomTextFormField(
                                 controller: bankSwiftCodeTextEditingController,
                                 validator: (value) {
-                                  // if(value!.isEmpty){
-                                  //   return "Field can't be empty";
-                                  // }
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
                                   return null;
                                 },
                                 labelText: "Bank Swift Code",
@@ -215,9 +215,9 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             CustomTextFormField(
                                 controller: bankAddressTextEditingController,
                                 validator: (value) {
-                                  // if(value!.isEmpty){
-                                  //   return "Field can't be empty";
-                                  // }
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
                                   return null;
                                 },
                                 labelText: "Bank Address",
@@ -249,7 +249,8 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 15,),
+
+                  if(commonController.selectedModeOfPayment?.name!.toLowerCase() == "bank")const SizedBox(height: 15,),
                   if(commonController.selectedModeOfPayment?.name!.toLowerCase() == "bank")Column(
                     children: [
                       Container(
@@ -303,13 +304,43 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                 ),
                                 filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
                                 onChanged: (value) {
-                                  commonController.selectedCountryWiseBank = value as CountryWiseBank;
+                                  setState((){
+                                    commonController.selectedCountryWiseBank = value as CountryWiseBank;
+                                  });
                                 }
                             ),
                           ],
                         ),
                       ),
                     ],
+                  ),
+
+                  if(commonController.selectedCountryWiseBank != null) const SizedBox(height: 20,),
+                  if(commonController.selectedCountryWiseBank != null) Container(
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                        color: AppColor.defaultColor.withOpacity(.1),
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Center(child: Text("Payment Bank Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
+                        Divider(color: AppColor.defaultColor,thickness: 2,),
+                        SendDetailsItem(title: "Bank Name",value: "${commonController.selectedCountryWiseBank!.bankName}",),
+                        Divider(color: AppColor.defaultColor,thickness: .5,),
+                        SendDetailsItem(title: "Bank Account No",value: "${commonController.selectedCountryWiseBank!.bankAccountNumber}",),
+                        Divider(color: AppColor.defaultColor,thickness: .5,),
+                        SendDetailsItem(title: "Bank Account Title",value: "${commonController.selectedCountryWiseBank!.bankAccountTitle}",),
+                        Divider(color: AppColor.defaultColor,thickness: .5,),
+                        SendDetailsItem(title: "Branch Name",value: "${commonController.selectedCountryWiseBank!.branchName}",),
+                        Divider(color: AppColor.defaultColor,thickness: .5,),
+                        // SendDetailsItem(title: "Bank Address",value: "${commonController.selectedCountryWiseBank!.status}",),
+                        // Divider(color: AppColor.defaultColor,thickness: .5,),
+                        SendDetailsItem(title: "Country",value: "${commonController.selectedCountryWiseBank!.country!.name}",),
+                      ],
+                    ),
                   ),
 
                   const SizedBox(height: 15,),

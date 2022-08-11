@@ -3,13 +3,15 @@ class ServerCurrency {
   int? id;
   String? name;
   String? code;
+  bool? defaultCurrency;
 
-  ServerCurrency({this.id, this.name, this.code});
+  ServerCurrency({this.id, this.name, this.code, this.defaultCurrency});
 
   ServerCurrency.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     code = json['code'];
+    defaultCurrency = json['default_currency']??false;
   }
 
   Map<String, dynamic> toJson() {
@@ -17,6 +19,7 @@ class ServerCurrency {
     data['id'] = id;
     data['name'] = name;
     data['code'] = code;
+    data['default_currency'] = defaultCurrency;
     return data;
   }
 

@@ -51,28 +51,28 @@ class CommonRepository{
 
 
 
-  /// getCountryDefaultCurrency
-  static Future<APIResponse<ServerCurrency>> getCountryDefaultCurrency(int countryId) async{
-
-    ///internet check
-    if(!await Utility.isInternetConnected()){
-      return APIResponse<ServerCurrency>(error: true, message: "Internet is not connected!");
-    }
-
-    Uri url = Uri.parse(baseAPIUrl()+'public/country_to_default_currency?country_id=$countryId');
-    return http.get(url).then((data){
-      print(data.body);
-      final responseData = utf8.decode(data.bodyBytes);
-      final jsonData = json.decode(responseData);
-      if(data.statusCode == 200){
-        return APIResponse<ServerCurrency>(data: ServerCurrency.fromJson(jsonData));
-      }
-      return APIResponse<ServerCurrency>(error: true, message: jsonData["detail"]??"An error occurred");
-    }).catchError((onError){
-      print(onError);
-      return APIResponse<ServerCurrency>(error: true, message: "An Error Occurred!");
-    });
-  }
+  // /// getCountryDefaultCurrency
+  // static Future<APIResponse<ServerCurrency>> getCountryDefaultCurrency(int countryId) async{
+  //
+  //   ///internet check
+  //   if(!await Utility.isInternetConnected()){
+  //     return APIResponse<ServerCurrency>(error: true, message: "Internet is not connected!");
+  //   }
+  //
+  //   Uri url = Uri.parse(baseAPIUrl()+'public/country_to_default_currency?country_id=$countryId');
+  //   return http.get(url).then((data){
+  //     print(data.body);
+  //     final responseData = utf8.decode(data.bodyBytes);
+  //     final jsonData = json.decode(responseData);
+  //     if(data.statusCode == 200){
+  //       return APIResponse<ServerCurrency>(data: ServerCurrency.fromJson(jsonData));
+  //     }
+  //     return APIResponse<ServerCurrency>(error: true, message: jsonData["detail"]??"An error occurred");
+  //   }).catchError((onError){
+  //     print(onError);
+  //     return APIResponse<ServerCurrency>(error: true, message: "An Error Occurred!");
+  //   });
+  // }
 
 
 

@@ -137,8 +137,8 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         ],
                       ),
                     ),
-                    if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "bank") const SizedBox(height: 20,),
-                    if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "bank") Container(
+                    if(commonController.selectedCountryWiseBank != null) const SizedBox(height: 20,),
+                    if(commonController.selectedCountryWiseBank != null) Container(
                       padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
                           color: AppColor.defaultColor.withOpacity(.1),
