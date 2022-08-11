@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:country_currency_pickers/country.dart';
 import 'package:country_currency_pickers/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hidmona/Models/app_settings.dart';
 import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/country_wise_bank.dart';
@@ -15,11 +18,14 @@ import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Models/user_profile.dart';
 import 'package:hidmona/Repositories/common_repository.dart';
 import 'package:hidmona/Repositories/api_response.dart';
+import 'package:hidmona/Repositories/firebase_repository.dart';
 import 'package:hidmona/Repositories/recipient_repository.dart';
 import 'package:hidmona/Repositories/user_repository.dart';
+import 'package:hidmona/Utilities/update_dialog.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Home/home_screen.dart';
 import 'package:hidmona/Views/Screens/Login/login_screen.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class CommonController extends GetxController{
 
@@ -67,28 +73,52 @@ class CommonController extends GetxController{
 
   ///getCountries
   void getStarted(){
-    CommonRepository.getCountries().then((APIResponse<List<ServerCountry>> apiResponse) async {
+
+    //version control
+    FirebaseRepository.getVersionControl().listen((apiResponse) async {
       if(apiResponse.data != null){
-        serverCountries.addAll(apiResponse.data!);
+
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+        AppVersion remoteVersion = Platform.isAndroid? apiResponse.data!.android! : apiResponse.data!.iOS!;
+
+        //String appName = packageInfo.appName;
+        //String packageName = packageInfo.packageName;
+        String version = packageInfo.version;
+        //String buildNumber = packageInfo.buildNumber;
+        print(apiResponse.data!.android!.version);
+        List<int> appVersions = version.split('.').map((value) => int.parse(value)).toList();
+        List<int> controlVersions = remoteVersion.version!.split(".").map((value) => int.parse(value)).toList();
+
+        //if (version.compareTo(apiResponse.data.android.version) >= 0) {
+        if (controlVersions[0]>appVersions[0] || (controlVersions[0]==appVersions[0] && controlVersions[1]>appVersions[1]) || (controlVersions[0]==appVersions[0] && controlVersions[1]==appVersions[1] && controlVersions[2]>appVersions[2])) {
+          UpdateDialog().showDialog(url: Platform.isAndroid?'https://play.google.com/store/apps/details?id=com.mahmud.hidmona':'https://apps.apple.com/ro/app/hidmona-money-transfer/id1629064572');
+        }else{
+          CommonRepository.getCountries().then((APIResponse<List<ServerCountry>> apiResponse) async {
+            if(apiResponse.data != null){
+              serverCountries.addAll(apiResponse.data!);
 
 
-        //savedLogin
-        String? email = getStorage.read<String>("email");
-        String? password = getStorage.read<String>("password");
+              //savedLogin
+              String? email = getStorage.read<String>("email");
+              String? password = getStorage.read<String>("password");
 
-        if(email != null && password != null){
-          bool isSuccessful = await customerLogin(email,password);
+              if(email != null && password != null){
+                bool isSuccessful = await customerLogin(email,password);
 
-          if(isSuccessful){
-            Get.offAll(()=> const HomeScreen());
-            return;
-          }
+                if(isSuccessful){
+                  Get.offAll(()=> const HomeScreen());
+                  return;
+                }
+              }
+
+              Get.offAll(()=> const LoginScreen());
+
+            }else{
+              Utility.showSnackBar(apiResponse.message??"An error occurred");
+            }
+          });
         }
-
-        Get.offAll(()=> const LoginScreen());
-
-      }else{
-        Utility.showSnackBar(apiResponse.message??"An error occurred");
       }
     });
   }

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -5,11 +6,15 @@ import 'package:hidmona/Controllers/app_bindings.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Controllers/theme_controller.dart';
 import 'package:hidmona/Views/Screens/Login/splash_screen.dart';
+import 'package:hidmona/firebase_options.dart';
 
 import 'Views/Screens/Home/home_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await GetStorage.init();
 
   runApp(const MyApp());

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "613268287847",
+    "project_id": "hidmona-app",
+    "storage_bucket": "hidmona-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613268287847:android:c5bcb71f2dd961ab5e7fc2",
+        "android_client_info": {
+          "package_name": "com.mahmud.hidmona"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "613268287847-8n445i9rokpf71atu1oprjlt1ukfs8up.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGcsskZb8toOdvxtDylf8owRdvg9g499c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "613268287847-8n445i9rokpf71atu1oprjlt1ukfs8up.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "613268287847-32f8p9dh5q66g1dpmep5ltb788s97c0j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mahmud.hidmona.hidmona"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
