@@ -43,7 +43,6 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
   Country? selectedPhoneCountry;
   City? selectedRecipientCity;
   Country? selectedCitizenCountry;
-  Recipient? selectedRecipient;
   DateTime? dateTime;
 
   bool isPhoneNumberValid = false;
@@ -55,7 +54,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
   void initState() {
     super.initState();
     commonController.recipientCity = null;
-    commonController.selectedRecipient = null;
+    // commonController.selectedRecipient = null;
     //
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   phoneTextEditingController.text = "+${selectedPhoneCountry!.phoneCode??""}";
@@ -107,9 +106,9 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                         const SizedBox(height: 7,),
                         CustomDropDownFromField(
                             validator: (value) {
-                              // if (value == null) {
-                              //   return "Select Recipient";
-                              // }
+                              if (value == null) {
+                                return "Select Recipient";
+                              }
                               return null;
                             },
 
@@ -119,7 +118,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                                   child: Text(recipient.fullName!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
                               );
                             }).toList(),
-                            selectedValue: selectedRecipient,
+                            selectedValue: commonController.selectedRecipient,
                             labelAndHintText: "Select Recipient",
                             suffixIcon: Padding(
                               padding: const EdgeInsets.only(bottom: 4.0),
@@ -127,9 +126,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                             ),
                             filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
                             onChanged: (value) {
-
-                              selectedRecipient = value as Recipient;
-                              commonController.selectedRecipient = selectedRecipient;
+                              commonController.selectedRecipient = value as Recipient;
 
                               // emailTextEditingController.text = selectedRecipient!.email??"";
                               // nameTextEditingController.text = selectedRecipient!.fullName??"";
@@ -203,7 +200,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                           ],
                         ),
                         const SizedBox(height: 7,),
-                        RecipientItem(recipient:selectedRecipient!,isHideButtons: true, onRefresh: (){
+                        RecipientItem(recipient:commonController.selectedRecipient!,isHideButtons: true, onRefresh: (){
                             setState(() {});
                         },)
                       ]
@@ -682,7 +679,6 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
   //
 
    clear(){
-    selectedRecipient = null;
     commonController.selectedRecipient = null;
     commonController.recipientCity = null;
 

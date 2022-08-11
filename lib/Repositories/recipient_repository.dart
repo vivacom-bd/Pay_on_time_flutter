@@ -91,11 +91,11 @@ class RecipientRepository{
 
 
   ///getRecipients
-  static Future<APIResponse<List<Recipient>>> getRecipients() async{
+  static Future<APIResponse<List<Recipient>>> getRecipients({String query = ""}) async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<Recipient>>(error: true, message: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'recipients');
+    Uri url = Uri.parse(baseAPIUrl()+'recipients?limit=100'+query);
     return http.get(url,headers: headersWithAuth).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);

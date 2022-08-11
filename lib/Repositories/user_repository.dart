@@ -127,8 +127,8 @@ class UserRepository{
   }
 
 
-  /// customerLogin
-  static Future<APIResponse<String>> resetPassword(String email) async{
+  /// forgetPassword
+  static Future<APIResponse<String>> forgetPassword(String email) async{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
@@ -154,4 +154,32 @@ class UserRepository{
     });
   }
 
+
+
+  /// resetPassword
+  static Future<APIResponse<String>> changePassword(String oldPassword,String newPassword) async{
+
+    ///internet check
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<String>(error: true, message: "Internet is not connected!");
+    }
+
+    Uri url = Uri.parse(baseAPIUrl()+'users/password_change');
+    return http.patch(
+        url,
+        headers: headersWithAuth,
+        body: json.encode({"new_password" : newPassword, "confirm_password":newPassword,"previous_password":oldPassword})
+    ).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        return APIResponse<String>(error: false, data:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      }
+      return APIResponse<String>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<String>(error: true, message: "An Error Occurred!");
+    });
+  }
 }

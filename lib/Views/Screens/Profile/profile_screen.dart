@@ -6,8 +6,11 @@ import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/user_profile.dart';
 import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Utilities/default_dialogs.dart';
+import 'package:hidmona/Views/Screens/Login/forget_password_screen.dart';
 import 'package:hidmona/Views/Screens/Login/login_screen.dart';
 import 'package:hidmona/Views/Screens/Payment/card_list_screen.dart';
+import 'package:hidmona/Views/Screens/Profile/change_password_screen.dart';
 import 'package:hidmona/Views/Widgets/contact_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -118,15 +121,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 10,),
                 ContactItem(
+                  iconData: CupertinoIcons.lock,text: "Change Password",
+                  onTap: () {
+                    Get.to(const ChangePasswordScreen());
+                  },
+                ),
+                const SizedBox(height: 10,),
+                ContactItem(
                   iconData: CupertinoIcons.arrowshape_turn_up_left_fill,text: "Logout",
                   onTap: () {
-
-                    commonController.getStorage.erase();
-                    commonController.currentUser.value = AppUser();
-                    commonController.userProfile.value = UserProfile();
-                    commonController.countryTo.value = Country();
-                    commonController.countryFrom.value = Country();
-                    Get.offAll(()=>const LoginScreen());
+                    DefaultDialogs.showDialog(title: "Logout",text: "Do you want to logout?",
+                      onCancel: (){
+                        Get.back();
+                      },
+                      onSubmitText: "Yes",
+                      onSubmit: (){
+                        logout();
+                      }
+                    );
                   },
                 ),
                 // SizedBox(height: 10,),
@@ -261,5 +273,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         )*/
       )
     );
+  }
+
+  logout(){
+    commonController.getStorage.erase();
+    commonController.currentUser.value = AppUser();
+    commonController.userProfile.value = UserProfile();
+    commonController.countryTo.value = Country();
+    commonController.countryFrom.value = Country();
+    Get.offAll(()=>const LoginScreen());
   }
 }

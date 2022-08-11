@@ -17,15 +17,15 @@ import 'package:hidmona/Views/Widgets/default_button.dart';
 
 import '../../Widgets/country_item.dart';
 
-class ResetPasswordScreen extends StatefulWidget {
-  static const String routeName = "/ResetPasswordScreen";
-  const ResetPasswordScreen({Key? key}) : super(key: key);
+class ForgetPasswordScreen extends StatefulWidget {
+  static const String routeName = "/ForgetPasswordScreen";
+  const ForgetPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  _ResetPasswordScreenState createState() => _ResetPasswordScreenState();
+  _ForgetPasswordScreenState createState() => _ForgetPasswordScreenState();
 }
 
-class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   TextEditingController emailController = TextEditingController();
 
@@ -91,7 +91,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
                                   Utility.showLoadingDialog();
 
-                                  UserRepository.resetPassword(emailController.text).then((value){
+                                  UserRepository.forgetPassword(emailController.text).then((value){
                                     if(value.data != null){
                                       Get.back();
                                       Utility.showSnackBar(value.data??"An Error Occurred",durationInSeconds: 3);

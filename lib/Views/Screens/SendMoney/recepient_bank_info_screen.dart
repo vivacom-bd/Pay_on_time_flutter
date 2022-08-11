@@ -180,28 +180,28 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                 }
                             ),
                             const SizedBox(height: 10,),
-                            CustomTextFormField(
-                                controller: bankAccountTitleTextEditingController,
-                                validator: (value) {
-                                  if(value!.isEmpty){
-                                    return "Field can't be empty";
-                                  }
-                                  return null;
-                                },
-                                labelText: "Bank Account Title",
-                                hindText: "",
-                                keyboardType: TextInputType.text,
-                                onChanged: (value) {
-
-                                }
-                            ),
-                            const SizedBox(height: 10,),
+                            // CustomTextFormField(
+                            //     controller: bankAccountTitleTextEditingController,
+                            //     validator: (value) {
+                            //       if(value!.isEmpty){
+                            //         return "Field can't be empty";
+                            //       }
+                            //       return null;
+                            //     },
+                            //     labelText: "Bank Account Title",
+                            //     hindText: "",
+                            //     keyboardType: TextInputType.text,
+                            //     onChanged: (value) {
+                            //
+                            //     }
+                            // ),
+                            // const SizedBox(height: 10,),
                             CustomTextFormField(
                                 controller: bankSwiftCodeTextEditingController,
                                 validator: (value) {
-                                  if(value!.isEmpty){
-                                    return "Field can't be empty";
-                                  }
+                                  // if(value!.isEmpty){
+                                  //   return "Field can't be empty";
+                                  // }
                                   return null;
                                 },
                                 labelText: "Bank Swift Code",
@@ -215,9 +215,9 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             CustomTextFormField(
                                 controller: bankAddressTextEditingController,
                                 validator: (value) {
-                                  if(value!.isEmpty){
-                                    return "Field can't be empty";
-                                  }
+                                  // if(value!.isEmpty){
+                                  //   return "Field can't be empty";
+                                  // }
                                   return null;
                                 },
                                 labelText: "Bank Address",

@@ -160,7 +160,7 @@ class CommonController extends GetxController{
   ///getMyRecipients
   Future<bool> getMyRecipients() async{
 
-    return RecipientRepository.getRecipients().then((APIResponse<List<Recipient>> apiResponse){
+    return RecipientRepository.getRecipients(query:"&country=${serverCountryTo.value.id}").then((APIResponse<List<Recipient>> apiResponse){
       if(apiResponse.data != null){
         myRecipients.clear();
         myRecipients.addAll(apiResponse.data!);
