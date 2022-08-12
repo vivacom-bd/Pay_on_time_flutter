@@ -199,9 +199,9 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             CustomTextFormField(
                                 controller: bankSwiftCodeTextEditingController,
                                 validator: (value) {
-                                  if(value!.isEmpty){
-                                    return "Field can't be empty";
-                                  }
+                                  // if(value!.isEmpty){
+                                  //   return "Field can't be empty";
+                                  // }
                                   return null;
                                 },
                                 labelText: "Bank Swift Code",
