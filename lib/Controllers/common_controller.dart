@@ -11,6 +11,7 @@ import 'package:hidmona/Models/country_wise_bank.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
 import 'package:hidmona/Models/mode_of_payment.dart';
 import 'package:hidmona/Models/recipient.dart';
+import 'package:hidmona/Models/recipient_bank.dart';
 import 'package:hidmona/Models/sending_purpose.dart';
 import 'package:hidmona/Models/server_country.dart';
 import 'package:hidmona/Models/server_currency.dart';
@@ -57,6 +58,7 @@ class CommonController extends GetxController{
   ModeOfPayment? selectedModeOfPayment;
   SendingPurpose? selectedSendingPurpose;
   Recipient? selectedRecipient;
+  List<RecipientBank> recipientBanks = [];
   City? recipientCity;
   CountryWiseBank? selectedCountryWiseBank;
 

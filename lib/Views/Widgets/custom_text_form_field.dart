@@ -7,7 +7,7 @@ import 'package:hidmona/Utilities/colors.dart';
 // ignore: must_be_immutable
 class CustomTextFormField extends StatelessWidget {
 
-  CustomTextFormField({required this.controller ,this.enabled = true, this.obscureText=false,required this.labelText,required this.hindText ,this.keyboardType = TextInputType.text,this.prefixIcon,this.suffixIcon,required this.onChanged,required this.validator});
+  CustomTextFormField({Key? key, required this.controller ,this.enabled = true, this.obscureText=false,required this.labelText,required this.hindText ,this.keyboardType = TextInputType.text,this.prefixIcon,this.suffixIcon,required this.onChanged,required this.validator}) : super(key: key);
 
   TextEditingController controller;
   bool enabled;

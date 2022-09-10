@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/recipient.dart';
+import 'package:hidmona/Models/recipient_bank.dart';
 import 'package:hidmona/Models/server_country.dart';
 import 'package:hidmona/Repositories/api_response.dart';
+import 'package:hidmona/Repositories/common_repository.dart';
 import 'package:hidmona/Repositories/recipient_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/utility.dart';
@@ -509,46 +511,55 @@ class _RecipientDetailsNewScreenState extends State<RecipientDetailsNewScreen> {
 
                           Utility.showLoadingDialog();
 
-                          RecipientRequestBody recipientRequestBody =  RecipientRequestBody(
-                            //email: emailTextEditingController.text,
-                            fullName: nameTextEditingController.text,
-                            phone: phoneNumber,
-                            streetAddress: addressTextEditingController.text,
-                            //postalCode: int.tryParse(postalCodeTextEditingController.text),
-                            //dateOfBirth: DateFormat("yyyy-MM-dd").format(dateTime!),
-                            countryId: commonController.serverCountryTo.value.id,
-                            //citizenCountryId: commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
-                            cityId: selectedRecipientCity!.id,
-                            //isCitizen: commonController.serverCountryTo.value.id == commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id
-                          );
+                          APIResponse<List<RecipientBank>> apiResponse = await CommonRepository.getRecipientBanks(commonController.serverCountryTo.value.id!);
 
-                          commonController.selectedRecipient = null;
+                          if(apiResponse.data != null) {
+                            commonController.recipientBanks = apiResponse.data!;
 
-                          //if(selectedRecipient == null){
+                            RecipientRequestBody recipientRequestBody =  RecipientRequestBody(
+                              //email: emailTextEditingController.text,
+                              fullName: nameTextEditingController.text,
+                              phone: phoneNumber,
+                              streetAddress: addressTextEditingController.text,
+                              //postalCode: int.tryParse(postalCodeTextEditingController.text),
+                              //dateOfBirth: DateFormat("yyyy-MM-dd").format(dateTime!),
+                              countryId: commonController.serverCountryTo.value.id,
+                              //citizenCountryId: commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
+                              cityId: selectedRecipientCity!.id,
+                              //isCitizen: commonController.serverCountryTo.value.id == commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id
+                            );
+
+                            commonController.selectedRecipient = null;
+
+                            //if(selectedRecipient == null){
                             APIResponse<Recipient> value = await RecipientRepository.createRecipient(recipientRequestBody);
                             if(value.data != null){
                               commonController.selectedRecipient = value.data;
                             }else{
                               Utility.showSnackBar(value.message??"Recipient Not Created");
                             }
-                          // }else{
-                          //   APIResponse<Recipient> value = await RecipientRepository.updateRecipient(selectedRecipient!.id!,recipientRequestBody);
-                          //   if(value.data != null){
-                          //     commonController.selectedRecipient = value.data;
-                          //   }else{
-                          //     Utility.showSnackBar(value.message??"Recipient Not Updated");
-                          //   }
-                          // }
+                            // }else{
+                            //   APIResponse<Recipient> value = await RecipientRepository.updateRecipient(selectedRecipient!.id!,recipientRequestBody);
+                            //   if(value.data != null){
+                            //     commonController.selectedRecipient = value.data;
+                            //   }else{
+                            //     Utility.showSnackBar(value.message??"Recipient Not Updated");
+                            //   }
+                            // }
 
-                          if(commonController.selectedRecipient != null){
-                            bool isGetSendingPurposes = await commonController.getSendinPurposes();
-                            bool isGetCountryWiseBanks = await commonController.getCountryWiseBanks();
-                            Get.back();
-                            if(isGetSendingPurposes && isGetCountryWiseBanks){
-                              Get.off(const TransactionBankInfoScreen());
+                            if(commonController.selectedRecipient != null){
+                              bool isGetSendingPurposes = await commonController.getSendinPurposes();
+                              bool isGetCountryWiseBanks = await commonController.getCountryWiseBanks();
+                              Get.back();
+                              if(isGetSendingPurposes && isGetCountryWiseBanks){
+                                Get.off(const TransactionBankInfoScreen());
+                              }
+                            }else{
+                              Get.back();
                             }
                           }else{
                             Get.back();
+                            Utility.showSnackBar(apiResponse.message??"Failed to retrieve recipient banks.");
                           }
 
                         }

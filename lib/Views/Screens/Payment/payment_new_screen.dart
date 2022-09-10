@@ -31,6 +31,7 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
 
   CommonController commonController = Get.find<CommonController>();
 
+  int isCardSave = 0;
 
   @override
   void initState() {
@@ -72,79 +73,60 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                   ),
                 ),
                 const SizedBox(height: 15,),
-                FutureBuilder(
-                  future: PaymentRepository.payment3dAuth(commonController.currentTransaction!.transactionNumber!),
-                  builder: (context, AsyncSnapshot<APIResponse<PaymentAuthResponse>> snapshots){
+                Row(
+                  children: [
+                    Checkbox(activeColor: AppColor.defaultColor,value: isCardSave == 1, onChanged: (value){
+                      setState(() {
+                        isCardSave = value! == true? 1:0;
+                      });
+                    }),
+                    Expanded(
+                      child: Text("Save Card Details", style: TextStyle(color: AppColor.defaultColor,fontWeight: FontWeight.w700,fontSize: 15),),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 15,),
+                Center(
+                  child: DefaultButton(
+                    buttonText: "Pay Now",
+                    onTap: ()async{
+                      Utility.showLoadingDialog();
 
-                    if(snapshots.data != null){
+                      APIResponse<PaymentAuthResponse> apiResponse = await PaymentRepository.payment3dAuth(commonController.currentTransaction!.transactionNumber!,isCardSave);
 
-                      APIResponse<PaymentAuthResponse> apiResponse = snapshots.data!;
+                      if(apiResponse.data != null){
+                        String? returnUrl = await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Payment3DAuthScreen(paymentAuthResponse: apiResponse.data!,)));
+                        if(returnUrl != null && returnUrl.isNotEmpty){
+                          print(returnUrl);
 
-                      if(apiResponse.data!=null){
-                        return Center(
-                          child: DefaultButton(
-                            buttonText: "Pay Now",
-                            onTap: ()async{
-                              Utility.showLoadingDialog();
+                          var errorCode = Uri.parse(returnUrl).queryParameters['errorcode'];
+                          var errorMessage = Uri.parse(returnUrl).queryParameters['errormessage'];
+                          var orderReference = Uri.parse(returnUrl).queryParameters['orderreference'];
+                          var jwt = Uri.parse(returnUrl).queryParameters['jwt'];
 
-                              String? returnUrl = await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Payment3DAuthScreen(paymentAuthResponse: apiResponse.data!,)));
-                              if(returnUrl != null && returnUrl.isNotEmpty){
-                                print(returnUrl);
-
-                                var errorCode = Uri.parse(returnUrl).queryParameters['errorcode'];
-                                var errorMessage = Uri.parse(returnUrl).queryParameters['errormessage'];
-                                var orderReference = Uri.parse(returnUrl).queryParameters['orderreference'];
-                                var jwt = Uri.parse(returnUrl).queryParameters['jwt'];
-
-                                if(errorCode == "0"){
-                                  PaymentRepository.transactionConfirmation(jwt!).then((value){
-                                    Get.back();
-                                    if(value.data!=null && value.data!){
-                                      PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
-                                    }else{
-                                      Utility.showSnackBar(value.message??"Transaction Failed!");
-                                    }
-                                  });
-                                }else{
-                                  Get.back();
-                                  Utility.showSnackBar(errorMessage??"Transaction Failed!");
-                                }
+                          if(errorCode == "0"){
+                            PaymentRepository.transactionConfirmation(jwt!).then((value){
+                              Get.back();
+                              if(value.data!=null && value.data!){
+                                PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
                               }else{
-                                Get.back();
+                                Utility.showSnackBar(value.message??"Transaction Failed!");
                               }
-                            },
-                          ),
-                        );
+                            });
+                          }else{
+                            Get.back();
+                            Utility.showSnackBar(errorMessage??"Transaction Failed!");
+                          }
+                        }else{
+                          Get.back();
+                        }
                       }else{
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                  color: AppColor.defaultColor.withOpacity(.1),
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              child: Text(apiResponse.message??"An error occurred, try again later",textAlign: TextAlign.center,),
-                            ),
-                            const SizedBox(height: 15,),
-                            Center(
-                              child: DefaultButton(
-                                buttonText: "Back to Home",
-                                onTap: (){
-                                  Get.offAll(const HomeScreen());
-                                },
-                              ),
-                            )
-                          ],
-                        );
+                        Get.back();
+                        Utility.showSnackBar(apiResponse.message??"Transaction Failed!");
                       }
 
-
-                    }else{
-                      return Center(child: SpinKitCircle(color: AppColor.defaultColor,),);
-                    }
-                  },
+                    },
+                  ),
                 ),
                 const SizedBox(height: 15,),
               ],

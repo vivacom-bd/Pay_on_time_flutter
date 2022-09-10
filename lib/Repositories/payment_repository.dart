@@ -144,7 +144,7 @@ class PaymentRepository{
 
 
   /// 3d Auth Payment
-  static Future<APIResponse<PaymentAuthResponse>> payment3dAuth(String transactionNumber) async{
+  static Future<APIResponse<PaymentAuthResponse>> payment3dAuth(String transactionNumber,int isCardSave) async{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
@@ -152,9 +152,12 @@ class PaymentRepository{
     }
 
     Uri url = Uri.parse(baseAPIUrl()+'payment/trust_pay/3d_authentication?transaction_number=$transactionNumber');
-    return http.get(
+    return http.post(
         url,
         headers: headersWithAuth,
+        body: json.encode({
+          "credentialsonfile": isCardSave.toString()
+        })
     ).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
