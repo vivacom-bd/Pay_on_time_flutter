@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Views/Screens/Payment/payment_new_screen.dart';
 import 'package:hidmona/Views/Screens/Payment/payment_screen.dart';
 import 'package:hidmona/Views/Screens/Transaction/transaction_details_screen.dart';
 import 'package:hidmona/Views/Screens/Transaction/upload_bank_receipt_screen.dart';
@@ -77,7 +78,7 @@ class TransactionItem extends StatelessWidget {
                       if(transaction.remitterStatus != null && transaction.remitterStatus!.toUpperCase() == "INPROCESS") InkWell(
                         onTap: (){
                           Get.find<CommonController>().currentTransaction = transaction;
-                          Get.to(const PaymentScreen());
+                          Get.to(const PaymentNewScreen());
                         },
                         child: Container(
                             height: 30,

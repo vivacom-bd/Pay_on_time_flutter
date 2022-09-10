@@ -6,6 +6,7 @@ import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/transaction_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Views/Screens/Payment/payment_new_screen.dart';
 import 'package:hidmona/Views/Screens/Payment/payment_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/sending_confirmation_screen.dart';
 import 'package:hidmona/Views/Screens/Transaction/upload_bank_receipt_screen.dart';
@@ -188,7 +189,7 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                         if(transaction.remitterStatus!.toUpperCase() == "INPROCESS") InkWell(
                           onTap: (){
                             commonController.currentTransaction = transaction;
-                            Get.to(const PaymentScreen());
+                            Get.to(const PaymentNewScreen());
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),

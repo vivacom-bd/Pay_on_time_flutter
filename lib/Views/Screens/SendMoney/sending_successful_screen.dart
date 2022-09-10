@@ -148,36 +148,3 @@ class _SendingSuccessFulScreenState extends State<SendingSuccessFulScreen> {
   }
 
 }
-
-
-
-class CardRadioWidget extends StatelessWidget {
-  const CardRadioWidget({Key? key, required this.card, required this.isSelected, required this.onChanged}) : super(key: key);
-
-  final PaymentCard card;
-  final Function() onChanged;
-  final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onChanged,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical:5.0),
-        child: Card(
-            elevation: 2,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-              child: Row(
-                children: [
-                  Icon(isSelected? Icons.check_circle : CupertinoIcons.circle, size: 30,color: AppColor.defaultColor,),
-                  const SizedBox(width: 10,),
-                  Text("${card.cardType!}  **** **** **** ${card.cardInfo!}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
-                ],
-              ),
-            )
-        ),
-      ),
-    );
-  }
-}

@@ -7,7 +7,7 @@ import 'package:hidmona/Views/Widgets/default_button.dart';
 
 class PaymentDialog{
   //showDeleteDialog
-  static Future<dynamic> showDialog({String text = "Your Payment Is Successful.\nWe'll update your transaction after manual verification!"}) {
+  static Future<dynamic> showDialog({String text = "Your Transaction is Successful."}) {
 
 
     return showModal(

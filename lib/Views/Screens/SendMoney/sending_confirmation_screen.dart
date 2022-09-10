@@ -5,6 +5,7 @@ import 'package:hidmona/Repositories/transaction_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Payment/payment_new_screen.dart';
 import 'package:hidmona/Views/Screens/Payment/payment_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/sending_successful_screen.dart';
 
@@ -211,7 +212,7 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         commonController.currentTransaction = value.data;
 
                         if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debit or credit" || commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit"){
-                          Get.offAll(const PaymentScreen());
+                          Get.offAll(const PaymentNewScreen());
                         }else{
                           Get.offAll(const SendingSuccessFulScreen());
                         }

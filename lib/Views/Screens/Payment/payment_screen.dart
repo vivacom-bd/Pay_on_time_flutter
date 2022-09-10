@@ -7,6 +7,7 @@ import 'package:hidmona/Models/card.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/payment_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Utilities/payment_dialog.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Payment/payment_new_card_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/sending_confirmation_screen.dart';
@@ -120,10 +121,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       Get.back();
 
                                       if(apiResponse.data != null && apiResponse.data!){
+                                        //Get.offAll(const SendingSuccessFulScreen());
 
-                                        Get.offAll(const SendingSuccessFulScreen());
-
-                                        //PaymentDialog.showDialog();
+                                        PaymentDialog.showDialog();
                                       }else{
                                         Utility.showSnackBar(apiResponse.message?? "An Error Occurred",durationInSeconds: 5);
                                       }
