@@ -26,10 +26,12 @@ class TransactionBankInfoScreen extends StatefulWidget {
 
 class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController bankNameTextEditingController = TextEditingController();
   final TextEditingController bankAccountNoTextEditingController = TextEditingController();
   // final TextEditingController bankAccountTitleTextEditingController = TextEditingController();
   final TextEditingController bankAddressTextEditingController = TextEditingController();
   final TextEditingController bankSwiftCodeTextEditingController = TextEditingController();
+  final TextEditingController branchNameTextEditingController = TextEditingController();
 
   CommonController commonController = Get.find<CommonController>();
 
@@ -137,6 +139,83 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                         ),
                       ),
                       Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+                        child: Column(
+                          children: [
+                            CustomDropDownFromField(
+                                validator: (value) {
+                                  if (value == null) {
+                                    return "Select Recipient Bank";
+                                  }
+                                  return null;
+                                },
+
+                                items: commonController.recipientBanks.map((RecipientBank bank) {
+                                  return DropdownMenuItem(
+                                      value: bank,
+                                      child: Text(bank.bankName!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
+                                  );
+                                }).toList(),
+                                selectedValue: recipientBank,
+                                labelAndHintText: "Select Recipient Bank",
+                                suffixIcon: Padding(
+                                  padding: const EdgeInsets.only(bottom: 4.0),
+                                  child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                                ),
+                                filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
+                                onChanged: (value) async{
+                                  //if(recipientBank==null || recipientBank!.id != (value as RecipientBank).id){
+                                  recipientBank = value as RecipientBank;
+                                  bankNameTextEditingController.text = recipientBank!.bankName!;
+                                  recipientBankBranch = null;
+                                  Utility.showLoadingDialog();
+                                  APIResponse<List<RecipientBankBranch>> apiResponse = await CommonRepository.getRecipientBankBranches(recipientBank!.id!);
+
+                                  Get.back();
+                                  if(apiResponse.data != null){
+                                    recipientBankBranches.value = apiResponse.data!;
+                                  }else{
+                                    Utility.showSnackBar(apiResponse.message??"Branches retrieve failed!");
+                                  }
+
+                                  //}
+                                }
+                            ),
+                            const SizedBox(height: 15,),
+                            Obx((){
+                              return CustomDropDownFromField(
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Select Recipient Bank Branch";
+                                    }
+                                    return null;
+                                  },
+
+                                  items: recipientBankBranches.map((RecipientBankBranch branch) {
+                                    return DropdownMenuItem(
+                                        value: branch,
+                                        child: Text(branch.branchName!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
+                                    );
+                                  }).toList(),
+                                  selectedValue: recipientBankBranch,
+                                  labelAndHintText: "Select Recipient Bank Branch",
+                                  suffixIcon: Padding(
+                                    padding: const EdgeInsets.only(bottom: 4.0),
+                                    child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                                  ),
+                                  filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
+                                  onChanged: (value) {
+
+                                    recipientBankBranch = value as RecipientBankBranch;
+                                    branchNameTextEditingController.text = recipientBankBranch!.branchName!;
+
+                                  }
+                              );
+                            }),
+                          ],
+                        ),
+                      ),
+                      Container(
                         width: double.infinity,
                         alignment: Alignment.center,
                         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
@@ -148,102 +227,21 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Select Recipient Bank',
-                                  style: TextStyle(
-                                    color: AppColor.textColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                const SizedBox(height: 7,),
-                                CustomDropDownFromField(
-                                    validator: (value) {
-                                      if (value == null) {
-                                        return "Select Recipient Bank";
-                                      }
-                                      return null;
-                                    },
+                            CustomTextFormField(
+                                controller: bankNameTextEditingController,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
+                                  return null;
+                                },
+                                labelText: "Bank Name",
+                                hindText: "",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
 
-                                    items: commonController.recipientBanks.map((RecipientBank bank) {
-                                      return DropdownMenuItem(
-                                          value: bank,
-                                          child: Text(bank.bankName!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
-                                      );
-                                    }).toList(),
-                                    selectedValue: recipientBank,
-                                    labelAndHintText: "Select Recipient Bank",
-                                    suffixIcon: Padding(
-                                      padding: const EdgeInsets.only(bottom: 4.0),
-                                      child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
-                                    ),
-                                    filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
-                                    onChanged: (value) async{
-                                      if(recipientBank==null || recipientBank!.id != (value as RecipientBank).id){
-                                        recipientBank = value as RecipientBank;
-                                        recipientBankBranch = null;
-                                        Utility.showLoadingDialog();
-                                        APIResponse<List<RecipientBankBranch>> apiResponse = await CommonRepository.getRecipientBankBranches(recipientBank!.id!);
-
-                                        Get.back();
-                                        if(apiResponse.data != null){
-                                          recipientBankBranches.value = apiResponse.data!;
-                                        }else{
-                                          Utility.showSnackBar(apiResponse.message??"Branches retrieve failed!");
-                                        }
-
-                                      }
-                                    }
-                                ),
-                              ],
+                                }
                             ),
-                            const SizedBox(height: 10,),
-                            Obx((){
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Select Recipient Bank Branch',
-                                    style: TextStyle(
-                                      color: AppColor.textColor,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 7,),
-                                  CustomDropDownFromField(
-                                      validator: (value) {
-                                        if (value == null) {
-                                          return "Select Recipient Bank Branch";
-                                        }
-                                        return null;
-                                      },
-
-                                      items: recipientBankBranches.map((RecipientBankBranch branch) {
-                                        return DropdownMenuItem(
-                                            value: branch,
-                                            child: Text(branch.branchName!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
-                                        );
-                                      }).toList(),
-                                      selectedValue: recipientBankBranch,
-                                      labelAndHintText: "Select Recipient Bank Branch",
-                                      suffixIcon: Padding(
-                                        padding: const EdgeInsets.only(bottom: 4.0),
-                                        child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
-                                      ),
-                                      filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
-                                      onChanged: (value) {
-
-                                        recipientBankBranch = value as RecipientBankBranch;
-
-                                      }
-                                  ),
-                                ],
-                              );
-                            }),
                             const SizedBox(height: 10,),
                             CustomTextFormField(
                                 controller: bankAccountNoTextEditingController,
@@ -302,6 +300,22 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                   return null;
                                 },
                                 labelText: "Bank Address",
+                                hindText: "",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+
+                                }
+                            ),
+                            const SizedBox(height: 10,),
+                            CustomTextFormField(
+                                controller: branchNameTextEditingController,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
+                                  return null;
+                                },
+                                labelText: "Branch Name",
                                 hindText: "",
                                 keyboardType: TextInputType.text,
                                 onChanged: (value) {
@@ -418,12 +432,12 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
 
 
                            commonController.transactionRequestBody = TransactionRequestBody(
-                            bankName: recipientBank!.bankName,
+                            bankName: bankNameTextEditingController.text,
                             bankAccountNo: bankAccountNoTextEditingController.text,
                             //bankAccountTitle: bankAccountTitleTextEditingController.text,
                             bankSwiftCode: bankSwiftCodeTextEditingController.text,
                             bankAddress: bankAddressTextEditingController.text,
-                            branchName: recipientBankBranch!.branchName,
+                            branchName: branchNameTextEditingController.text,
                             payoutCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
                             receivingCurrency: commonController.serverCountryTo.value.selectedCurrency!.code,
                             // transactionDate: DateFormat("yyyy-mm-dd").format(DateTime.now()),
