@@ -144,9 +144,9 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                           children: [
                             CustomDropDownFromField(
                                 validator: (value) {
-                                  if (value == null) {
-                                    return "Select Recipient Bank";
-                                  }
+                                  // if (value == null) {
+                                  //   return "Select Recipient Bank";
+                                  // }
                                   return null;
                                 },
 
@@ -185,9 +185,9 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             Obx((){
                               return CustomDropDownFromField(
                                   validator: (value) {
-                                    if (value == null) {
-                                      return "Select Recipient Bank Branch";
-                                    }
+                                    // if (value == null) {
+                                    //   return "Select Recipient Bank Branch";
+                                    // }
                                     return null;
                                   },
 

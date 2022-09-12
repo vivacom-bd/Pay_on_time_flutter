@@ -151,13 +151,10 @@ class PaymentRepository{
       return APIResponse<PaymentAuthResponse>(error: true, message: "Internet is not connected!");
     }
 
-    Uri url = Uri.parse(baseAPIUrl()+'payment/trust_pay/3d_authentication?transaction_number=$transactionNumber');
-    return http.post(
+    Uri url = Uri.parse(baseAPIUrl()+'payment/trust_pay/3d_authentication?transaction_number=$transactionNumber&credentialsonfile=$isCardSave');
+    return http.get(
         url,
         headers: headersWithAuth,
-        body: json.encode({
-          "credentialsonfile": isCardSave.toString()
-        })
     ).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
