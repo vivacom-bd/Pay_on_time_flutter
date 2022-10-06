@@ -379,10 +379,10 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                               return null;
                             },
 
-                            items: commonController.modeOfPayments.map((ModeOfPayment modeOfReceive) {
+                            items: commonController.modeOfPayments.map((ModeOfPayment modeOfPayment) {
                               return DropdownMenuItem(
-                                  value: modeOfReceive,
-                                  child: Text(modeOfReceive.name!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
+                                  value: modeOfPayment,
+                                  child: Text(modeOfPayment.name!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
                               );
                             }).toList(),
                             selectedValue: commonController.selectedModeOfPayment,

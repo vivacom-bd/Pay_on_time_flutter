@@ -158,7 +158,7 @@ class CommonRepository{
     });
   }
 
-  ///getPaymentMethod
+  ///getModeOfReceive
   static Future<APIResponse<List<ModeOfPayment>>> getModeOfReceive(int countryId) async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<ModeOfPayment>>(error: true, message: "Internet is not connected!");
