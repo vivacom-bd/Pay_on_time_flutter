@@ -9,6 +9,7 @@ import 'package:hidmona/Repositories/payment_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/payment_dialog.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Home/home_screen.dart';
 import 'package:hidmona/Views/Screens/Payment/payment_new_card_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/sending_confirmation_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/sending_successful_screen.dart';
@@ -154,8 +155,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             child: Center(child: SpinKitCircle(color: AppColor.defaultColor,)),
                           );
                         },
-                      )
+                      ),
                     ],
+                  ),
+                ),
+                const SizedBox(height: 35,),
+                Center(
+                  child: DefaultButton(
+                    buttonText: "Go to Home",
+                    textColor: Colors.black,
+                    onTap: (){
+                      Get.offAll(const HomeScreen());
+                    },
+                    linearGradient: AppGradient.getColorGradient('grey'),
                   ),
                 ),
                 const SizedBox(height: 15,),

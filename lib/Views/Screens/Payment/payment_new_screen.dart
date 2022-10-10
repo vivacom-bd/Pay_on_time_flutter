@@ -128,6 +128,17 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 35,),
+                Center(
+                  child: DefaultButton(
+                    buttonText: "Go to Home",
+                    textColor: Colors.black,
+                    onTap: (){
+                      Get.offAll(const HomeScreen());
+                    },
+                    linearGradient: AppGradient.getColorGradient('grey'),
+                  ),
+                ),
                 const SizedBox(height: 15,),
               ],
             ),
