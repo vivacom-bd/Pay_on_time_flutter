@@ -204,7 +204,7 @@ class CardRadioWidget extends StatelessWidget {
                 children: [
                   Icon(isSelected? Icons.check_circle : CupertinoIcons.circle, size: 30,color: AppColor.defaultColor,),
                   const SizedBox(width: 10,),
-                  Text("${card.cardType!}  **** **** **** ${card.cardInfo!}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                  Text("${card.cardType??"Card"}  **** **** **** ${card.cardInfo!}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
                 ],
               ),
             )

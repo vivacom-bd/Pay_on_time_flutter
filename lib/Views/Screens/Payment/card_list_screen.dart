@@ -84,12 +84,12 @@ class _CardListScreenState extends State<CardListScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("${cards[index].cardType!}  **** **** **** ${cards[index].cardInfo!}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                                    Text("${cards[index].cardType??"Card"}  **** **** **** ${cards[index].cardInfo!}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
                                     InkWell(
                                       onTap: (){
                                         DefaultDialogs.showDialog(
                                             title: "Delete ${cards[index].cardType!} Card",
-                                            text: "${cards[index].cardType} **** **** **** ${cards[index].cardInfo!}\n\nDo you want to delete the card?",
+                                            text: "${cards[index].cardType??"Card"} **** **** **** ${cards[index].cardInfo!}\n\nDo you want to delete the card?",
                                             onCancel: (){
                                               Navigator.pop(context);
                                             },

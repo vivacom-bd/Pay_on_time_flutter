@@ -32,6 +32,7 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
   CommonController commonController = Get.find<CommonController>();
 
   int isCardSave = 0;
+  PaymentCard? selectedCard;
 
   @override
   void initState() {
@@ -73,59 +74,207 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                   ),
                 ),
                 const SizedBox(height: 15,),
-                Row(
-                  children: [
-                    Checkbox(activeColor: AppColor.defaultColor,value: isCardSave == 1, onChanged: (value){
-                      setState(() {
-                        isCardSave = value! == true? 1:0;
-                      });
-                    }),
-                    Expanded(
-                      child: Text("Save Card Details", style: TextStyle(color: AppColor.defaultColor,fontWeight: FontWeight.w700,fontSize: 15),),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 15,),
-                Center(
-                  child: DefaultButton(
-                    buttonText: "Pay Now",
-                    onTap: ()async{
-                      Utility.showLoadingDialog();
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                      color: AppColor.defaultColor.withOpacity(.1),
+                      borderRadius: BorderRadius.circular(10)
+                  ),
+                  child:  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Center(child: Text("Pay the amount",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w600),)),
+                      Divider(color: AppColor.defaultColor,thickness: 2,),
+                      FutureBuilder(
+                        future: PaymentRepository.getCards(),
+                        builder: (context,AsyncSnapshot< APIResponse<List<PaymentCard>>> snapshot){
 
-                      APIResponse<PaymentAuthResponse> apiResponse = await PaymentRepository.payment3dAuth(commonController.currentTransaction!.transactionNumber!,isCardSave);
+                          if(snapshot.data!=null){
 
-                      if(apiResponse.data != null){
-                        String? returnUrl = await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Payment3DAuthScreen(paymentAuthResponse: apiResponse.data!,)));
-                        if(returnUrl != null && returnUrl.isNotEmpty){
-                          print(returnUrl);
+                            APIResponse<List<PaymentCard>> response = snapshot.data!;
 
-                          var errorCode = Uri.parse(returnUrl).queryParameters['errorcode'];
-                          var errorMessage = Uri.parse(returnUrl).queryParameters['errormessage'];
-                          var orderReference = Uri.parse(returnUrl).queryParameters['orderreference'];
-                          var jwt = Uri.parse(returnUrl).queryParameters['jwt'];
+                            if(response.data != null){
+                              List<PaymentCard> cards = response.data!;
 
-                          if(errorCode == "0"){
-                            PaymentRepository.transactionConfirmation(jwt!).then((value){
-                              Get.back();
-                              if(value.data!=null && value.data!){
-                                PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
-                              }else{
-                                Utility.showSnackBar(value.message??"Transaction Failed!");
-                              }
-                            });
-                          }else{
-                            Get.back();
-                            Utility.showSnackBar(errorMessage??"Transaction Failed!");
+                              //transactions = transactions.reversed.toList();
+
+
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children:cards.map((card){
+                                      return CardRadioWidget(card: card, isSelected: selectedCard==null? false : selectedCard!.id == card.id, onChanged: (){
+                                        setState(() {
+                                          selectedCard = card;
+                                        });
+                                      });
+                                    }).toList(),
+                                  ),
+                                  if(cards.isNotEmpty)const SizedBox(height: 5,),
+                                  if(cards.isNotEmpty)DefaultButton(buttonText: "Pay Now",onTap: () async{
+                                    if(selectedCard != null){
+                                      Utility.showLoadingDialog();
+
+                                      APIResponse<bool> apiResponse = await PaymentRepository.paymentByCardId(selectedCard!.id!, commonController.currentTransaction!.transactionNumber!);
+
+                                      Get.back();
+
+                                      if(apiResponse.data != null && apiResponse.data!){
+                                        //Get.offAll(const SendingSuccessFulScreen());
+
+                                        PaymentDialog.showDialog();
+                                      }else{
+                                        Utility.showSnackBar(apiResponse.message?? "An Error Occurred",durationInSeconds: 5);
+                                      }
+
+
+                                    }else{
+                                      Utility.showSnackBar("Please Choose One Card");
+                                    }
+                                  },),
+                                  if(cards.isNotEmpty) Divider(height: 30,color: AppColor.defaultColor.withOpacity(.7),thickness: 1,),
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        height: 35,
+                                        width: 35,
+                                        child: Checkbox(activeColor: AppColor.defaultColor,value: isCardSave == 1, onChanged: (value){
+                                          setState(() {
+                                            isCardSave = value! == true? 1:0;
+                                          });
+                                        }),
+                                      ),
+                                      Expanded(
+                                        child: Text("Save Card Details", style: TextStyle(color: AppColor.defaultColor,fontWeight: FontWeight.w700,fontSize: 15),),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 5,),
+                                  Center(
+                                    child: DefaultButton(
+                                      buttonText: cards.isEmpty?"Pay Now":"Use Another Card",
+                                      onTap: ()async{
+                                        Utility.showLoadingDialog();
+
+                                        APIResponse<PaymentAuthResponse> apiResponse = await PaymentRepository.payment3dAuth(commonController.currentTransaction!.transactionNumber!,isCardSave);
+
+                                        if(apiResponse.data != null){
+                                          String? returnUrl = await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Payment3DAuthScreen(paymentAuthResponse: apiResponse.data!,)));
+                                          if(returnUrl != null && returnUrl.isNotEmpty){
+                                            print(returnUrl);
+
+                                            var errorCode = Uri.parse(returnUrl).queryParameters['errorcode'];
+                                            var errorMessage = Uri.parse(returnUrl).queryParameters['errormessage'];
+                                            var orderReference = Uri.parse(returnUrl).queryParameters['orderreference'];
+                                            var jwt = Uri.parse(returnUrl).queryParameters['jwt'];
+
+                                            if(errorCode == "0"){
+                                              PaymentRepository.transactionConfirmation(jwt!).then((value){
+                                                Get.back();
+                                                if(value.data!=null && value.data!){
+                                                  PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
+                                                }else{
+                                                  Utility.showSnackBar(value.message??"Transaction Failed!");
+                                                }
+                                              });
+                                            }else{
+                                              Get.back();
+                                              Utility.showSnackBar(errorMessage??"Transaction Failed!");
+                                            }
+                                          }else{
+                                            Get.back();
+                                          }
+                                        }else{
+                                          Get.back();
+                                          Utility.showSnackBar(apiResponse.message??"Transaction Failed!");
+                                        }
+
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+
+                            }else{
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        height: 35,
+                                        width: 35,
+                                        child: Checkbox(activeColor: AppColor.defaultColor,value: isCardSave == 1, onChanged: (value){
+                                          setState(() {
+                                            isCardSave = value! == true? 1:0;
+                                          });
+                                        }),
+                                      ),
+                                      Expanded(
+                                        child: Text("Save Card Details", style: TextStyle(color: AppColor.defaultColor,fontWeight: FontWeight.w700,fontSize: 15),),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 5,),
+                                  Center(
+                                    child: DefaultButton(
+                                      buttonText: "Pay Now",
+                                      onTap: ()async{
+                                        Utility.showLoadingDialog();
+
+                                        APIResponse<PaymentAuthResponse> apiResponse = await PaymentRepository.payment3dAuth(commonController.currentTransaction!.transactionNumber!,isCardSave);
+
+                                        if(apiResponse.data != null){
+                                          String? returnUrl = await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Payment3DAuthScreen(paymentAuthResponse: apiResponse.data!,)));
+                                          if(returnUrl != null && returnUrl.isNotEmpty){
+                                            print(returnUrl);
+
+                                            var errorCode = Uri.parse(returnUrl).queryParameters['errorcode'];
+                                            var errorMessage = Uri.parse(returnUrl).queryParameters['errormessage'];
+                                            var orderReference = Uri.parse(returnUrl).queryParameters['orderreference'];
+                                            var jwt = Uri.parse(returnUrl).queryParameters['jwt'];
+
+                                            if(errorCode == "0"){
+                                              PaymentRepository.transactionConfirmation(jwt!).then((value){
+                                                Get.back();
+                                                if(value.data!=null && value.data!){
+                                                  PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
+                                                }else{
+                                                  Utility.showSnackBar(value.message??"Transaction Failed!");
+                                                }
+                                              });
+                                            }else{
+                                              Get.back();
+                                              Utility.showSnackBar(errorMessage??"Transaction Failed!");
+                                            }
+                                          }else{
+                                            Get.back();
+                                          }
+                                        }else{
+                                          Get.back();
+                                          Utility.showSnackBar(apiResponse.message??"Transaction Failed!");
+                                        }
+
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+
                           }
-                        }else{
-                          Get.back();
-                        }
-                      }else{
-                        Get.back();
-                        Utility.showSnackBar(apiResponse.message??"Transaction Failed!");
-                      }
 
-                    },
+                          return Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Center(child: SpinKitCircle(color: AppColor.defaultColor,)),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 35,),
@@ -173,7 +322,7 @@ class CardRadioWidget extends StatelessWidget {
                 children: [
                   Icon(isSelected? Icons.check_circle : CupertinoIcons.circle, size: 30,color: AppColor.defaultColor,),
                   const SizedBox(width: 10,),
-                  Text("${card.cardType!}  **** **** **** ${card.cardInfo!}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                  Text("${card.cardType??"Card"}  **** **** **** ${card.cardInfo!}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
                 ],
               ),
             )
