@@ -144,9 +144,9 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                           children: [
                             CustomDropDownFromField(
                                 validator: (value) {
-                                  // if (value == null) {
-                                  //   return "Select Recipient Bank";
-                                  // }
+                                  if (value == null) {
+                                    return "Select Recipient Bank";
+                                  }
                                   return null;
                                 },
 
@@ -185,9 +185,9 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             Obx((){
                               return CustomDropDownFromField(
                                   validator: (value) {
-                                    // if (value == null) {
-                                    //   return "Select Recipient Bank Branch";
-                                    // }
+                                    if (value == null) {
+                                      return "Select Recipient Bank Branch";
+                                    }
                                     return null;
                                   },
 
@@ -227,22 +227,22 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomTextFormField(
-                                controller: bankNameTextEditingController,
-                                validator: (value) {
-                                  if(value!.isEmpty){
-                                    return "Field can't be empty";
-                                  }
-                                  return null;
-                                },
-                                labelText: "Bank Name",
-                                hindText: "",
-                                keyboardType: TextInputType.text,
-                                onChanged: (value) {
-
-                                }
-                            ),
-                            const SizedBox(height: 10,),
+                            // CustomTextFormField(
+                            //     controller: bankNameTextEditingController,
+                            //     validator: (value) {
+                            //       if(value!.isEmpty){
+                            //         return "Field can't be empty";
+                            //       }
+                            //       return null;
+                            //     },
+                            //     labelText: "Bank Name",
+                            //     hindText: "",
+                            //     keyboardType: TextInputType.text,
+                            //     onChanged: (value) {
+                            //
+                            //     }
+                            // ),
+                            // const SizedBox(height: 10,),
                             CustomTextFormField(
                                 controller: bankAccountNoTextEditingController,
                                 validator: (value) {
@@ -275,54 +275,54 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             //     }
                             // ),
                             // const SizedBox(height: 10,),
-                            CustomTextFormField(
-                                controller: bankSwiftCodeTextEditingController,
-                                validator: (value) {
-                                  // if(value!.isEmpty){
-                                  //   return "Field can't be empty";
-                                  // }
-                                  return null;
-                                },
-                                labelText: "Swift Code (Optional)",
-                                hindText: "",
-                                keyboardType: TextInputType.text,
-                                onChanged: (value) {
-
-                                }
-                            ),
-                            const SizedBox(height: 10,),
-                            CustomTextFormField(
-                                controller: bankAddressTextEditingController,
-                                validator: (value) {
-                                  if(value!.isEmpty){
-                                    return "Field can't be empty";
-                                  }
-                                  return null;
-                                },
-                                labelText: "Bank Address",
-                                hindText: "",
-                                keyboardType: TextInputType.text,
-                                onChanged: (value) {
-
-                                }
-                            ),
-                            const SizedBox(height: 10,),
-                            CustomTextFormField(
-                                controller: branchNameTextEditingController,
-                                validator: (value) {
-                                  if(value!.isEmpty){
-                                    return "Field can't be empty";
-                                  }
-                                  return null;
-                                },
-                                labelText: "Branch Name",
-                                hindText: "",
-                                keyboardType: TextInputType.text,
-                                onChanged: (value) {
-
-                                }
-                            ),
-                            const SizedBox(height: 5,),
+                            // CustomTextFormField(
+                            //     controller: bankSwiftCodeTextEditingController,
+                            //     validator: (value) {
+                            //       // if(value!.isEmpty){
+                            //       //   return "Field can't be empty";
+                            //       // }
+                            //       return null;
+                            //     },
+                            //     labelText: "Swift Code (Optional)",
+                            //     hindText: "",
+                            //     keyboardType: TextInputType.text,
+                            //     onChanged: (value) {
+                            //
+                            //     }
+                            // ),
+                            // const SizedBox(height: 10,),
+                            // CustomTextFormField(
+                            //     controller: bankAddressTextEditingController,
+                            //     validator: (value) {
+                            //       if(value!.isEmpty){
+                            //         return "Field can't be empty";
+                            //       }
+                            //       return null;
+                            //     },
+                            //     labelText: "Bank Address",
+                            //     hindText: "",
+                            //     keyboardType: TextInputType.text,
+                            //     onChanged: (value) {
+                            //
+                            //     }
+                            // ),
+                            // const SizedBox(height: 10,),
+                            // CustomTextFormField(
+                            //     controller: branchNameTextEditingController,
+                            //     validator: (value) {
+                            //       if(value!.isEmpty){
+                            //         return "Field can't be empty";
+                            //       }
+                            //       return null;
+                            //     },
+                            //     labelText: "Branch Name",
+                            //     hindText: "",
+                            //     keyboardType: TextInputType.text,
+                            //     onChanged: (value) {
+                            //
+                            //     }
+                            // ),
+                            // const SizedBox(height: 5,),
                           ],
                         ),
                       ),
@@ -436,7 +436,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             bankAccountNo: bankAccountNoTextEditingController.text,
                             //bankAccountTitle: bankAccountTitleTextEditingController.text,
                             bankSwiftCode: bankSwiftCodeTextEditingController.text,
-                            bankAddress: bankAddressTextEditingController.text,
+                            bankAddress: "........",//bankAddressTextEditingController.text,
                             branchName: branchNameTextEditingController.text,
                             payoutCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
                             receivingCurrency: commonController.serverCountryTo.value.selectedCurrency!.code,
