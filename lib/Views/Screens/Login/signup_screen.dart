@@ -7,6 +7,7 @@ import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/user_signup.dart';
 import 'package:hidmona/Repositories/user_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Utilities/default_dialogs.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
@@ -462,8 +463,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       if(value.data != null){
 
                                         Get.back();
-                                        Get.back();
-                                        Utility.showSnackBar(value.message??"Signed up successfully");
+
+                                        DefaultDialogs.showDialog(title:"Verify Your Account",text: "Please check your email. A verification link is sent to ${userSignupRequest.email}.",onSubmitText: "Okay",onSubmit: (){
+                                          Get.back();
+                                          Get.back();
+                                        });
 
                                       }else{
                                         Get.back();
