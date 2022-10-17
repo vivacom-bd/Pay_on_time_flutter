@@ -88,7 +88,7 @@ class _CardListScreenState extends State<CardListScreen> {
                                     InkWell(
                                       onTap: (){
                                         DefaultDialogs.showDialog(
-                                            title: "Delete ${cards[index].cardType!} Card",
+                                            title: "Delete ${cards[index].cardType??""} Card",
                                             text: "${cards[index].cardType??"Card"} **** **** **** ${cards[index].cardInfo!}\n\nDo you want to delete the card?",
                                             onCancel: (){
                                               Navigator.pop(context);

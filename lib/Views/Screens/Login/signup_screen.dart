@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:android_intent_plus/android_intent.dart';
+import 'package:android_intent_plus/flag.dart';
 import 'package:country_currency_pickers/country.dart';
 import 'package:country_currency_pickers/country_picker_dialog.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +18,7 @@ import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 import 'package:libphonenumber/libphonenumber.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Widgets/country_item.dart';
 
@@ -464,10 +469,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                                         Get.back();
 
-                                        DefaultDialogs.showDialog(title:"Verify Your Account",text: "Please check your email. A verification link is sent to ${userSignupRequest.email}.",onSubmitText: "Okay",onSubmit: (){
-                                          Get.back();
-                                          Get.back();
-                                        });
+                                        DefaultDialogs.showDialog(title:"Verify Your Account",text: "Please check your email.\nA verification link is sent to ${userSignupRequest.email}.",
+                                          onSubmitText: "Open 📩",
+                                          onSubmit: () {
+                                            Get.back();
+                                            Get.back();
+
+                                            if (Platform.isAndroid) {
+                                              AndroidIntent intent = const AndroidIntent(
+                                                action: 'android.intent.action.MAIN',
+                                                category: 'android.intent.category.APP_EMAIL',
+                                                flags: [Flag.FLAG_ACTIVITY_NEW_TASK]
+                                              );
+                                              intent.launch().catchError((e) {
+                                                //
+                                              });
+                                            } else if (Platform.isIOS) {
+                                              launch("message://").catchError((e){
+                                                //
+                                              });
+                                            }
+
+                                          },
+                                          onCancel: (){
+                                            Get.back();
+                                            Get.back();
+                                          },
+                                          cancelText: "Cancel"
+                                        );
 
                                       }else{
                                         Get.back();

@@ -41,7 +41,7 @@ class PaymentRepository{
       return APIResponse<bool>(error: true, message: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'card/$id');
-    return http.get(url,headers: headersWithAuth)
+    return http.delete(url,headers: headersWithAuth)
         .then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
