@@ -217,22 +217,22 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                             ],
                           ),
                           const SizedBox(height: 10,),
-                          CustomTextFormField(
-                              controller: addressTextEditingController,
-                              validator: (value) {
-                                if(value!.isEmpty){
-                                  return "Field can't be empty";
-                                }
-                                return null;
-                              },
-                              labelText: "Address",
-                              hindText: "",
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
-
-                              }
-                          ),
-                          const SizedBox(height: 10,),
+                          // CustomTextFormField(
+                          //     controller: addressTextEditingController,
+                          //     validator: (value) {
+                          //       if(value!.isEmpty){
+                          //         return "Field can't be empty";
+                          //       }
+                          //       return null;
+                          //     },
+                          //     labelText: "Address",
+                          //     hindText: "",
+                          //     keyboardType: TextInputType.text,
+                          //     onChanged: (value) {
+                          //
+                          //     }
+                          // ),
+                          // const SizedBox(height: 10,),
                           // CustomTextFormField(
                           //     controller: postalCodeTextEditingController,
                           //     validator: (value) {

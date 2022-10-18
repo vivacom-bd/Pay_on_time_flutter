@@ -1,21 +1,12 @@
-import 'package:country_currency_pickers/country.dart';
-import 'package:country_currency_pickers/country_picker_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Repositories/user_repository.dart';
-import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
-import 'package:hidmona/Views/Screens/Home/home_screen.dart';
-import 'package:hidmona/Views/Screens/Login/login_screen.dart';
-import 'package:hidmona/Views/Screens/Login/signup_screen.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
-import '../../Widgets/country_item.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   static const String routeName = "/ForgetPasswordScreen";
