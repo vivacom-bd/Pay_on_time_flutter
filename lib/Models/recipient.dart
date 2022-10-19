@@ -13,7 +13,7 @@ class Recipient {
   String? phone;
   int? countryId;
   String? streetAddress;
-  int? postalCode;
+  String? postalCode;
   String? dateOfBirth;
   int? cityId;
   int? citizenCountryId;
