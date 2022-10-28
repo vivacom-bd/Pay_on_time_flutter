@@ -119,7 +119,7 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                               Divider(color: AppColor.defaultColor,thickness: .5,),
                               SendDetailsItem(title: "Bank Account No",value: "${transaction.bankAccountNo}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Bank Account Title",value: "${transaction.bankAccountTitle}",),
+                              SendDetailsItem(title: "Account Holder Name",value: "${transaction.bankAccountTitle}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
                               SendDetailsItem(title: "Branch Name",value: "${transaction.branchName}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),

@@ -42,6 +42,7 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
   CommonController commonController = Get.find<CommonController>();
 
   Country? selectedCountry;
+  Country? selectedPhoneCountry;
   City? selectedRecipientCity;
   Country? selectedCitizenCountry;
   DateTime? dateTime;
@@ -65,17 +66,20 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
 
     //dateTime = DateFormat("yyyy-MM-dd").parse(widget.recipient.dateOfBirth.toString());
 
-    phone.PhoneNumberUtil().parse(widget.recipient.phone!).then((number){
-      //phoneNumber = number.nationalNumber;
-      print(phoneNumber);
-      phoneTextEditingController.text = number.nationalNumber;
+    if(widget.recipient.phone!=null) {
+      phone.PhoneNumberUtil().parse(widget.recipient.phone!).then((number){
+        //phoneNumber = number.nationalNumber;
+        print(phoneNumber);
+        phoneTextEditingController.text = number.nationalNumber;
 
-    });
+      });
+    }
 
     if(widget.recipient.country != null){
       List<ServerCountry> countries = commonController.serverCountries.where((country) => widget.recipient.country!.id == country.id).toList();
       if (countries.isNotEmpty) {
         selectedCountry = CountryPickerUtils.getCountryByIsoCode(countries.first.countryCode!);
+        selectedPhoneCountry = selectedCountry;
         getCities();
       }
     }
@@ -210,18 +214,18 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
                               InkWell(
                                 onTap: (){
                                   FocusScope.of(context).unfocus();
-                                  //_openCountryPickerDialog();
+                                  _openCountryPickerDialog(type: "Phone");
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.only(top: 12, bottom: 12, left: 10, right: 10),
+                                  padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
                                   decoration: BoxDecoration(
                                     color: Colors.grey.withOpacity(.2),
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Row(
                                     children: [
-                                      CountryItem(country: selectedCountry,titleType: "flag",),
-                                      //const Icon(Icons.arrow_drop_down)
+                                      CountryItem(country: selectedPhoneCountry,titleType: "flag",),
+                                      const Icon(Icons.arrow_drop_down)
                                     ],
                                   )
                                 ),
@@ -465,8 +469,14 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
           if(type == "Country"){
             setState(() {
               selectedCountry = country;
-              phoneTextEditingController.text = "+${selectedCountry!.phoneCode??""}";
+              selectedPhoneCountry = country;
+              phoneTextEditingController.text = "+${selectedPhoneCountry!.phoneCode??""}";
               getCities();
+            });
+          }else if(type=="Phone"){
+            setState(() {
+              selectedPhoneCountry = country;
+              phoneTextEditingController.text = "+${selectedPhoneCountry!.phoneCode??""}";
             });
           }else if(type == "Citizen"){
             setState(() {
@@ -491,8 +501,8 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
   void phoneNumberValidator(String value){
 
     Future.delayed(const Duration(seconds: 1),(){
-      PhoneNumberUtil.normalizePhoneNumber(phoneNumber: value, isoCode: selectedCountry!.isoCode!).then((normalizedPhoneNumber){
-        PhoneNumberUtil.isValidPhoneNumber(phoneNumber: normalizedPhoneNumber!, isoCode:selectedCountry!.isoCode!).then((isPhoneValid){
+      PhoneNumberUtil.normalizePhoneNumber(phoneNumber: value, isoCode: selectedPhoneCountry!.isoCode!).then((normalizedPhoneNumber){
+        PhoneNumberUtil.isValidPhoneNumber(phoneNumber: normalizedPhoneNumber!, isoCode:selectedPhoneCountry!.isoCode!).then((isPhoneValid){
 
           if(isPhoneValid!){
             phoneNumber = normalizedPhoneNumber;
@@ -513,15 +523,22 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
 
 
   void getCities() async{
+
     APIResponse<List<City>> apiResponse1 = await CommonRepository.getCities(commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id!);
+
     if(apiResponse1.data != null){
       countryCities.clear();
       countryCities.addAll(apiResponse1.data!);
 
-      if(widget.recipient.city != null){
+      if(widget.recipient.city != null && selectedRecipientCity == null){
         List<City> cities = countryCities.where((city) => widget.recipient.city!.id == city.id).toList();
         if(cities.isNotEmpty){
           selectedRecipientCity = cities.first;
+        }
+      }else if(selectedRecipientCity!=null){
+        List<City> cities = countryCities.where((city) => selectedRecipientCity!.id == city.id).toList();
+        if(cities.isEmpty){
+          selectedRecipientCity = null;
         }
       }
 

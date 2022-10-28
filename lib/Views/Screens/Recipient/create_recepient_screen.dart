@@ -38,6 +38,7 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
   CommonController commonController = Get.find<CommonController>();
 
   Country? selectedCountry;
+  Country? selectedPhoneCountry;
   City? selectedRecipientCity;
   Country? selectedCitizenCountry;
   DateTime? dateTime;
@@ -173,18 +174,18 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                               InkWell(
                                 onTap: (){
                                   FocusScope.of(context).unfocus();
-                                  //_openCountryPickerDialog();
+                                  _openCountryPickerDialog(type: "Phone");
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.only(top: 12, bottom: 12, left: 10, right: 10),
+                                  padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
                                   decoration: BoxDecoration(
                                     color: Colors.grey.withOpacity(.2),
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Row(
                                     children: [
-                                      CountryItem(country: selectedCountry,titleType: "flag",),
-                                      //const Icon(Icons.arrow_drop_down)
+                                      CountryItem(country: selectedPhoneCountry,titleType: "flag",),
+                                      const Icon(Icons.arrow_drop_down)
                                     ],
                                   )
                                 ),
@@ -426,8 +427,14 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
           if(type == "Country"){
             setState(() {
               selectedCountry = country;
-              phoneTextEditingController.text = "+${selectedCountry!.phoneCode??""}";
+              selectedPhoneCountry = selectedCountry;
+              phoneTextEditingController.text = "+${selectedPhoneCountry!.phoneCode??""}";
               getCities();
+            });
+          }else if(type=="Phone"){
+            setState(() {
+              selectedPhoneCountry = country;
+              phoneTextEditingController.text = "+${selectedPhoneCountry!.phoneCode??""}";
             });
           }else if(type == "Citizen"){
             setState(() {
@@ -452,8 +459,8 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
   void phoneNumberValidator(String value){
 
     Future.delayed(const Duration(seconds: 1),(){
-      PhoneNumberUtil.normalizePhoneNumber(phoneNumber: value, isoCode: selectedCountry!.isoCode!).then((normalizedPhoneNumber){
-        PhoneNumberUtil.isValidPhoneNumber(phoneNumber: normalizedPhoneNumber!, isoCode:selectedCountry!.isoCode!).then((isPhoneValid){
+      PhoneNumberUtil.normalizePhoneNumber(phoneNumber: value, isoCode: selectedPhoneCountry!.isoCode!).then((normalizedPhoneNumber){
+        PhoneNumberUtil.isValidPhoneNumber(phoneNumber: normalizedPhoneNumber!, isoCode:selectedPhoneCountry!.isoCode!).then((isPhoneValid){
 
           if(isPhoneValid!){
             phoneNumber = normalizedPhoneNumber;

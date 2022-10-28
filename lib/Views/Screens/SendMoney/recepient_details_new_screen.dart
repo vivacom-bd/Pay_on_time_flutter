@@ -259,10 +259,10 @@ class _RecipientDetailsNewScreenState extends State<RecipientDetailsNewScreen> {
                               InkWell(
                                 onTap: (){
                                   FocusScope.of(context).unfocus();
-                                  //_openCountryPickerDialog();
+                                  _openCountryPickerDialog();
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.only(top: 12, bottom: 12, left: 10, right: 10),
+                                  padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
                                   decoration: BoxDecoration(
                                     color: Colors.grey.withOpacity(.2),
                                     borderRadius: BorderRadius.circular(4),
@@ -270,7 +270,7 @@ class _RecipientDetailsNewScreenState extends State<RecipientDetailsNewScreen> {
                                   child: Row(
                                     children: [
                                       CountryItem(country: selectedPhoneCountry,titleType: "flag",),
-                                      //const Icon(Icons.arrow_drop_down)
+                                      const Icon(Icons.arrow_drop_down)
                                     ],
                                   )
                                 ),

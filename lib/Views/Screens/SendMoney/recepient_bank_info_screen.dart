@@ -28,7 +28,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController bankNameTextEditingController = TextEditingController();
   final TextEditingController bankAccountNoTextEditingController = TextEditingController();
-  // final TextEditingController bankAccountTitleTextEditingController = TextEditingController();
+  final TextEditingController bankAccountTitleTextEditingController = TextEditingController();
   final TextEditingController bankAddressTextEditingController = TextEditingController();
   final TextEditingController bankSwiftCodeTextEditingController = TextEditingController();
   final TextEditingController branchNameTextEditingController = TextEditingController();
@@ -45,6 +45,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
 
     commonController.selectedSendingPurpose = null;
     commonController.selectedCountryWiseBank = null;
+    bankAccountTitleTextEditingController.text = commonController.selectedRecipient!.fullName!;
   }
 
 
@@ -244,6 +245,22 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             // ),
                             // const SizedBox(height: 10,),
                             CustomTextFormField(
+                                controller: bankAccountTitleTextEditingController,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }
+                                  return null;
+                                },
+                                labelText: "Account Holder Name",
+                                hindText: "",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+
+                                }
+                            ),
+                            const SizedBox(height: 10,),
+                            CustomTextFormField(
                                 controller: bankAccountNoTextEditingController,
                                 validator: (value) {
                                   if(value!.isEmpty){
@@ -259,22 +276,6 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                 }
                             ),
                             const SizedBox(height: 10,),
-                            // CustomTextFormField(
-                            //     controller: bankAccountTitleTextEditingController,
-                            //     validator: (value) {
-                            //       if(value!.isEmpty){
-                            //         return "Field can't be empty";
-                            //       }
-                            //       return null;
-                            //     },
-                            //     labelText: "Bank Account Title",
-                            //     hindText: "",
-                            //     keyboardType: TextInputType.text,
-                            //     onChanged: (value) {
-                            //
-                            //     }
-                            // ),
-                            // const SizedBox(height: 10,),
                             // CustomTextFormField(
                             //     controller: bankSwiftCodeTextEditingController,
                             //     validator: (value) {
@@ -434,7 +435,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                            commonController.transactionRequestBody = TransactionRequestBody(
                             bankName: bankNameTextEditingController.text,
                             bankAccountNo: bankAccountNoTextEditingController.text,
-                            //bankAccountTitle: bankAccountTitleTextEditingController.text,
+                            bankAccountTitle: bankAccountTitleTextEditingController.text,
                             bankSwiftCode: bankSwiftCodeTextEditingController.text,
                             bankAddress: "........",//bankAddressTextEditingController.text,
                             branchName: branchNameTextEditingController.text,
