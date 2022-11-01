@@ -246,6 +246,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             // const SizedBox(height: 10,),
                             CustomTextFormField(
                                 controller: bankAccountTitleTextEditingController,
+                                enabled:false,
                                 validator: (value) {
                                   if(value!.isEmpty){
                                     return "Field can't be empty";

@@ -109,7 +109,11 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                                     children:cards.map((card){
                                       return CardRadioWidget(card: card, isSelected: selectedCard==null? false : selectedCard!.id == card.id, onChanged: (){
                                         setState(() {
-                                          selectedCard = card;
+                                          if(selectedCard != card) {
+                                            selectedCard = card;
+                                          }else{
+                                            selectedCard = null;
+                                          }
                                         });
                                       });
                                     }).toList(),
