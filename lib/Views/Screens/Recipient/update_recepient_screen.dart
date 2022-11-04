@@ -16,7 +16,6 @@ import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 import 'package:libphonenumber/libphonenumber.dart';
-import 'package:phone_number/phone_number.dart' as phone;
 
 class UpdateRecipientScreen extends StatefulWidget {
   static const String routeName = "/UpdateRecipientScreen";
@@ -66,12 +65,13 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
     //dateTime = DateFormat("yyyy-MM-dd").parse(widget.recipient.dateOfBirth.toString());
 
     if(widget.recipient.phone!=null) {
-      phone.PhoneNumberUtil().parse(widget.recipient.phone!).then((number){
-        //phoneNumber = number.nationalNumber;
-        print(phoneNumber);
-        phoneTextEditingController.text = number.nationalNumber;
-
-      });
+      phoneTextEditingController.text = widget.recipient.phone!;
+      // phone.PhoneNumberUtil().parse(widget.recipient.phone!).then((number){
+      //   //phoneNumber = number.nationalNumber;
+      //   print(phoneNumber);
+      //   phoneTextEditingController.text = number.nationalNumber;
+      //
+      // });
     }
 
     if(widget.recipient.country != null){

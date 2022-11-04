@@ -18,8 +18,6 @@ import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 import 'package:libphonenumber/libphonenumber.dart';
-import 'package:phone_number/phone_number.dart' as phone;
-
 class RecipientDetailsNewScreen extends StatefulWidget {
   static const String routeName = "/RecipientDetailsNewScreen";
 
