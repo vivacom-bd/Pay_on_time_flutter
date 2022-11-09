@@ -616,15 +616,22 @@ class _RecipientDetailsNewScreenState extends State<RecipientDetailsNewScreen> {
       PhoneNumberUtil.normalizePhoneNumber(phoneNumber: value, isoCode: selectedPhoneCountry!.isoCode!).then((normalizedPhoneNumber){
         PhoneNumberUtil.isValidPhoneNumber(phoneNumber: normalizedPhoneNumber!, isoCode:selectedPhoneCountry!.isoCode!).then((isPhoneValid){
 
-          if(isPhoneValid!){
+          bool isValid = isPhoneValid??false;
+          if(isValid){
             phoneNumber = normalizedPhoneNumber;
             print(phoneNumber);
+          }else{
+            if(selectedPhoneCountry!.isoCode! == "ET" && normalizedPhoneNumber.length == 13 && normalizedPhoneNumber.compareTo("+25170")==1){
+              phoneNumber = normalizedPhoneNumber;
+              isValid = true;
+              print(phoneNumber);
+            }
           }
 
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             if(mounted){
               setState(() {
-                isPhoneNumberValid = isPhoneValid;
+                isPhoneNumberValid = isValid;
               });
             }
           });

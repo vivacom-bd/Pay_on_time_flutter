@@ -572,15 +572,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
       PhoneNumberUtil.normalizePhoneNumber(phoneNumber: value, isoCode: selectedCountry!.isoCode!).then((normalizedPhoneNumber){
         PhoneNumberUtil.isValidPhoneNumber(phoneNumber: normalizedPhoneNumber!, isoCode:selectedCountry!.isoCode!).then((isPhoneValid){
 
-          if(isPhoneValid!){
+          bool isValid = isPhoneValid??false;
+          if(isValid){
             phoneNumber = normalizedPhoneNumber;
             print(phoneNumber);
+          }else{
+            if(selectedCountry!.isoCode! == "ET" && normalizedPhoneNumber.length == 13 && normalizedPhoneNumber.compareTo("+25170")==1){
+              phoneNumber = normalizedPhoneNumber;
+              isValid = true;
+              print(phoneNumber);
+            }
           }
 
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             if(mounted){
               setState(() {
-                isPhoneNumberValid = isPhoneValid;
+                isPhoneNumberValid = isValid;
               });
             }
           });
