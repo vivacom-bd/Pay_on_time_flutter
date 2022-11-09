@@ -621,7 +621,7 @@ class _RecipientDetailsNewScreenState extends State<RecipientDetailsNewScreen> {
             phoneNumber = normalizedPhoneNumber;
             print(phoneNumber);
           }else{
-            if(selectedPhoneCountry!.isoCode! == "ET" && normalizedPhoneNumber.length == 13 && normalizedPhoneNumber.compareTo("+25170")==1){
+            if(selectedPhoneCountry!.isoCode! == "ET" && normalizedPhoneNumber.length == 13 && normalizedPhoneNumber.contains("+25170")){
               phoneNumber = normalizedPhoneNumber;
               isValid = true;
               print(phoneNumber);
