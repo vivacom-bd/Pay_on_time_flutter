@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:hidmona/Models/card.dart';
 import 'package:hidmona/Models/card_info.dart';
+import 'package:hidmona/Models/dashun_bank_info.dart';
 import 'package:hidmona/Models/pyament_auth_response.dart';
 import 'package:hidmona/Repositories/api_constants.dart';
 import 'package:hidmona/Repositories/api_response.dart';
@@ -195,6 +196,38 @@ class PaymentRepository{
     }).catchError((onError){
       print(onError);
       return APIResponse<bool>(error: true, message: "An Error Occurred!");
+    });
+  }
+
+
+
+  /// bankAccountCheck
+  static Future<APIResponse<DashunBankInfo>> dashunBankAccountCheck(String accountNo) async{
+
+    ///internet check
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<DashunBankInfo>(error: true, message: "Internet is not connected!");
+    }
+
+    Uri url = Uri.parse(baseAPIUrl()+'dashen_bank/beneficiary_check');
+    return http.post(
+      url,
+      headers: headers,
+      body: json.encode({
+        "beneficiary_account_number":accountNo
+      })
+    ).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        print(jsonData);
+        return APIResponse<DashunBankInfo>(error: false,data: DashunBankInfo.fromJson(jsonData));
+      }
+      return APIResponse<DashunBankInfo>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<DashunBankInfo>(error: true, message: "An Error Occurred!");
     });
   }
 }

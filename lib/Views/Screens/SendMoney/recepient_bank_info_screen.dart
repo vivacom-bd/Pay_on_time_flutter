@@ -8,6 +8,7 @@ import 'package:hidmona/Models/sending_purpose.dart';
 import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/common_repository.dart';
+import 'package:hidmona/Repositories/payment_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/SendMoney/sending_confirmation_screen.dart';
@@ -31,13 +32,15 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
   final TextEditingController bankAccountTitleTextEditingController = TextEditingController();
   final TextEditingController bankAddressTextEditingController = TextEditingController();
   final TextEditingController bankSwiftCodeTextEditingController = TextEditingController();
-  final TextEditingController branchNameTextEditingController = TextEditingController();
+  // final TextEditingController branchNameTextEditingController = TextEditingController();
 
   CommonController commonController = Get.find<CommonController>();
 
   RecipientBank? recipientBank;
   RxList<RecipientBankBranch> recipientBankBranches = <RecipientBankBranch>[].obs;
   RecipientBankBranch? recipientBankBranch;
+  bool isAccountNumberValidate = false;
+  String accountNumber = "";
 
   @override
   void initState() {
@@ -186,9 +189,9 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             Obx((){
                               return CustomDropDownFromField(
                                   validator: (value) {
-                                    if (value == null) {
-                                      return "Select Recipient Bank Branch";
-                                    }
+                                    // if (value == null) {
+                                    //   return "Select Recipient Bank Branch";
+                                    // }
                                     return null;
                                   },
 
@@ -208,7 +211,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                   onChanged: (value) {
 
                                     recipientBankBranch = value as RecipientBankBranch;
-                                    branchNameTextEditingController.text = recipientBankBranch!.branchName!;
+                                    // branchNameTextEditingController.text = recipientBankBranch!.branchName!;
 
                                   }
                               );
@@ -245,6 +248,36 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             // ),
                             // const SizedBox(height: 10,),
                             CustomTextFormField(
+                                controller: bankAccountNoTextEditingController,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }else if(recipientBank!=null && recipientBank!.bankName!.toLowerCase() == "dashan bank"){
+                                    if(value.length == 13){
+                                      if(accountNumber!=value){
+                                        accountNumber = value;
+                                        checkAccountNumber(accountNumber);
+                                      }
+
+                                      if(!isAccountNumberValidate){
+                                        return "Invalid account number";
+                                      }
+
+                                    }else{
+                                      return "Account no. should be 13 digits";
+                                    }
+                                  }
+                                  return null;
+                                },
+                                labelText: "Bank Account No.",
+                                hindText: "",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+
+                                }
+                            ),
+                            const SizedBox(height: 10,),
+                            CustomTextFormField(
                                 controller: bankAccountTitleTextEditingController,
                                 enabled:false,
                                 validator: (value) {
@@ -254,22 +287,6 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                   return null;
                                 },
                                 labelText: "Account Holder Name",
-                                hindText: "",
-                                keyboardType: TextInputType.text,
-                                onChanged: (value) {
-
-                                }
-                            ),
-                            const SizedBox(height: 10,),
-                            CustomTextFormField(
-                                controller: bankAccountNoTextEditingController,
-                                validator: (value) {
-                                  if(value!.isEmpty){
-                                    return "Field can't be empty";
-                                  }
-                                  return null;
-                                },
-                                labelText: "Bank Account No.",
                                 hindText: "",
                                 keyboardType: TextInputType.text,
                                 onChanged: (value) {
@@ -399,6 +416,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                   if(commonController.selectedCountryWiseBank != null) const SizedBox(height: 20,),
                   if(commonController.selectedCountryWiseBank != null) Container(
                     padding: const EdgeInsets.all(15),
+                    margin: const EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
                         color: AppColor.defaultColor.withOpacity(.1),
                         borderRadius: BorderRadius.circular(10)
@@ -439,7 +457,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             bankAccountTitle: bankAccountTitleTextEditingController.text,
                             bankSwiftCode: bankSwiftCodeTextEditingController.text,
                             bankAddress: "........",//bankAddressTextEditingController.text,
-                            branchName: branchNameTextEditingController.text,
+                            branchName: recipientBankBranch?.branchName,
                             payoutCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
                             receivingCurrency: commonController.serverCountryTo.value.selectedCurrency!.code,
                             // transactionDate: DateFormat("yyyy-mm-dd").format(DateTime.now()),
@@ -474,5 +492,31 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
         ),
       ),
     );
+  }
+
+
+  checkAccountNumber(String accountNumber){
+    print(accountNumber);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Utility.showLoadingDialog();
+    });
+    PaymentRepository.dashunBankAccountCheck(accountNumber).then((value){
+      Get.back();
+      if(value.data!=null){
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          setState(() {
+            isAccountNumberValidate=true;
+            bankAccountTitleTextEditingController.text = value.data?.name??commonController.selectedRecipient!.fullName!;
+          });
+        });
+      }else{
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          setState(() {
+            isAccountNumberValidate=false;
+            bankAccountTitleTextEditingController.text = commonController.selectedRecipient!.fullName!;
+          });
+        });
+      }
+    });
   }
 }
