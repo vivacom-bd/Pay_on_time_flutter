@@ -252,7 +252,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                 validator: (value) {
                                   if(value!.isEmpty){
                                     return "Field can't be empty";
-                                  }else if(recipientBank!=null && recipientBank!.bankName!.toLowerCase() == "DASHAN BANK"){
+                                  }else if(recipientBank!=null && recipientBank!.bankName!.toUpperCase() == "DASHEN BANK"){
                                     if(value.length == 13){
                                       if(accountNumber!=value){
                                         accountNumber = value;
@@ -269,7 +269,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                   }
                                   return null;
                                 },
-                                labelText: "Account Holder Name",
+                                labelText: "Bank Account No.",
                                 hindText: "",
                                 keyboardType: TextInputType.text,
                                 onChanged: (value) {
@@ -300,7 +300,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                   }
                                   return null;
                                 },
-                                labelText: "Bank Account No.",
+                                labelText: "Account Holder Name",
                                 hindText: "",
                                 keyboardType: TextInputType.text,
                                 onChanged: (value) {
