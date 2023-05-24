@@ -252,7 +252,38 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                 validator: (value) {
                                   if(value!.isEmpty){
                                     return "Field can't be empty";
-                                  }else if(recipientBank!=null && recipientBank!.bankName!.toLowerCase() == "dashan bank"){
+                                  }else if(recipientBank!=null && recipientBank!.bankName!.toLowerCase() == "DASHAN BANK"){
+                                    if(value.length == 13){
+                                      if(accountNumber!=value){
+                                        accountNumber = value;
+                                        checkAccountNumber(accountNumber);
+                                      }
+
+                                      if(!isAccountNumberValidate){
+                                        return "Invalid account number";
+                                      }
+
+                                    }else{
+                                      return "Account no. should be 13 digits";
+                                    }
+                                  }
+                                  return null;
+                                },
+                                labelText: "Account Holder Name",
+                                hindText: "",
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+
+                                }
+                            ),
+                            const SizedBox(height: 10,),
+                            CustomTextFormField(
+                                controller: bankAccountTitleTextEditingController,
+                                enabled:false,
+                                validator: (value) {
+                                  if(value!.isEmpty){
+                                    return "Field can't be empty";
+                                  }else if(recipientBank!=null && recipientBank!.bankName == "DASHEN BANK"){
                                     if(value.length == 13){
                                       if(accountNumber!=value){
                                         accountNumber = value;
@@ -270,23 +301,6 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                   return null;
                                 },
                                 labelText: "Bank Account No.",
-                                hindText: "",
-                                keyboardType: TextInputType.text,
-                                onChanged: (value) {
-
-                                }
-                            ),
-                            const SizedBox(height: 10,),
-                            CustomTextFormField(
-                                controller: bankAccountTitleTextEditingController,
-                                enabled:false,
-                                validator: (value) {
-                                  if(value!.isEmpty){
-                                    return "Field can't be empty";
-                                  }
-                                  return null;
-                                },
-                                labelText: "Account Holder Name",
                                 hindText: "",
                                 keyboardType: TextInputType.text,
                                 onChanged: (value) {

@@ -2,7 +2,7 @@
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 
-bool isDev = true;
+bool isDev = false;
 
 String baseUrl(){
   return isDev ? 'https://dev.hidmona.ch/' : 'https://hidmona.ch/';
