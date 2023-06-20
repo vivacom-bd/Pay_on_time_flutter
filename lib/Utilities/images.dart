@@ -24,6 +24,21 @@ class AppImage{
       case "history": {
         return "assets/images/history.webp";
       }
+      case "card": {
+        return "assets/images/credit-card.png";
+      }
+      case "card_chip": {
+        return "assets/images/card_chip.png";
+      }
+      case "personal_account": {
+        return "assets/images/personal account.png";
+      }
+      case "company_account": {
+        return "assets/images/company account.png";
+      }
+      case "uk_flag": {
+        return "assets/images/uk_flag.jpg";
+      }
       default : {
         return "assets/images/logo.webp";
       }

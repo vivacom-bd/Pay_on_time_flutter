@@ -2,8 +2,13 @@ import 'dart:io';
 
 import 'package:country_currency_pickers/country.dart';
 import 'package:country_currency_pickers/utils/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/create_card_holder.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/create_personal_account.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/get_personal_account.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/get_title.dart';
 import 'package:hidmona/Models/app_settings.dart';
 import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/city.dart';
@@ -17,6 +22,7 @@ import 'package:hidmona/Models/server_country.dart';
 import 'package:hidmona/Models/server_currency.dart';
 import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Models/user_profile.dart';
+import 'package:hidmona/Repositories/card_remittance_repository.dart';
 import 'package:hidmona/Repositories/common_repository.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/firebase_repository.dart';
@@ -32,6 +38,7 @@ class CommonController extends GetxController{
 
   Rx<Country> countryFrom = Country().obs; // CountryPickerUtils.getCountryByIsoCode("SE").obs;
   Rx<Country> countryTo = Country().obs; // CountryPickerUtils.getCountryByIsoCode("SE").obs;
+  Rx<Country> shippingCountry = Country().obs;
 
   Rx<ServerCountry> serverCountryFrom = ServerCountry().obs;
   Rx<ServerCountry> serverCountryTo = ServerCountry().obs;
@@ -48,11 +55,9 @@ class CommonController extends GetxController{
   RxList<SendingPurpose> sendingPurposes = <SendingPurpose>[].obs;
   RxList<CountryWiseBank> countryWiseBanks = <CountryWiseBank>[].obs;
 
-
   Rx<CurrencyConversionDetails> currencyConversionDetails = CurrencyConversionDetails().obs;
   TransactionRequestBody? transactionRequestBody;
   Transaction? currentTransaction;
-
 
   ModeOfPayment? selectedModeOfReceive;
   ModeOfPayment? selectedModeOfPayment;
@@ -61,6 +66,44 @@ class CommonController extends GetxController{
   List<RecipientBank> recipientBanks = [];
   City? recipientCity;
   CountryWiseBank? selectedCountryWiseBank;
+
+  /// Card Remittance.
+  Rx<PersonalAccount> currentPersonalAccount = PersonalAccount().obs; //Create Personal Account
+  Rx<GetPersonalAccount> getAccountDetails = GetPersonalAccount().obs; // Retrieve Personal Account
+  Rx<GetTitle> getTitleDetails = GetTitle().obs;
+  Rx<CreateCardHolder> createCardHolder = CreateCardHolder().obs; //Create Card Holder
+
+  int testID = 126;
+
+
+  List<String> euroCountry = ['SE','ER','AT','BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK','SI', 'ES', 'SE', 'GB'];
+  Country? selectedCountry;
+  Country? selectedCitizenCountry;
+
+  int? selectedTitleId;
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController othersFirstNameController = TextEditingController();
+  TextEditingController middleNameController = TextEditingController();
+  TextEditingController othersMiddleNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController othersLastNameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController dobController = TextEditingController();
+  TextEditingController othersDobController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController othersEmailController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController othersPhoneNumberController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController othersCityController = TextEditingController();
+  TextEditingController stateController = TextEditingController();
+  TextEditingController othersStateController = TextEditingController();
+  TextEditingController postalCodeController = TextEditingController();
+  TextEditingController othersPostalCodeController = TextEditingController();
+  TextEditingController addressLine1Controller = TextEditingController();
+  TextEditingController othersAddressLine1Controller = TextEditingController();
+  TextEditingController addressLine2Controller = TextEditingController();
+  TextEditingController othersAddressLine2Controller = TextEditingController();
 
 
   final getStorage = GetStorage();
@@ -234,7 +277,6 @@ class CommonController extends GetxController{
   }
 
 
-
   ///getSendingPurposes
   Future<bool> getSendinPurposes() async{
 
@@ -250,7 +292,6 @@ class CommonController extends GetxController{
     });
 
   }
-
 
   ///getCountryWiseBanks
   Future<bool> getCountryWiseBanks() async{
@@ -268,7 +309,6 @@ class CommonController extends GetxController{
     });
 
   }
-
 
 
   /// getConversionDetails
@@ -302,9 +342,6 @@ class CommonController extends GetxController{
       return false;
     }
 
-
-
-
     //Country To
     serverCountryTo.value.selectedCurrency = null;
 
@@ -328,6 +365,88 @@ class CommonController extends GetxController{
     return true;
   }
 
+
+
+  ///PersonalAccountCreate
+  Future<bool> createAccount(int userId, String familyName, String givenName, String countryCode, String dob, String phoneNumber, String email) async{
+    APIResponse<PersonalAccount> apiResponseFromAcc = await CardRemittanceRepository.createPersonalAccount(
+      userId, familyName,givenName,countryCode,dob,phoneNumber,email);
+    if(apiResponseFromAcc.data!=null){
+      currentPersonalAccount.value = apiResponseFromAcc.data!;
+    }else{
+      Utility.showSnackBar(apiResponseFromAcc.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///GetPersonalAccount
+  Future<bool> getPersonalAccount(int start, int limit, int id) async{
+    APIResponse<GetPersonalAccount> apiResponseFromGetAcc = await CardRemittanceRepository.getPersonalAccount(start,limit,id);
+    if(apiResponseFromGetAcc.data!=null){
+      getAccountDetails.value = apiResponseFromGetAcc.data!;
+    }else{
+      Utility.showSnackBar(apiResponseFromGetAcc.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///getTitle
+  Future<bool> getTitle() async{
+    APIResponse<GetTitle> apiResponseGetTitle = await CardRemittanceRepository.getTitle(0, 23);
+    if(apiResponseGetTitle.data!=null){
+      getTitleDetails.value = apiResponseGetTitle.data!;
+    }else{
+      Utility.showSnackBar(apiResponseGetTitle.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///PersonalAccountCreate
+  Future<bool> cardHolder(
+      int userId, int accountPK, int titlePK, String suffixName, String fName, String mName, String lName, String embossedName,
+      String dob, String email, String userName, String clientRef, String countryCode, String phoneNumber, String aCountryAlpha3,
+      String aCity, String aState, String aPostal, String aLine1, String aLine2, String sCountryAlpha3, String sCity, String sState,
+      String sPostal, String sLine1,String sLine2, bool isPrimary,) async{
+    APIResponse<CreateCardHolder> apiResponseCardHolder = await CardRemittanceRepository.createCardHolder(
+       userId, accountPK, titlePK, suffixName, fName, mName, lName, embossedName, dob, email, userName, clientRef,
+       countryCode, phoneNumber, aCountryAlpha3, aCity, aState, aPostal, aLine1, aLine2, sCountryAlpha3, sCity, sState, sPostal, sLine1, sLine2, isPrimary,
+    );
+    if(apiResponseCardHolder.data!=null){
+      createCardHolder.value = apiResponseCardHolder.data!;
+    }else{
+      Utility.showSnackBar(apiResponseCardHolder.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+
+  ///Currency for fromCountryCurrency Only
+  Future<bool> fromCountryCurrencies() async{
+    //Country From
+    serverCountryFrom.value.selectedCurrency = null;
+
+    APIResponse<List<ServerCurrency>> apiResponseFrom2 = await CommonRepository.getCurrenciesOnCountry(serverCountryFrom.value.id!);
+    if(apiResponseFrom2.data!=null){
+      serverCountryFrom.value.currencies = apiResponseFrom2.data;
+      if((serverCountryFrom.value.currencies??[]).isEmpty){
+        Utility.showSnackBar("No default currency for ${serverCountryFrom.value.name}");
+        return false;
+      }
+      try{
+        serverCountryFrom.value.selectedCurrency = (serverCountryFrom.value.currencies??<ServerCurrency>[]).firstWhere((currency) => currency.defaultCurrency??false);
+      }catch(e){
+        serverCountryFrom.value.selectedCurrency = serverCountryFrom.value.currencies!.first;
+      }
+    }else{
+      Utility.showSnackBar(apiResponseFrom2.message??"No Currency Found ${serverCountryFrom.value.name}");
+      return false;
+    }
+    return true;
+  }
 
   ServerCountry getServerCountryFromCountryCode(String countryCode){
     return serverCountries.where((element) => element.countryCode == countryCode).first;

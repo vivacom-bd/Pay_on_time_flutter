@@ -10,6 +10,8 @@ import 'package:hidmona/Utilities/default_dialogs.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Cards/card_list_screen.dart';
+import 'package:hidmona/Views/Screens/Cards/Accounts/create_account_option_screen.dart';
 import 'package:hidmona/Views/Screens/Profile/profile_screen.dart';
 import 'package:hidmona/Views/Screens/Recipient/my_recipients_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/send_money_screen.dart';
@@ -36,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   initState(){
     super.initState();
-    
+
     if(controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty){
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
         //Utility.showSnackBar("Your KYC application is not approved yet",durationInSeconds: 3);
@@ -85,6 +87,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     DashboardExploreItem(title: "Profile",subtitle: "See your profile here",iconName: "user",
                       onTap: (){
                        Get.to(const ProfileScreen());
+                      },
+                    ),
+                    const SizedBox(height: 10,),
+                    DashboardExploreItem(title: "Accounts",subtitle: "See your Account here",iconName: "personal_account",
+                      onTap: (){
+                        Get.to(const CreateAccountOptionScreen());
+                      },
+                    ),
+                    const SizedBox(height: 10,),
+                    DashboardExploreItem(title: "Cards",subtitle: "See your Cards here",iconName: "card",
+                      onTap: (){
+                        Get.to(const CardListScreen());
                       },
                     ),
                     const SizedBox(height: 10,),

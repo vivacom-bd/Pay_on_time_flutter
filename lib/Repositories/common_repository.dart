@@ -208,8 +208,6 @@ class CommonRepository{
     });
   }
 
-
-
   ///getPaymentMethod
   static Future<APIResponse<List<City>>> getCities(int countryId) async{
     if(!await Utility.isInternetConnected()){

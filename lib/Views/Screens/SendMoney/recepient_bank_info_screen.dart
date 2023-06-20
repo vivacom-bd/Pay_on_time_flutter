@@ -252,7 +252,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                 validator: (value) {
                                   if(value!.isEmpty){
                                     return "Field can't be empty";
-                                  }else if(recipientBank!=null && recipientBank!.bankName!.toLowerCase() == "DASHAN BANK"){
+                                  }else if(recipientBank!=null && recipientBank!.bankName == "DASHEN BANK"){
                                     if(value.length == 13){
                                       if(accountNumber!=value){
                                         accountNumber = value;

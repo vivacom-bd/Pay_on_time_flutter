@@ -7,7 +7,6 @@ import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/user_profile.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/default_dialogs.dart';
-import 'package:hidmona/Views/Screens/Login/forget_password_screen.dart';
 import 'package:hidmona/Views/Screens/Login/login_screen.dart';
 import 'package:hidmona/Views/Screens/Payment/card_list_screen.dart';
 import 'package:hidmona/Views/Screens/Profile/change_password_screen.dart';
@@ -126,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Get.to(const ChangePasswordScreen());
                   },
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(height: 10),
                 ContactItem(
                   iconData: CupertinoIcons.arrowshape_turn_up_left_fill,text: "Logout",
                   onTap: () {

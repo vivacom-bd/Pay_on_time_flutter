@@ -10,6 +10,7 @@ class AppColor{
   static Color dropdownBoxColor = const Color(0xffcac9c9);
   static Color defaultTextColor = Colors.black;
   static Color successfulTextColor = const Color(0xff97D700);
+  static Color hyperlinkColor = const Color(0xff3366CC);
 }
 
 

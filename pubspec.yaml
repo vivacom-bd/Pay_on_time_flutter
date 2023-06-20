@@ -33,6 +33,7 @@ dependencies:
   package_info_plus: ^1.4.3+1
   flutter_inappwebview:
   android_intent_plus: ^3.1.4
+  flutter_credit_card: ^3.0.6
 
   firebase_core:
   cloud_firestore:

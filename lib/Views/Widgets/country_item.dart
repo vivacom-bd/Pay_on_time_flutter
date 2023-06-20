@@ -7,8 +7,9 @@ class CountryItem extends StatelessWidget {
 
   final Country? country;
   final String titleType;
+  final Color color;
 
-  const CountryItem({this.country,this.titleType="name"});
+  const CountryItem({this.country,this.titleType="name",this.color = const Color(0xffeeeded)});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class CountryItem extends StatelessWidget {
         //Text("+${country.phoneCode}"),
         //SizedBox(width: 8.0),
         if(titleType == "name") Flexible(child: Text(country!.name!,style:  const TextStyle(fontSize: 15,fontWeight: FontWeight.w600),)),
-        if(titleType == "currencyCode") Flexible(child: Text(country!.currencyCode!,style: TextStyle(color: AppColor.boxColor,fontSize: 15,fontWeight: FontWeight.w600),)),
+        if(titleType == "currencyCode") Flexible(child: Text(country!.currencyCode!,style: TextStyle(color: color,fontSize: 15,fontWeight: FontWeight.w600),)),
         if(titleType == "iso3Code") Flexible(child: Text(country!.iso3Code!,style:  TextStyle(color: AppColor.boxColor,fontSize: 15,fontWeight: FontWeight.w600),)),
         if(titleType == "phoneCode") Flexible(child: Text(country!.phoneCode!,style: const TextStyle(fontSize: 15,fontWeight: FontWeight.w600),)),
         if(titleType == "countryWithPhoneCode") Flexible(child: Text("${country!.phoneCode} (${country!.name})",style: const TextStyle(fontSize: 15,fontWeight: FontWeight.w600),)),
