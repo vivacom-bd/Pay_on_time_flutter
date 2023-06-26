@@ -39,6 +39,9 @@ class AppImage{
       case "uk_flag": {
         return "assets/images/uk_flag.jpg";
       }
+      case "card": {
+        return "assets/images/card.png";
+      }
       default : {
         return "assets/images/logo.webp";
       }
