@@ -39,7 +39,7 @@ class AppImage{
       case "uk_flag": {
         return "assets/images/uk_flag.jpg";
       }
-      case "card": {
+      case "card1": {
         return "assets/images/card.png";
       }
       default : {

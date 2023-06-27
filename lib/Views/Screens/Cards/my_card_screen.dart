@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hidmona/Controllers/common_controller.dart';
+import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:get/get.dart';
+import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/card_transection_details.dart';
+import 'package:hidmona/Views/Widgets/default_button.dart';
 
 class MyCardScreen extends StatefulWidget {
   static const String routeName = "MyCardScreen";
@@ -12,247 +16,128 @@ class MyCardScreen extends StatefulWidget {
 }
 
 class _MyCardScreenState extends State<MyCardScreen> {
+  CommonController commonController = Get.find<CommonController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Cards'),
-      ),
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: (){
-                Get.to(const CardTransactionListScreen());
-              },
-              child: Container(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.indigo,
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  SizedBox(height: 8.0),
-                                  Text(
-                                    '',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    'Bank Name',
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 15.0),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.asset(AppImage.getPath("card_chip"), height: 35, width: 35,),
-                                ],
-                              ),
-                              const SizedBox(width: 20),
-                              const Text(
-                                '1234 5678 9012 3456',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8.0),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'Valid',
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(width: 10.0),
-                              Text(
-                                '09/23',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  SizedBox(height: 8.0),
-                                  Text(
-                                    'MD JEHAN',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 15,),
+                  Center(child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
+                  ),),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Card Details",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
+                        const SizedBox(height: 3,),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: (){
-                Get.to(const CardTransactionListScreen());
-              },
-              child: Container(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.indigo,
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  SizedBox(height: 8.0),
-                                  Text(
-                                    '',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    'Bank Name',
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                  ),
+                  const SizedBox(height: 10,),
+                  Container(
+                    margin: const EdgeInsets.only(left: 0),
+                    padding: const EdgeInsets.only(left: 8.0, right: 10),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.only(left: 20,right: 20,top: 20,bottom: 20),
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            color: AppColor.dropdownBoxColor.withOpacity(0.39),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          const SizedBox(height: 15.0),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              const SizedBox(width: 15),
+                              Image.asset(AppImage.getPath("card1"),width: SizeConfig.screenWidth*.2, color: AppColor.defaultColorLight,),
+                              const SizedBox(height: 10,),
+                              Text("${commonController.createCardHolder.value.data!.externalId!.substring(0,4)}*****${commonController.createCardHolder.value.data!.externalId!.substring(commonController.createCardHolder.value.data!.externalId!.length - 4)} | EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                              const SizedBox(height: 2),
+                              Text("${commonController.createCardHolder.value.data!.cardholderDto!.firstName!} ${commonController.createCardHolder.value.data!.cardholderDto!.lastName}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
+                              const SizedBox(height: 10),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Image.asset(AppImage.getPath("card_chip"), height: 35, width: 35,),
+                                  Text("Expiration Date: ",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                  Text("12/2/2030",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
+
                                 ],
                               ),
-                              const SizedBox(width: 20),
-                              const Text(
-                                '1234 5678 9012 3456',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              const SizedBox(height: 20),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Status: ",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                  Text("Active",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
+
+                                ],
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 8.0),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'Valid',
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              const SizedBox(height: 20),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Available Balance : ",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                  Text("0.00 EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
+
+                                ],
                               ),
-                              SizedBox(width: 10.0),
-                              Text(
-                                '09/23',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  SizedBox(height: 8.0),
-                                  Text(
-                                    'MD JEHAN',
+                              const SizedBox(height: 10),
+                              GestureDetector(
+                                onTap: (){
+                                  //Get.to(()=> const BankAccountDetails());
+                                },
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: 'View Card Transaction',
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
+                                        color: AppColor.hyperlinkColor,
+                                        decoration: TextDecoration.underline,
+                                        decorationStyle: TextDecorationStyle.solid,
+                                        fontWeight: FontWeight.bold
                                     ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              const Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  DefaultButton(
+                                      buttonText: "View Pin",
+                                  ),
+                                  SizedBox(width: 5),
+                                  DefaultButton(
+                                    buttonText: "Report as Lost",
                                   ),
                                 ],
                               ),
+                              const SizedBox(height: 20),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+
+                  const SizedBox(height: 15,),
+                ],
               ),
             ),
           ],

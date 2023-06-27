@@ -22,8 +22,8 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
   final String heading3 = 'IBAN';
   final String heading4 = 'Hidmona\'s address';
   final String accountName = 'MIKEY JOSEPH LOUIS';
-  final String swift = 'LPWIBEB1XXX';
-  final String iBan = 'LP163670000000008657';
+  final String swift = 'UAPLLT20XXX';
+  final String iBan = 'LT933670000000008920';
   final String address = 'Avenue Loise 54, Room S52 \nVilnius, Lithuania';
 
 

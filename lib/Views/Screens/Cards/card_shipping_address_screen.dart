@@ -9,6 +9,7 @@ import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Cards/card_holder_list_screen.dart';
 import 'package:hidmona/Views/Screens/Cards/my_card_screen.dart';
 import 'package:hidmona/Views/Widgets/country_item.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
@@ -239,7 +240,7 @@ class _CardShippingAddressState extends State<CardShippingAddress> {
                     Get.back();
                     if(value){
                       //print(commonController.currentPersonalAccount.value.success);
-                      Get.to(const MyCardScreen());
+                      Get.to(const CardHolderListScreen());
                     }
                   },
                 ),

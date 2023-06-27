@@ -77,7 +77,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                 },
                                                 child: RichText(
                                                   text: TextSpan(
-                                                    text: 'LP163670000000008657',
+                                                    text: 'LT233670000000008919',
                                                     style: TextStyle(
                                                       color: AppColor.hyperlinkColor,
                                                       decoration: TextDecoration.underline,
