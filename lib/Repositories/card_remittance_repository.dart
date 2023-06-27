@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:hidmona/Controllers/common_controller.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/card_details_screen.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/create_card_holder.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/create_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_title.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/personal_account_card.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/supported_country.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/api_constants.dart';
@@ -187,4 +189,62 @@ class CardRemittanceRepository{
       return APIResponse<CreateCardHolder>(error: true, message: "An Error Occurred!");
     });
   }
+
+  ///CardDetails
+  static Future<APIResponse<CardDetails>> cardDetails(int senderId, int cardHolderId) async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<CardDetails>(error: true, message: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'card_remittance/order-card');
+    return http.post(
+        url,
+        headers: headersWithAuth,
+        body: json.encode({
+          "sender_id" : senderId,
+          "card_holder_pk" : cardHolderId,
+        })
+    ).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        return APIResponse<CardDetails>(data: CardDetails.fromJson(jsonData));
+      }
+      return APIResponse<CardDetails>(error: true, message: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<CardDetails>(error: true, message: "An Error Occurred!");
+    });
+  }
+
+  ///getModeOfReceive
+  static Future<APIResponse<PersonalAccountCard>> getPersonalCard(int start, int limit, int userId) async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<PersonalAccountCard>(error: true, message: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'card_remittance/get-personal-account-cards');
+    return http.post(
+        url,
+        headers: headersWithAuth,
+        body: json.encode({
+          "start" : start,
+          "limit" : limit,
+          "user_id" : userId
+        })
+    )
+        .then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        return APIResponse<PersonalAccountCard>(data: PersonalAccountCard.fromJson(jsonData));
+      }
+      return APIResponse<PersonalAccountCard>(error: true, message: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<PersonalAccountCard>(error: true, message: "An Error Occurred!");
+    });
+  }
+
+
 }

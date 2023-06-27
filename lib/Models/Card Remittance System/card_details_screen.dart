@@ -1,10 +1,10 @@
-class CreateCardHolder {
+class CardDetails {
   bool? success;
   Data? data;
 
-  CreateCardHolder({this.success, this.data});
+  CardDetails({this.success, this.data});
 
-  CreateCardHolder.fromJson(Map<String, dynamic> json) {
+  CardDetails.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
@@ -25,15 +25,15 @@ class Data {
   ShippingAddress? address;
   String? phone;
   int? status;
-  List<Null>? cards;
+  List<Card>? cards;
   List<Null>? failedChecks;
   String? externalId;
+  String? cardLedgerUid;
   String? holderId;
   String? programmeConfigurationUid;
   String? applicationId;
   int? partners;
   String? programmeUid;
-  int? id;
 
   Data(
       {this.cardholderDto,
@@ -44,12 +44,12 @@ class Data {
         this.cards,
         this.failedChecks,
         this.externalId,
+        this.cardLedgerUid,
         this.holderId,
         this.programmeConfigurationUid,
         this.applicationId,
         this.partners,
-        this.programmeUid,
-        this.id});
+        this.programmeUid});
 
   Data.fromJson(Map<String, dynamic> json) {
     cardholderDto = json['cardholderDto'] != null
@@ -64,9 +64,9 @@ class Data {
     phone = json['phone'];
     status = json['status'];
     if (json['cards'] != null) {
-      cards = <Null>[];
+      cards = <Card>[];
       json['cards'].forEach((v) {
-        //cards!.add(new Null.fromJson(v));
+        cards!.add(new Card.fromJson(v));
       });
     }
     if (json['failedChecks'] != null) {
@@ -76,12 +76,12 @@ class Data {
       });
     }
     externalId = json['externalId'];
+    cardLedgerUid = json['cardLedgerUid'];
     holderId = json['holderId'];
     programmeConfigurationUid = json['programmeConfigurationUid'];
     applicationId = json['applicationId'];
     partners = json['partners'];
     programmeUid = json['programmeUid'];
-    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -98,18 +98,18 @@ class Data {
     data['phone'] = this.phone;
     data['status'] = this.status;
     if (this.cards != null) {
-      //data['cards'] = this.cards!.map((v) => v.toJson()).toList();
+      data['cards'] = this.cards!.map((v) => v.toJson()).toList();
     }
-    if (this.failedChecks != null) {
-      //data['failedChecks'] = this.failedChecks!.map((v) => v.toJson()).toList();
-    }
+    // if (this.failedChecks != null) {
+    //   data['failedChecks'] = this.failedChecks!.map((v) => v.toJson()).toList();
+    // }
     data['externalId'] = this.externalId;
+    data['cardLedgerUid'] = this.cardLedgerUid;
     data['holderId'] = this.holderId;
     data['programmeConfigurationUid'] = this.programmeConfigurationUid;
     data['applicationId'] = this.applicationId;
     data['partners'] = this.partners;
     data['programmeUid'] = this.programmeUid;
-    data['id'] = this.id;
     return data;
   }
 }
@@ -200,6 +200,63 @@ class ShippingAddress {
     data['state'] = this.state;
     data['line1'] = this.line1;
     data['line2'] = this.line2;
+    return data;
+  }
+}
+
+class Card {
+  String? externalId;
+  int? type;
+  int? state;
+  int? sequenceNumber;
+  String? embossedName;
+  String? panFirst6;
+  String? panLast4;
+  String? expiry;
+  int? pinFailCount;
+  int? status;
+  String? addedDate;
+
+  Card(
+      {this.externalId,
+        this.type,
+        this.state,
+        this.sequenceNumber,
+        this.embossedName,
+        this.panFirst6,
+        this.panLast4,
+        this.expiry,
+        this.pinFailCount,
+        this.status,
+        this.addedDate});
+
+  Card.fromJson(Map<String, dynamic> json) {
+    externalId = json['externalId'];
+    type = json['type'];
+    state = json['state'];
+    sequenceNumber = json['sequenceNumber'];
+    embossedName = json['embossedName'];
+    panFirst6 = json['panFirst6'];
+    panLast4 = json['panLast4'];
+    expiry = json['expiry'];
+    pinFailCount = json['pinFailCount'];
+    status = json['status'];
+    addedDate = json['addedDate'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['externalId'] = this.externalId;
+    data['type'] = this.type;
+    data['state'] = this.state;
+    data['sequenceNumber'] = this.sequenceNumber;
+    data['embossedName'] = this.embossedName;
+    data['panFirst6'] = this.panFirst6;
+    data['panLast4'] = this.panLast4;
+    data['expiry'] = this.expiry;
+    data['pinFailCount'] = this.pinFailCount;
+    data['status'] = this.status;
+    data['addedDate'] = this.addedDate;
     return data;
   }
 }

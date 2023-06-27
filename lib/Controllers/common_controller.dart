@@ -5,10 +5,12 @@ import 'package:country_currency_pickers/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/card_details_screen.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/create_card_holder.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/create_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_title.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/personal_account_card.dart';
 import 'package:hidmona/Models/app_settings.dart';
 import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/city.dart';
@@ -72,8 +74,10 @@ class CommonController extends GetxController{
   Rx<GetPersonalAccount> getAccountDetails = GetPersonalAccount().obs; // Retrieve Personal Account
   Rx<GetTitle> getTitleDetails = GetTitle().obs;
   Rx<CreateCardHolder> createCardHolder = CreateCardHolder().obs; //Create Card Holder
+  Rx<CardDetails> getCardDetails = CardDetails().obs;
+  Rx<PersonalAccountCard> personalAccountCard = PersonalAccountCard().obs;
 
-  int testID = 151;
+  int testID = 153;
 
 
   List<String> euroCountry = ['SE','ER','AT','BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK','SI', 'ES', 'SE', 'GB'];
@@ -418,6 +422,30 @@ class CommonController extends GetxController{
       createCardHolder.value = apiResponseCardHolder.data!;
     }else{
       Utility.showSnackBar(apiResponseCardHolder.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///getTitle
+  Future<bool> getCardDetail(int senderId, int cardHolderId) async{
+    APIResponse<CardDetails> apiResponseGetCardDetails = await CardRemittanceRepository.cardDetails(senderId, cardHolderId);
+    if(apiResponseGetCardDetails.data!=null){
+      getCardDetails.value = apiResponseGetCardDetails.data!;
+    }else{
+      Utility.showSnackBar(apiResponseGetCardDetails.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///getPersonalAccountCard
+  Future<bool> getPersonalAccountCard(int start, int limit, int userId) async{
+    APIResponse<PersonalAccountCard> apiResponseGetCard = await CardRemittanceRepository.getPersonalCard(start, limit, userId);
+    if(apiResponseGetCard.data!=null){
+      personalAccountCard.value = apiResponseGetCard.data!;
+    }else{
+      Utility.showSnackBar(apiResponseGetCard.message??"No data Found");
       return false;
     }
     return true;

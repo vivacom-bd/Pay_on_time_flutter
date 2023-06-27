@@ -64,16 +64,16 @@ class _MyCardScreenState extends State<MyCardScreen> {
                               const SizedBox(width: 15),
                               Image.asset(AppImage.getPath("card1"),width: SizeConfig.screenWidth*.2, color: AppColor.defaultColorLight,),
                               const SizedBox(height: 10,),
-                              Text("${commonController.createCardHolder.value.data!.externalId!.substring(0,4)}*****${commonController.createCardHolder.value.data!.externalId!.substring(commonController.createCardHolder.value.data!.externalId!.length - 4)} | EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                              Text("${commonController.personalAccountCard.value.data![0].externalId!.substring(0,4)}*****${commonController.personalAccountCard.value.data![0].externalId!.substring(commonController.personalAccountCard.value.data![0].externalId!.length - 4)} | EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 2),
-                              Text("${commonController.createCardHolder.value.data!.cardholderDto!.firstName!} ${commonController.createCardHolder.value.data!.cardholderDto!.lastName}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
+                              Text("${commonController.personalAccountCard.value.data![0].cardHolder}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 10),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text("Expiration Date: ",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
-                                  Text("12/2/2030",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
+                                  Text(commonController.personalAccountCard.value.data![0].expiry!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
 
                                 ],
                               ),
@@ -83,7 +83,7 @@ class _MyCardScreenState extends State<MyCardScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text("Status: ",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
-                                  Text("Active",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
+                                  Text(commonController.personalAccountCard.value.data![0].status!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
 
                                 ],
                               ),

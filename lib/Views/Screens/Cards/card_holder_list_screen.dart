@@ -50,8 +50,18 @@ class _CardHolderListScreenState extends State<CardHolderListScreen> {
                         const SizedBox(height: 10),
                         const SizedBox(height: 5,),
                         GestureDetector(
-                          onTap: (){
-                            Get.to(const MyCardScreen());
+                          onTap: () async {
+                            if(commonController.personalAccountCard.value.data == null ){
+                              Utility.showLoadingDialog();
+                              bool value = await commonController.getPersonalAccountCard(0, 23, commonController.testID);
+                              Get.back();
+                              if(value){
+                                print(commonController.getAccountDetails.value.total);
+                                Get.to(()=> const MyCardScreen());
+                              }
+                            } else {
+                              Get.to(const MyCardScreen());
+                            }
                           },
                           child: Container(
                             padding: const EdgeInsets.only(left: 30,right: 20,top: 20,bottom: 20),
