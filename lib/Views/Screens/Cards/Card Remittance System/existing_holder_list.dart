@@ -97,8 +97,17 @@ class _ExistingCardHolderListState extends State<ExistingCardHolderList> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  (commonController.cardStatus.value.state! == "active") ? const SizedBox(height: 0):  const DefaultButton(
+                  (commonController.cardStatus.value.state! == "active") ? const SizedBox(height: 0):  DefaultButton(
                       buttonText: "Active Card",
+                    onTap: () async {
+                      Utility.showLoadingDialog();
+                      bool value = await commonController.activeCard(commonController.testID, commonController.personalAccountCard.value.data![0].id!);
+                      Get.back();
+                      if(value){
+                        Get.to(const MyCardScreen());
+                        Utility.showSnackBar(commonController.cardActive.value.message!);
+                      }
+                    },
                   ) ,
                   const SizedBox(height: 15,),
                 ],

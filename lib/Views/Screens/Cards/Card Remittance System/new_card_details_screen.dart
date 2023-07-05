@@ -69,7 +69,7 @@ class _NewCardDetailsScreenState extends State<NewCardDetailsScreen> {
                                   const SizedBox(height: 10,),
                                   Text("${commonController.getCardDetails.value.data!.cards![index].externalId!.substring(0,4)}*****${commonController.getCardDetails.value.data!.cards![index].externalId!.substring(commonController.getCardDetails.value.data!.cards![index].externalId!.length - 4)} | EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
                                   const SizedBox(height: 2),
-                                  Text("${commonController.getCardDetails.value.data!.cardholderDto!.firstName}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
+                                  Text("${commonController.getCardDetails.value.data!.cardholderDto!.firstName} ${commonController.getCardDetails.value.data!.cardholderDto!.middleName} ${commonController.getCardDetails.value.data!.cardholderDto!.lastName}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
                                   const SizedBox(height: 10),
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,

@@ -44,7 +44,7 @@ class _CardHolderListScreenState extends State<CardHolderListScreen> {
                   ),
                   const SizedBox(height: 10),
                   Container(
-                    margin: const EdgeInsets.only(left: 20),
+                    margin: const EdgeInsets.only(left: 10),
                     padding: const EdgeInsets.only(left: 8.0, right: 10),
                     child: Column(
                       children: [
@@ -52,16 +52,7 @@ class _CardHolderListScreenState extends State<CardHolderListScreen> {
                         const SizedBox(height: 5,),
                         GestureDetector(
                           onTap: () async {
-                            Utility.showLoadingDialog();
-                            bool value = await commonController.cardOrder(commonController.testID, commonController.createCardHolder.value.data!.id!);
-                            Get.back();
-                            if(value){
-                              print("Success");
-                              Get.to(()=> const NewCardDetailsScreen());
-                            } else {
-                              Utility.showSnackBar("value");
-                              Get.to(const NewCardDetailsScreen());
-                            }
+                            // Get.to(const NewCardDetailsScreen());
                           },
                           child: Container(
                             padding: const EdgeInsets.only(left: 30,right: 20,top: 20,bottom: 20),
@@ -70,32 +61,51 @@ class _CardHolderListScreenState extends State<CardHolderListScreen> {
                               color: AppColor.dropdownBoxColor.withOpacity(0.39),
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const SizedBox(width: 15),
-                                CircleAvatar(
-                                  radius: 35,
-                                  backgroundImage: AssetImage(
-                                    CountryPickerUtils.getFlagImageAssetPath(commonController.countryFrom.value.isoCode!),
-                                    package: "country_currency_pickers",),
-                                ),
-                                const SizedBox(height: 5),
-                                Column(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: commonController.getCardDetails.value.data!.cards!.length,
+                              itemBuilder: (context, index) {
+                                return Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text("${commonController.createCardHolder.value.data!.cardholderDto!.firstName!} ${commonController.createCardHolder.value.data!.cardholderDto!.lastName}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                    const SizedBox(width: 15),
+                                    CircleAvatar(
+                                      radius: 35,
+                                      backgroundImage: AssetImage(
+                                        CountryPickerUtils.getFlagImageAssetPath(commonController.countryFrom.value.isoCode!),
+                                        package: "country_currency_pickers",),
+                                    ),
                                     const SizedBox(height: 5),
-                                    Text("${commonController.createCardHolder.value.data!.externalId!.substring(0,4)}*****${commonController.createCardHolder.value.data!.externalId!.substring(commonController.createCardHolder.value.data!.externalId!.length - 4)}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text("${commonController.createCardHolder.value.data!.cardholderDto!.firstName!} ${commonController.createCardHolder.value.data!.cardholderDto!.lastName}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                        const SizedBox(height: 5),
+                                        Text("${commonController.getCardDetails.value.data!.cards![index].externalId!.substring(0,4)}*****${commonController.getCardDetails.value.data!.cards![index].externalId!.substring(commonController.getCardDetails.value.data!.cards![index].externalId!.length - 4)}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),),
+                                      ],
+                                    ),
                                   ],
-                                ),
-                              ],
+                                );
+                              },
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
+                  const SizedBox(height: 15),
+                    (commonController.cardStatus.value.state! == "active") ? const SizedBox(height: 0):  DefaultButton(
+                    buttonText: "Active Card",
+                      onTap: () async {
+                      Utility.showLoadingDialog();
+                        bool value = await commonController.activeCard(commonController.testID, commonController.personalAccountCard.value.data![0].id!);
+                        Get.back();
+                        if(value){
+                          Get.to(const NewCardDetailsScreen());
+                          Utility.showSnackBar(commonController.cardActive.value.message!);
+                        }
+                      },
+                  ) ,
                   const SizedBox(height: 15,),
                 ],
               ),

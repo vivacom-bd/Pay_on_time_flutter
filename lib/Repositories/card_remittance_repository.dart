@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:hidmona/Controllers/common_controller.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/active_card.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/card_details_screen.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/card_status.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/create_card_holder.dart';
@@ -272,6 +273,34 @@ class CardRemittanceRepository{
     }).catchError((onError){
       print(onError);
       return APIResponse<CardStatus>(error: true, message: "An Error Occurred!");
+    });
+  }
+
+  ///statusCheck
+  static Future<APIResponse<CardActivate>> activeCard(int senderId, int cardHolderId) async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<CardActivate>(error: true, message: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'card_remittance/activate-card');
+    return http.post(
+        url,
+        headers: headersWithAuth,
+        body: json.encode({
+          "sender_id" : senderId,
+          "card_holder_pk" : cardHolderId,
+        })
+    )
+        .then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        return APIResponse<CardActivate>(data: CardActivate.fromJson(jsonData));
+      }
+      return APIResponse<CardActivate>(error: true, message: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<CardActivate>(error: true, message: "An Error Occurred!");
     });
   }
 

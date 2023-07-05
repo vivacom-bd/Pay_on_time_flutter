@@ -5,6 +5,7 @@ import 'package:country_currency_pickers/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/active_card.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/card_details_screen.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/create_card_holder.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/create_personal_account.dart';
@@ -79,8 +80,9 @@ class CommonController extends GetxController{
   Rx<CardDetails> getCardDetails = CardDetails().obs;
   Rx<PersonalAccountCard> personalAccountCard = PersonalAccountCard().obs;
   Rx<CardStatus> cardStatus = CardStatus().obs;
+  Rx<CardActivate> cardActive = CardActivate().obs;
 
-  int testID = 168;
+  int testID = 173;
 
 
   List<String> euroCountry = ['SE','ER','AT','BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK','SI', 'ES', 'SE', 'GB'];
@@ -462,6 +464,18 @@ class CommonController extends GetxController{
       cardStatus.value = apiResponseCardStatus.data!;
     }else{
       Utility.showSnackBar(apiResponseCardStatus.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///activeCard
+  Future<bool> activeCard(int userId, int cardHolderPkd) async{
+    APIResponse<CardActivate> apiResponseActiveCard = await CardRemittanceRepository.activeCard(userId, cardHolderPkd);
+    if(apiResponseActiveCard.data!=null){
+      cardActive.value = apiResponseActiveCard.data!;
+    }else{
+      Utility.showSnackBar(apiResponseActiveCard.message??"No data Found");
       return false;
     }
     return true;
