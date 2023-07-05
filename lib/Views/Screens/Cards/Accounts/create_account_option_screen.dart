@@ -62,7 +62,7 @@ class _CreateAccountOptionScreenState extends State<CreateAccountOptionScreen> {
                       const SizedBox(height: 10),
                       DashboardExploreItem(title: "Create Company Account",subtitle: "See your Cards here",iconName: "card",
                         onTap: () async {
-                           Utility.showLoadingDialog();
+                          Utility.showLoadingDialog();
                           bool value = await commonController.getPersonalAccount(0,25,commonController.testID);
                           Get.back();
                           if(value){

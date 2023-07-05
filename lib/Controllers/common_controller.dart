@@ -36,6 +36,8 @@ import 'package:hidmona/Views/Screens/Home/home_screen.dart';
 import 'package:hidmona/Views/Screens/Login/login_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../Models/Card Remittance System/card_status.dart';
+
 class CommonController extends GetxController{
 
   Rx<Country> countryFrom = Country().obs; // CountryPickerUtils.getCountryByIsoCode("SE").obs;
@@ -76,8 +78,9 @@ class CommonController extends GetxController{
   Rx<CreateCardHolder> createCardHolder = CreateCardHolder().obs; //Create Card Holder
   Rx<CardDetails> getCardDetails = CardDetails().obs;
   Rx<PersonalAccountCard> personalAccountCard = PersonalAccountCard().obs;
+  Rx<CardStatus> cardStatus = CardStatus().obs;
 
-  int testID = 153;
+  int testID = 168;
 
 
   List<String> euroCountry = ['SE','ER','AT','BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK','SI', 'ES', 'SE', 'GB'];
@@ -428,8 +431,8 @@ class CommonController extends GetxController{
   }
 
   ///getTitle
-  Future<bool> getCardDetail(int senderId, int cardHolderId) async{
-    APIResponse<CardDetails> apiResponseGetCardDetails = await CardRemittanceRepository.cardDetails(senderId, cardHolderId);
+  Future<bool> cardOrder(int senderId, int cardHolderId) async{
+    APIResponse<CardDetails> apiResponseGetCardDetails = await CardRemittanceRepository.orderCard(senderId, cardHolderId);
     if(apiResponseGetCardDetails.data!=null){
       getCardDetails.value = apiResponseGetCardDetails.data!;
     }else{
@@ -446,6 +449,19 @@ class CommonController extends GetxController{
       personalAccountCard.value = apiResponseGetCard.data!;
     }else{
       Utility.showSnackBar(apiResponseGetCard.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+
+  ///getCardStatus
+  Future<bool> getCardStatus(int userId, int cardHolderPkd) async{
+    APIResponse<CardStatus> apiResponseCardStatus = await CardRemittanceRepository.cardStatusCheck(userId, cardHolderPkd);
+    if(apiResponseCardStatus.data!=null){
+      cardStatus.value = apiResponseCardStatus.data!;
+    }else{
+      Utility.showSnackBar(apiResponseCardStatus.message??"No data Found");
       return false;
     }
     return true;

@@ -21,14 +21,16 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
   final String heading2 = 'SWIFT/BIC';
   final String heading3 = 'IBAN';
   final String heading4 = 'Hidmona\'s address';
-  final String accountName = 'MIKEY JOSEPH LOUIS';
-  final String swift = 'UAPLLT20XXX';
-  final String iBan = 'LT933670000000008920';
+  String accountName = '';
+  String swift = '';
+  String iBan = '';
   final String address = 'Avenue Loise 54, Room S52 \nVilnius, Lithuania';
 
 
-  void _copyTextToClipboard() {
-    Clipboard.setData(ClipboardData(text: "$heading1 : $accountName \n$heading2 : $swift \n$heading3 : $iBan \n$heading4 : $address"));
+  void _copyTextToClipboard( String name,
+      String iban, String swiftcode
+      ) {
+    Clipboard.setData(ClipboardData(text: "$heading1 : $name \n$heading2 : $swiftcode \n$heading3 : $iban \n$heading4 : $address"));
   }
 
 
@@ -81,17 +83,17 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                               const SizedBox(width: 15),
                               Text(heading1,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 2),
-                              Text(accountName,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
+                              Text(commonController.getAccountDetails.value.data![0].givenName!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 20),
                               Text(heading2,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 2),
-                              Text(swift,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.w500),),
+                              Text(commonController.getAccountDetails.value.data![0].bankAccountDetails!.swiftBic!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.w500),),
                               const SizedBox(height: 20),
                               Text(heading3,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 2),
-                              Text(iBan,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.w500),),
+                              Text(commonController.getAccountDetails.value.data![0].bankAccountDetails!.iban!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.w500),),
                               const SizedBox(height: 20),
-                              Text(heading3,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.bold),),
+                              Text(heading4,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 2),
                               Text(address,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.w500),),
                               //const SizedBox(height: 20),
@@ -100,7 +102,12 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                         ),
                         ElevatedButton(
                           onPressed: (){
-                            _copyTextToClipboard;
+                            setState(() {
+                              accountName = commonController.getAccountDetails.value.data![0].givenName!;
+                              iBan = commonController.getAccountDetails.value.data![0].bankAccountDetails!.iban!;
+                              swift = commonController.getAccountDetails.value.data![0].bankAccountDetails!.swiftBic!;
+                            });
+                            _copyTextToClipboard(accountName,iBan,swift);
                             Utility.showSnackBar("Text Copied to your Clipboard");
                           },
                           child: const Text('Copy details'),

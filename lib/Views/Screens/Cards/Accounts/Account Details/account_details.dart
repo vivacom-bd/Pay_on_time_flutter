@@ -69,7 +69,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text("Euro account",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                              Text("${commonController.getAccountDetails.value.data![0].bankAccountDetails!.currency!} account" ,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
                                               const SizedBox(height: 2),
                                               GestureDetector(
                                                 onTap: (){
@@ -77,7 +77,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                 },
                                                 child: RichText(
                                                   text: TextSpan(
-                                                    text: 'LT233670000000008919',
+                                                    text: commonController.getAccountDetails.value.data![0].bankAccountDetails!.iban!,
                                                     style: TextStyle(
                                                       color: AppColor.hyperlinkColor,
                                                       decoration: TextDecoration.underline,

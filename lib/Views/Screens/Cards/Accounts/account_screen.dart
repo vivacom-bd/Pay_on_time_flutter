@@ -82,7 +82,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text("10,000.00",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
-                                            Text(commonController.countryFrom.value.currencyCode!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),),
+                                            // Text(commonController.getAccountDetails.value.data![0].bankAccountDetails!.currency!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),)
+                                            Text("EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),),
                                           ],
                                         ),
                                       ],
@@ -92,35 +93,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               ],
                             ),
                             const SizedBox(width: 5),
-                            Column(
-                              children: [
-                                const SizedBox(height: 5,),
-                                Container(
-                                  padding: const EdgeInsets.only(left: 40,right: 40,top: 20,bottom: 20),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(
-                                    color: AppColor.dropdownBoxColor.withOpacity(0.3),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 35,
-                                        backgroundImage: AssetImage(AppImage.getPath("uk_flag")),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("75,00.00",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
-                                          Text('GBR',style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+
                           ],
                         ),
                       ],

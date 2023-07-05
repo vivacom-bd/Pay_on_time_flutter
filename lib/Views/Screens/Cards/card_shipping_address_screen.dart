@@ -239,6 +239,17 @@ class _CardShippingAddressState extends State<CardShippingAddress> {
                     );
                     Get.back();
                     if(value){
+                      if(commonController.personalAccountCard.value.data == null ){
+                        Utility.showLoadingDialog();
+                        bool value = await commonController.cardOrder(commonController.testID, commonController.createCardHolder.value.data!.id!);
+                        Get.back();
+                        if(value){
+                          print("Success");
+                          //Get.to(()=> const MyCardScreen());
+                        }
+                      } else {
+                        //Get.to(const MyCardScreen());
+                      }
                       //print(commonController.currentPersonalAccount.value.success);
                       Get.to(const CardHolderListScreen());
                     }

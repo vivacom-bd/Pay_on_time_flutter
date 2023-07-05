@@ -7,19 +7,19 @@ import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Cards/Accounts/Account%20Details/account_details.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/new_card_details_screen.dart';
 import 'package:hidmona/Views/Screens/Cards/card_holder_info_screen.dart';
 import 'package:hidmona/Views/Screens/Cards/my_card_screen.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
-class CardHolderListScreen extends StatefulWidget {
-  const CardHolderListScreen({Key? key}) : super(key: key);
+
+class ExistingCardHolderList extends StatefulWidget {
+  const ExistingCardHolderList({Key? key}) : super(key: key);
 
   @override
-  State<CardHolderListScreen> createState() => _CardHolderListScreenState();
+  State<ExistingCardHolderList> createState() => _ExistingCardHolderListState();
 }
 
-class _CardHolderListScreenState extends State<CardHolderListScreen> {
+class _ExistingCardHolderListState extends State<ExistingCardHolderList> {
   CommonController commonController = Get.find<CommonController>();
   @override
   Widget build(BuildContext context) {
@@ -53,14 +53,14 @@ class _CardHolderListScreenState extends State<CardHolderListScreen> {
                         GestureDetector(
                           onTap: () async {
                             Utility.showLoadingDialog();
-                            bool value = await commonController.cardOrder(commonController.testID, commonController.createCardHolder.value.data!.id!);
+                            bool value = await commonController.getPersonalAccountCard(0, 23, commonController.testID);
                             Get.back();
                             if(value){
-                              print("Success");
-                              Get.to(()=> const NewCardDetailsScreen());
+                              print(commonController.getAccountDetails.value.total);
+                              Get.to(()=> const MyCardScreen());
                             } else {
                               Utility.showSnackBar("value");
-                              Get.to(const NewCardDetailsScreen());
+                              Get.to(const MyCardScreen());
                             }
                           },
                           child: Container(
@@ -84,9 +84,9 @@ class _CardHolderListScreenState extends State<CardHolderListScreen> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text("${commonController.createCardHolder.value.data!.cardholderDto!.firstName!} ${commonController.createCardHolder.value.data!.cardholderDto!.lastName}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                    Text("${commonController.personalAccountCard.value.data![0].cardHolder}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
                                     const SizedBox(height: 5),
-                                    Text("${commonController.createCardHolder.value.data!.externalId!.substring(0,4)}*****${commonController.createCardHolder.value.data!.externalId!.substring(commonController.createCardHolder.value.data!.externalId!.length - 4)}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),),
+                                    Text("${commonController.personalAccountCard.value.data![0].externalId!.substring(0,4)}*****${commonController.personalAccountCard.value.data![0].externalId!.substring(commonController.personalAccountCard.value.data![0].externalId!.length - 4)}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),),
                                   ],
                                 ),
                               ],
@@ -96,6 +96,10 @@ class _CardHolderListScreenState extends State<CardHolderListScreen> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  (commonController.cardStatus.value.state! == "active") ? const SizedBox(height: 0):  const DefaultButton(
+                      buttonText: "Active Card",
+                  ) ,
                   const SizedBox(height: 15,),
                 ],
               ),

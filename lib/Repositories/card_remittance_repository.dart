@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/card_details_screen.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/card_status.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/create_card_holder.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/create_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_personal_account.dart';
@@ -191,7 +192,7 @@ class CardRemittanceRepository{
   }
 
   ///CardDetails
-  static Future<APIResponse<CardDetails>> cardDetails(int senderId, int cardHolderId) async{
+  static Future<APIResponse<CardDetails>> orderCard(int senderId, int cardHolderId) async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<CardDetails>(error: true, message: "Internet is not connected!");
     }
@@ -243,6 +244,34 @@ class CardRemittanceRepository{
     }).catchError((onError){
       print(onError);
       return APIResponse<PersonalAccountCard>(error: true, message: "An Error Occurred!");
+    });
+  }
+
+  ///statusCheck
+  static Future<APIResponse<CardStatus>> cardStatusCheck(int senderId, int cardHolderId) async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<CardStatus>(error: true, message: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'card_remittance/card-status');
+    return http.post(
+        url,
+        headers: headersWithAuth,
+        body: json.encode({
+          "sender_id" : senderId,
+          "card_holder_pk" : cardHolderId,
+        })
+    )
+        .then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        return APIResponse<CardStatus>(data: CardStatus.fromJson(jsonData));
+      }
+      return APIResponse<CardStatus>(error: true, message: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<CardStatus>(error: true, message: "An Error Occurred!");
     });
   }
 

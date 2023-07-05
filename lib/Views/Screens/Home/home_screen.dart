@@ -10,7 +10,9 @@ import 'package:hidmona/Utilities/default_dialogs.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Cards/Accounts/account_screen.dart';
 import 'package:hidmona/Views/Screens/Cards/Accounts/create_account_option_screen.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/existing_holder_list.dart';
 import 'package:hidmona/Views/Screens/Cards/card_list_screen.dart';
 import 'package:hidmona/Views/Screens/Profile/profile_screen.dart';
 import 'package:hidmona/Views/Screens/Recipient/my_recipients_screen.dart';
@@ -67,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
+    CommonController commonController = Get.find<CommonController>();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -90,13 +92,37 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     DashboardExploreItem(title: "Account",subtitle: "See your Account here",iconName: "users",
-                      onTap: (){
-                        Get.to(const CreateAccountOptionScreen());
+                      onTap: () async {
+                        Utility.showLoadingDialog();
+                        bool value = await commonController.getPersonalAccount(0,25,commonController.testID);
+                        Get.back();
+                        if(value){
+                          if(commonController.getAccountDetails.value.data!.isNotEmpty){
+                            Get.to(()=> const AccountScreen());
+                          } else{
+                            Get.to(()=> const CreateAccountOptionScreen());
+                          }
+                        }
                       },
                     ),
                     DashboardExploreItem(title: "Card",subtitle: "See your Card here",iconName: "card",
-                      onTap: (){
-                        Get.to(const CardListScreen());
+                      onTap: () async {
+                        Utility.showLoadingDialog();
+                        bool value = await commonController.getPersonalAccountCard(0,25,commonController.testID);
+                        if(value){
+                          if(commonController.personalAccountCard.value.data!.isNotEmpty){
+                            bool value = await commonController.getCardStatus(commonController.testID, commonController.personalAccountCard.value.data![0].id!);
+                            Get.back();
+                            if(value){
+                              Get.to(()=> const ExistingCardHolderList());
+                            } else {
+                              Utility.showSnackBar("can not call");
+                            }
+
+                          } else {
+                            Get.to(const CardListScreen());
+                          }
+                        }
                       },
                     ),
                     const SizedBox(height: 10,),

@@ -35,11 +35,14 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
   Data ?_selectedTitle;
   //int ? _selectedTitleId;
 
+
+
   CardGroup _value = CardGroup.forMe;
   @override
   void initState() {
     super.initState();
     setState(() {
+      String phoneNumber = commonController.userProfile.value.phone!.substring(3);
       selectCardHolder.text = "1";
       commonController.dobController.text = "";
       fullName = commonController.userProfile.value.fullName!;
@@ -47,7 +50,7 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
       commonController.firstNameController.text = nameParts.first;
       commonController.lastNameController.text = nameParts.last;
       commonController.emailController.text = commonController.userProfile.value.email!;
-      commonController.phoneNumberController.text = commonController.userProfile.value.phone!;
+      commonController.phoneNumberController.text = phoneNumber.substring(0,10);
       commonController.addressController.text = commonController.userProfile.value.country!.name!;
       (commonController.userProfile.value.city != null) ? commonController.cityController.text = commonController.userProfile.value.city!.name! : commonController.cityController.text ="";
     });
@@ -297,7 +300,7 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                         }
                                         return null;
                                       },
-                                      //enabled: (selectCardHolder.text=="1") ? false : true,
+                                      enabled: (selectCardHolder.text=="1") ? false : true,
                                       labelText: "Email",
                                       hindText: "Enter your Email",
                                       keyboardType: TextInputType.text,
@@ -314,7 +317,7 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                         }
                                         return null;
                                       },
-                                      //enabled: (selectCardHolder.text=="1") ? false : true,
+                                      enabled: (selectCardHolder.text=="1") ? false : true,
                                       labelText: "Phone Number",
                                       hindText: "Enter your Phone Number",
                                       keyboardType: TextInputType.text,
