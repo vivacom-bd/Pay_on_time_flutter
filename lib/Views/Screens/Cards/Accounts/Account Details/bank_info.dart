@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
+import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
 
@@ -16,6 +17,7 @@ class BankAccountDetails extends StatefulWidget {
 }
 
 class _BankAccountDetailsState extends State<BankAccountDetails> {
+  GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   CommonController commonController = Get.find<CommonController>();
   final String heading1 = 'Account Holder';
   final String heading2 = 'SWIFT/BIC';
@@ -37,6 +39,8 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _globalKey,
+      drawer: NavDrawer(),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,10 +51,26 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 15,),
-                  Center(child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
-                  ),),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: (){
+                          _globalKey.currentState?.openDrawer();
+                        },
+                        icon: Icon(
+                          Icons.menu,
+                          color: AppColor.defaultColorLight,
+                        ),
+                      ),
+                      const SizedBox(width: 35,),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
+                        ),
+                      ),
+                    ],
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0),
                     child: Column(
@@ -87,11 +107,11 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                               const SizedBox(height: 20),
                               Text(heading2,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 2),
-                              Text(commonController.getAccountDetails.value.data![0].bankAccountDetails!.swiftBic!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.w500),),
+                              Text((commonController.getAccountDetails.value.data![0].bankAccountDetails!.swiftBic !=null) ? commonController.getAccountDetails.value.data![0].bankAccountDetails!.swiftBic! : "SWIFT",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.w500),),
                               const SizedBox(height: 20),
                               Text(heading3,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 2),
-                              Text(commonController.getAccountDetails.value.data![0].bankAccountDetails!.iban!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.w500),),
+                              Text((commonController.getAccountDetails.value.data![0].bankAccountDetails!.iban !=null) ? commonController.getAccountDetails.value.data![0].bankAccountDetails!.iban! : "Iban Number",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.w500),),
                               const SizedBox(height: 20),
                               Text(heading4,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 2),

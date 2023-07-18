@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:hidmona/Controllers/common_controller.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/CardPin.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/active_card.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/card_details_screen.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/card_status.dart';
@@ -7,7 +8,11 @@ import 'package:hidmona/Models/Card%20Remittance%20System/create_card_holder.dar
 import 'package:hidmona/Models/Card%20Remittance%20System/create_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_title.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/load_card.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/otp.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/otp_verify.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/personal_account_card.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/set_pin.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/supported_country.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/api_constants.dart';
@@ -192,7 +197,7 @@ class CardRemittanceRepository{
     });
   }
 
-  ///CardDetails
+  ///OrderCard
   static Future<APIResponse<CardDetails>> orderCard(int senderId, int cardHolderId) async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<CardDetails>(error: true, message: "Internet is not connected!");
@@ -219,7 +224,7 @@ class CardRemittanceRepository{
     });
   }
 
-  ///getModeOfReceive
+  ///getPersonalCard
   static Future<APIResponse<PersonalAccountCard>> getPersonalCard(int start, int limit, int userId) async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<PersonalAccountCard>(error: true, message: "Internet is not connected!");
@@ -249,7 +254,7 @@ class CardRemittanceRepository{
   }
 
   ///statusCheck
-  static Future<APIResponse<CardStatus>> cardStatusCheck(int senderId, int cardHolderId) async{
+  static Future<APIResponse<CardStatus>> cardStatusCheck(int senderId, int accountCardPk) async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<CardStatus>(error: true, message: "Internet is not connected!");
     }
@@ -259,7 +264,7 @@ class CardRemittanceRepository{
         headers: headersWithAuth,
         body: json.encode({
           "sender_id" : senderId,
-          "card_holder_pk" : cardHolderId,
+          "account_card_pk" : accountCardPk,
         })
     )
         .then((data){
@@ -277,7 +282,7 @@ class CardRemittanceRepository{
   }
 
   ///statusCheck
-  static Future<APIResponse<CardActivate>> activeCard(int senderId, int cardHolderId) async{
+  static Future<APIResponse<CardActivate>> activeCard(int senderId, int accountCardPk, int cardLastFourDigit) async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<CardActivate>(error: true, message: "Internet is not connected!");
     }
@@ -287,7 +292,8 @@ class CardRemittanceRepository{
         headers: headersWithAuth,
         body: json.encode({
           "sender_id" : senderId,
-          "card_holder_pk" : cardHolderId,
+          "account_card_pk" : accountCardPk,
+          "card_last_four_digit" : cardLastFourDigit,
         })
     )
         .then((data){
@@ -303,6 +309,139 @@ class CardRemittanceRepository{
       return APIResponse<CardActivate>(error: true, message: "An Error Occurred!");
     });
   }
+
+  ///CardPin
+  static Future<APIResponse<CardPin>> cardPin(int senderId, int accountCardPk) async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<CardPin>(error: true, message: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'card_remittance/card-pin');
+    return http.post(
+        url,
+        headers: headersWithAuth,
+        body: json.encode({
+          "sender_id" : senderId,
+          "account_card_pk" : accountCardPk,
+        })
+    )
+        .then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        return APIResponse<CardPin>(data: CardPin.fromJson(jsonData));
+      }
+      return APIResponse<CardPin>(error: true, message: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<CardPin>(error: true, message: "An Error Occurred!");
+    });
+  }
+
+  ///PinSet
+  static Future<APIResponse<PinSet>> pinSet(int cardPk, int pin) async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<PinSet>(error: true, message: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'card_remittance/set-card-pin');
+    return http.post(
+        url,
+        headers: headersWithAuth,
+        body: json.encode({
+          "card_pk" : cardPk,
+          "pin" : pin,
+        })
+    )
+        .then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        return APIResponse<PinSet>(data: PinSet.fromJson(jsonData));
+      }
+      return APIResponse<PinSet>(error: true, message: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<PinSet>(error: true, message: "An Error Occurred!");
+    });
+  }
+
+  ///Load Card
+  static Future<APIResponse<LoadCard>> loadCard(int cardPk, int accountPk, int amount) async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<LoadCard>(error: true, message: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'card_remittance/load-card');
+    return http.post(
+        url,
+        headers: headersWithAuth,
+        body: json.encode({
+          "card_pk" : cardPk,
+          "account_pk" : accountPk,
+          "amount" : amount,
+        })
+    )
+        .then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        return APIResponse<LoadCard>(data: LoadCard.fromJson(jsonData));
+      }
+      return APIResponse<LoadCard>(error: true, message: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<LoadCard>(error: true, message: "An Error Occurred!");
+    });
+  }
+
+  ///OTP
+  static Future<APIResponse<OTP>> otp() async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<OTP>(error: true, message: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'otp');
+    return http.post(
+        url,
+        headers: headersWithAuth,
+        body: json.encode({})
+    )
+        .then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 201){
+        return APIResponse<OTP>(data: OTP.fromJson(jsonData));
+      }
+      return APIResponse<OTP>(error: true, message: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<OTP>(error: true, message: "An Error Occurred!");
+    });
+  }
+
+  ///OTPVerify
+  static Future<APIResponse<OTPVerification>> otpVerify(otp) async{
+    ///internet check
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<OTPVerification>(error: true, message: "Internet is not connected!");
+    }
+    print(headersWithAuth);
+    Uri url = Uri.parse(baseAPIUrl()+'otpVerification/$otp');
+    return http.get(url,headers: headersWithAuth).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 201){
+        return APIResponse<OTPVerification>(data: OTPVerification.fromJson(jsonData));
+      }
+      return APIResponse<OTPVerification>(error: true, message: jsonData["detail"]??"An error occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<OTPVerification>(error: true, message: "An Error Occurred!");
+    });
+  }
+
 
 
 }

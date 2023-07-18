@@ -5,13 +5,18 @@ import 'package:country_currency_pickers/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/CardPin.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/active_card.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/card_details_screen.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/create_card_holder.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/create_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_title.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/load_card.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/otp.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/otp_verify.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/personal_account_card.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/set_pin.dart';
 import 'package:hidmona/Models/app_settings.dart';
 import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/city.dart';
@@ -40,7 +45,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../Models/Card Remittance System/card_status.dart';
 
 class CommonController extends GetxController{
-
+  //int testID = 227; // 200, 223
   Rx<Country> countryFrom = Country().obs; // CountryPickerUtils.getCountryByIsoCode("SE").obs;
   Rx<Country> countryTo = Country().obs; // CountryPickerUtils.getCountryByIsoCode("SE").obs;
   Rx<Country> shippingCountry = Country().obs;
@@ -81,8 +86,13 @@ class CommonController extends GetxController{
   Rx<PersonalAccountCard> personalAccountCard = PersonalAccountCard().obs;
   Rx<CardStatus> cardStatus = CardStatus().obs;
   Rx<CardActivate> cardActive = CardActivate().obs;
+  Rx<CardPin> cardPin = CardPin().obs;
+  Rx<PinSet> pinSet= PinSet().obs;
+  List<PersonalAccountCard> cardList = <PersonalAccountCard>[].obs;
+  Rx<LoadCard> cardLoading= LoadCard().obs;
+  Rx<OTP> otp= OTP().obs;
+  Rx<OTPVerification> otpVerify= OTPVerification().obs;
 
-  int testID = 173;
 
 
   List<String> euroCountry = ['SE','ER','AT','BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK','SI', 'ES', 'SE', 'GB'];
@@ -458,8 +468,8 @@ class CommonController extends GetxController{
 
 
   ///getCardStatus
-  Future<bool> getCardStatus(int userId, int cardHolderPkd) async{
-    APIResponse<CardStatus> apiResponseCardStatus = await CardRemittanceRepository.cardStatusCheck(userId, cardHolderPkd);
+  Future<bool> getCardStatus(int userId, int accountCardPk) async{
+    APIResponse<CardStatus> apiResponseCardStatus = await CardRemittanceRepository.cardStatusCheck(userId, accountCardPk);
     if(apiResponseCardStatus.data!=null){
       cardStatus.value = apiResponseCardStatus.data!;
     }else{
@@ -470,12 +480,72 @@ class CommonController extends GetxController{
   }
 
   ///activeCard
-  Future<bool> activeCard(int userId, int cardHolderPkd) async{
-    APIResponse<CardActivate> apiResponseActiveCard = await CardRemittanceRepository.activeCard(userId, cardHolderPkd);
+  Future<bool> activeCard(int userId, int accountCardPk, int lastFourDigit) async{
+    APIResponse<CardActivate> apiResponseActiveCard = await CardRemittanceRepository.activeCard(userId, accountCardPk, lastFourDigit);
     if(apiResponseActiveCard.data!=null){
       cardActive.value = apiResponseActiveCard.data!;
     }else{
       Utility.showSnackBar(apiResponseActiveCard.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///cardPin
+  Future<bool> getCardPin(int userId, int accountCardPk) async{
+    APIResponse<CardPin> apiResponseActiveCard = await CardRemittanceRepository.cardPin(userId, accountCardPk);
+    if(apiResponseActiveCard.data!=null){
+      cardPin.value = apiResponseActiveCard.data!;
+    }else{
+      Utility.showSnackBar(apiResponseActiveCard.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///Pin Set
+  Future<bool> cardPinSet(int cardPk, int pin) async{
+    APIResponse<PinSet> apiResponsePinSet = await CardRemittanceRepository.pinSet(cardPk, pin);
+    if(apiResponsePinSet.data!=null){
+      pinSet.value = apiResponsePinSet.data!;
+    }else{
+      Utility.showSnackBar(apiResponsePinSet.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///Card Load
+  Future<bool> loadingCard(int cardPk, int accountPk, int amount) async{
+    APIResponse<LoadCard> apiResponseCardLoad = await CardRemittanceRepository.loadCard(cardPk, accountPk,amount);
+    if(apiResponseCardLoad.data!=null){
+      cardLoading.value = apiResponseCardLoad.data!;
+    }else{
+      Utility.showSnackBar(apiResponseCardLoad.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///OTP
+  Future<bool> sendOTP() async{
+    APIResponse<OTP> apiResponseOtp = await CardRemittanceRepository.otp();
+    if(apiResponseOtp.data!=null){
+      otp.value = apiResponseOtp.data!;
+    }else{
+      Utility.showSnackBar(apiResponseOtp.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///OTP Verify
+  Future<bool> verifyOTP(int otp) async{
+    APIResponse<OTPVerification> apiResponseOtpVerify = await CardRemittanceRepository.otpVerify(otp);
+    if(apiResponseOtpVerify.data!=null){
+      otpVerify.value = apiResponseOtpVerify.data!;
+    }else{
+      Utility.showSnackBar(apiResponseOtpVerify.message??"No data Found");
       return false;
     }
     return true;

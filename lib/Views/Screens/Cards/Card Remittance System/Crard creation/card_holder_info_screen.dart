@@ -7,8 +7,9 @@ import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_title.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
+import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
-import 'package:hidmona/Views/Screens/Cards/card_shipping_address_screen.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Crard%20creation/card_shipping_address_screen.dart';
 import 'package:hidmona/Views/Widgets/country_item.dart';
 import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
@@ -55,10 +56,13 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
       (commonController.userProfile.value.city != null) ? commonController.cityController.text = commonController.userProfile.value.city!.name! : commonController.cityController.text ="";
     });
   }
+  GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _globalKey,
+      drawer: NavDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -66,13 +70,26 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 15,),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
-                  ),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: (){
+                        _globalKey.currentState?.openDrawer();
+                      },
+                      icon: Icon(
+                        Icons.menu,
+                        color: AppColor.defaultColorLight,
+                      ),
+                    ),
+                    const SizedBox(width: 35,),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 15,),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: SingleChildScrollView(

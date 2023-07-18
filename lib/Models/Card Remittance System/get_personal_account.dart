@@ -35,6 +35,7 @@ class Data {
   String? dateofBirth;
   String? email;
   String? phoneNumber;
+  String? uid;
   BankAccountDetails? bankAccountDetails;
 
   Data(
@@ -45,6 +46,7 @@ class Data {
         this.dateofBirth,
         this.email,
         this.phoneNumber,
+        this.uid,
         this.bankAccountDetails});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -55,6 +57,7 @@ class Data {
     dateofBirth = json['dateofBirth'];
     email = json['email'];
     phoneNumber = json['phoneNumber'];
+    uid = json['uid'];
     bankAccountDetails = json['bank_account_details'] != null
         ? new BankAccountDetails.fromJson(json['bank_account_details'])
         : null;
@@ -69,6 +72,7 @@ class Data {
     data['dateofBirth'] = this.dateofBirth;
     data['email'] = this.email;
     data['phoneNumber'] = this.phoneNumber;
+    data['uid'] = this.uid;
     if (this.bankAccountDetails != null) {
       data['bank_account_details'] = this.bankAccountDetails!.toJson();
     }
@@ -83,6 +87,8 @@ class BankAccountDetails {
   String? bankCountry;
   String? branchIdentifier;
   String? currency;
+  String? ledgerUID;
+  String? balance;
 
   BankAccountDetails(
       {this.iban,
@@ -90,7 +96,9 @@ class BankAccountDetails {
         this.bankIdentifier,
         this.bankCountry,
         this.branchIdentifier,
-        this.currency});
+        this.currency,
+        this.ledgerUID,
+        this.balance});
 
   BankAccountDetails.fromJson(Map<String, dynamic> json) {
     iban = json['iban'];
@@ -99,6 +107,8 @@ class BankAccountDetails {
     bankCountry = json['bank_country'];
     branchIdentifier = json['branch_identifier'];
     currency = json['currency'];
+    ledgerUID = json['ledgerUID'];
+    balance = json['balance'];
   }
 
   Map<String, dynamic> toJson() {
@@ -109,6 +119,8 @@ class BankAccountDetails {
     data['bank_country'] = this.bankCountry;
     data['branch_identifier'] = this.branchIdentifier;
     data['currency'] = this.currency;
+    data['ledgerUID'] = this.ledgerUID;
+    data['balance'] = this.balance;
     return data;
   }
 }

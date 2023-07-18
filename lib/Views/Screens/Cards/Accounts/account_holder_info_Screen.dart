@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
+import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Cards/Accounts/account_screen.dart';
@@ -21,6 +22,7 @@ class AccountHolderScreen extends StatefulWidget {
 
 class _AccountHolderScreenState extends State<AccountHolderScreen> {
   final _formKey = GlobalKey<FormState>();
+  GlobalKey<ScaffoldState> _globalKey=GlobalKey<ScaffoldState>();
   TextEditingController accountCurrencyController = TextEditingController();
   TextEditingController familyNameController = TextEditingController();
   TextEditingController givenNameController = TextEditingController();
@@ -52,6 +54,8 @@ class _AccountHolderScreenState extends State<AccountHolderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _globalKey,
+      drawer: NavDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -59,11 +63,25 @@ class _AccountHolderScreenState extends State<AccountHolderScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 15,),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
-                  ),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: (){
+                        _globalKey.currentState?.openDrawer();
+                      },
+                      icon: Icon(
+                        Icons.menu,
+                        color: AppColor.defaultColorLight,
+                      ),
+                    ),
+                    const SizedBox(width: 35,),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 15,),
                 Container(
@@ -278,7 +296,7 @@ class _AccountHolderScreenState extends State<AccountHolderScreen> {
                       print("${familyNameController.text},\n${givenNameController.text},\n${nationalityController.text},\n${dobController.text},\n${phoneNumberController.text},\n${emailController.text},");
                       Utility.showLoadingDialog();
                       bool value = await commonController.createAccount(
-                        commonController.testID,
+                        commonController.userProfile.value.id!,
                         familyNameController.text,
                         givenNameController.text,
                         nationalityController.text,
@@ -286,10 +304,13 @@ class _AccountHolderScreenState extends State<AccountHolderScreen> {
                         phoneNumberController.text,
                         emailController.text,
                       );
-                      Get.back();
                       if(value){
-                        //print(commonController.currentPersonalAccount.value.success);
-                        Get.to(()=> const AccountScreen());
+                        bool value = await commonController.getPersonalAccount(0,25,commonController.userProfile.value.id!);
+                        Get.back();
+                        if(value){
+                          //print(commonController.currentPersonalAccount.value.success);
+                          Get.to(()=> const AccountScreen());
+                        }
                       }
                     }
                   },

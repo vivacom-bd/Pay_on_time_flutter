@@ -1,16 +1,14 @@
 import 'package:country_currency_pickers/country.dart';
 import 'package:country_currency_pickers/country_picker_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
+import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
-import 'package:hidmona/Views/Screens/Cards/card_holder_list_screen.dart';
-import 'package:hidmona/Views/Screens/Cards/my_card_screen.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Crard%20creation/card_Application_confirmation_screen.dart';
 import 'package:hidmona/Views/Widgets/country_item.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
@@ -25,6 +23,8 @@ class CardShippingAddress extends StatefulWidget {
 
 class _CardShippingAddressState extends State<CardShippingAddress> {
   final _formKey = GlobalKey<FormState>();
+  GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+
   Country? selectedCountry;
   Country? selectedCitizenCountry;
   CommonController commonController = Get.find<CommonController>();
@@ -39,6 +39,8 @@ class _CardShippingAddressState extends State<CardShippingAddress> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _globalKey,
+      drawer: NavDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -46,11 +48,25 @@ class _CardShippingAddressState extends State<CardShippingAddress> {
             child: Column(
               children: [
                 const SizedBox(height: 15,),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
-                  ),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: (){
+                        _globalKey.currentState?.openDrawer();
+                      },
+                      icon: Icon(
+                        Icons.menu,
+                        color: AppColor.defaultColorLight,
+                      ),
+                    ),
+                    const SizedBox(width: 40,),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 15,),
                 Container(
@@ -209,7 +225,7 @@ class _CardShippingAddressState extends State<CardShippingAddress> {
                     print("${commonController.shippingCountry.value.iso3Code}.${cityController.text},${cityController.text},${stateController.text},${addressLine1Controller.text},${addressLine2Controller.text}");
                     Utility.showLoadingDialog();
                     bool value = await commonController.cardHolder(
-                      commonController.testID,
+                        commonController.userProfile.value.id!,
                       58,
                       commonController.selectedTitleId!,
                       "SuffixName",
@@ -240,21 +256,20 @@ class _CardShippingAddressState extends State<CardShippingAddress> {
                     Get.back();
                     if(value){
                         Utility.showLoadingDialog();
-                        bool value = await commonController.cardOrder(commonController.testID, commonController.createCardHolder.value.data!.id!);
+                        bool value = await commonController.cardOrder(commonController.userProfile.value.id!, commonController.createCardHolder.value.data!.id!);
 
                         if(value){
-                          bool value = await commonController.getPersonalAccountCard(0,25,commonController.testID);
+                          bool value = await commonController.getPersonalAccountCard(0,25,commonController.userProfile.value.id!);
                           if(value){
-                            bool value = await commonController.getCardStatus(commonController.testID, commonController.personalAccountCard.value.data![0].id!);
+                            bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![0].id!);
                             Get.back();
                             if(value){
                               print("Success");
                             }
                           }
-                          //Get.to(()=> const MyCardScreen());
                         }
                       //print(commonController.currentPersonalAccount.value.success);
-                      Get.to(const CardHolderListScreen());
+                      Get.to(const CardApplicationConfirmationScreen());
                     }
                   },
                 ),

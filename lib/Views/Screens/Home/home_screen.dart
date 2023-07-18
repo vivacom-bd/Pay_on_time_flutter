@@ -13,7 +13,7 @@ import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Cards/Accounts/account_screen.dart';
 import 'package:hidmona/Views/Screens/Cards/Accounts/create_account_option_screen.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/existing_holder_list.dart';
-import 'package:hidmona/Views/Screens/Cards/card_list_screen.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Crard%20creation/card_list_screen.dart';
 import 'package:hidmona/Views/Screens/Profile/profile_screen.dart';
 import 'package:hidmona/Views/Screens/Recipient/my_recipients_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/send_money_screen.dart';
@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     DashboardExploreItem(title: "Account",subtitle: "See your Account here",iconName: "users",
                       onTap: () async {
                         Utility.showLoadingDialog();
-                        bool value = await commonController.getPersonalAccount(0,25,commonController.testID);
+                        bool value = await commonController.getPersonalAccount(0,25,commonController.userProfile.value.id!);
                         Get.back();
                         if(value){
                           if(commonController.getAccountDetails.value.data!.isNotEmpty){
@@ -108,10 +108,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     DashboardExploreItem(title: "Card",subtitle: "See your Card here",iconName: "card",
                       onTap: () async {
                         Utility.showLoadingDialog();
-                        bool value = await commonController.getPersonalAccountCard(0,25,commonController.testID);
+                        bool value = await commonController.getPersonalAccountCard(0,25,commonController.userProfile.value.id!);
                         if(value){
                           if(commonController.personalAccountCard.value.data!.isNotEmpty){
-                            bool value = await commonController.getCardStatus(commonController.testID, commonController.personalAccountCard.value.data![0].id!);
+                            bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![0].id!);
                             Get.back();
                             if(value){
                               Get.to(()=> const ExistingCardHolderList());

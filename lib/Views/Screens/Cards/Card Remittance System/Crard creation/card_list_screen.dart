@@ -7,9 +7,10 @@ import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Repositories/api_constants.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
+import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
-import 'package:hidmona/Views/Screens/Cards/card_holder_info_screen.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Crard%20creation/card_holder_info_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/send_money_screen.dart';
 import 'package:hidmona/Views/Widgets/country_item.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
@@ -26,9 +27,12 @@ class CardListScreen extends StatefulWidget {
 class _CardListScreenState extends State<CardListScreen> {
   CommonController controller = Get.find<CommonController>();
   CommonController commonController = Get.find<CommonController>();
+  GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _globalKey,
+      drawer: NavDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -36,10 +40,26 @@ class _CardListScreenState extends State<CardListScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 15,),
-                Center(child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
-                ),),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: (){
+                        _globalKey.currentState?.openDrawer();
+                      },
+                      icon: Icon(
+                        Icons.menu,
+                        color: AppColor.defaultColorLight,
+                      ),
+                    ),
+                    const SizedBox(width: 35,),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
+                      ),
+                    ),
+                  ],
+                ),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   decoration: BoxDecoration(

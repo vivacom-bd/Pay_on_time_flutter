@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
+import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Views/Screens/Cards/Accounts/Account%20Details/bank_info.dart';
 
@@ -15,10 +16,13 @@ class AccountDetails extends StatefulWidget {
 }
 
 class _AccountDetailsState extends State<AccountDetails> {
+  GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   CommonController commonController = Get.find<CommonController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _globalKey,
+      drawer: NavDrawer(),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,10 +33,26 @@ class _AccountDetailsState extends State<AccountDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 15,),
-                  Center(child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
-                  ),),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: (){
+                          _globalKey.currentState?.openDrawer();
+                        },
+                        icon: Icon(
+                          Icons.menu,
+                          color: AppColor.defaultColorLight,
+                        ),
+                      ),
+                      const SizedBox(width: 35,),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Image.asset(AppImage.getPath("logo"),width: SizeConfig.screenWidth*.4,),
+                        ),
+                      ),
+                    ],
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0),
                     child: Text("Account Details",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
@@ -69,7 +89,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text("${commonController.getAccountDetails.value.data![0].bankAccountDetails!.currency!} account" ,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                              Text((commonController.getAccountDetails.value.data![0].bankAccountDetails!.currency !=null) ? "${commonController.getAccountDetails.value.data![0].bankAccountDetails!.currency!} account" : " account" ,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
                                               const SizedBox(height: 2),
                                               GestureDetector(
                                                 onTap: (){
@@ -77,7 +97,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                 },
                                                 child: RichText(
                                                   text: TextSpan(
-                                                    text: commonController.getAccountDetails.value.data![0].bankAccountDetails!.iban!,
+                                                    text: (commonController.getAccountDetails.value.data![0].bankAccountDetails!.iban !=null) ?commonController.getAccountDetails.value.data![0].bankAccountDetails!.iban! : "IBAN Number",
                                                     style: TextStyle(
                                                       color: AppColor.hyperlinkColor,
                                                       decoration: TextDecoration.underline,
@@ -88,7 +108,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                                                 ),
                                               ),
                                               const SizedBox(height: 5),
-                                              Text("10,000.00 EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),),
+                                              Text((commonController.getAccountDetails.value.data![0].bankAccountDetails!.balance !=null) ? "${commonController.getAccountDetails.value.data![0].bankAccountDetails!.balance!} EUR" : "0.0 EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),),
                                             ],
                                           ),
                                         ],

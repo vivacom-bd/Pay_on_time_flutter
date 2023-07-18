@@ -32,6 +32,7 @@ class Data {
   String? account;
   String? cardHolder;
   String? externalId;
+  double? balance;
   String? state;
   String? type;
   String? sequenceNumber;
@@ -50,6 +51,7 @@ class Data {
         this.account,
         this.cardHolder,
         this.externalId,
+        this.balance,
         this.state,
         this.type,
         this.sequenceNumber,
@@ -68,6 +70,7 @@ class Data {
     account = json['account'];
     cardHolder = json['card_holder'];
     externalId = json['externalId'];
+    balance = json['balance'];
     state = json['state'];
     type = json['type'];
     sequenceNumber = json['sequenceNumber'];
@@ -88,6 +91,7 @@ class Data {
     data['account'] = this.account;
     data['card_holder'] = this.cardHolder;
     data['externalId'] = this.externalId;
+    data['balance'] = this.balance;
     data['state'] = this.state;
     data['type'] = this.type;
     data['sequenceNumber'] = this.sequenceNumber;
