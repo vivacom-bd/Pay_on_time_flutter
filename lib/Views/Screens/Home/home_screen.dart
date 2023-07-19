@@ -93,34 +93,76 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     DashboardExploreItem(title: "Account",subtitle: "See your Account here",iconName: "users",
                       onTap: () async {
-                        Utility.showLoadingDialog();
-                        bool value = await commonController.getPersonalAccount(0,25,commonController.userProfile.value.id!);
-                        Get.back();
-                        if(value){
-                          if(commonController.getAccountDetails.value.data!.isNotEmpty){
-                            Get.to(()=> const AccountScreen());
-                          } else{
-                            Get.to(()=> const CreateAccountOptionScreen());
+                        if(controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty){
+                          DefaultDialogs.showDialog(
+                              title: "Apply for KYC",
+                              text: "Your KYC application is not approved yet. Please apply for KYC.",
+                              onCancel: (){
+                                Get.back();
+                              },
+                              onSubmitText: "Continue",
+                              onSubmit: ()async{
+
+                                Get.back();
+
+                                String url = '${kycBaseUrl()}applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
+                                Uri uri = Uri.parse(url);
+                                if (await canLaunchUrl(uri)) {
+                                  await launchUrl(uri,mode: LaunchMode.externalApplication);
+                                }
+                              }
+                          );
+                        } else {
+                          Utility.showLoadingDialog();
+                          bool value = await commonController.getPersonalAccount(0,25,commonController.userProfile.value.id!);
+                          Get.back();
+                          if(value){
+                            if(commonController.getAccountDetails.value.data!.isNotEmpty){
+                              Get.to(()=> const AccountScreen());
+                            } else{
+                              Get.to(()=> const CreateAccountOptionScreen());
+                            }
                           }
                         }
                       },
                     ),
                     DashboardExploreItem(title: "Card",subtitle: "See your Card here",iconName: "card",
                       onTap: () async {
-                        Utility.showLoadingDialog();
-                        bool value = await commonController.getPersonalAccountCard(0,25,commonController.userProfile.value.id!);
-                        if(value){
-                          if(commonController.personalAccountCard.value.data!.isNotEmpty){
-                            bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![0].id!);
-                            Get.back();
-                            if(value){
-                              Get.to(()=> const ExistingCardHolderList());
-                            } else {
-                              Utility.showSnackBar("can not call");
-                            }
+                        if(controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty){
+                          DefaultDialogs.showDialog(
+                              title: "Apply for KYC",
+                              text: "Your KYC application is not approved yet. Please apply for KYC.",
+                              onCancel: (){
+                                Get.back();
+                              },
+                              onSubmitText: "Continue",
+                              onSubmit: ()async{
 
-                          } else {
-                            Get.to(const CardListScreen());
+                                Get.back();
+
+                                String url = '${kycBaseUrl()}applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
+                                Uri uri = Uri.parse(url);
+                                if (await canLaunchUrl(uri)) {
+                                  await launchUrl(uri,mode: LaunchMode.externalApplication);
+                                }
+                              }
+                          );
+                        } else {
+                          Utility.showLoadingDialog();
+                          bool value = await commonController.getPersonalAccountCard(0,25,commonController.userProfile.value.id!);
+                          if(value){
+                            if(commonController.personalAccountCard.value.data!.isNotEmpty){
+                              bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![0].id!);
+                              Get.back();
+                              if(value){
+                                Get.to(()=> const ExistingCardHolderList());
+                              } else {
+                                Utility.showSnackBar("can not call");
+                              }
+
+                            } else {
+                              Get.to(const CardListScreen());
+                            }
                           }
                         }
                       },
@@ -128,33 +170,59 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 10,),
                     DashboardExploreItem(title: "Transaction History",subtitle: "See your previous transactions",iconName: "history",
                       onTap: (){
-                        Get.to(const TransactionHistoryScreen());
+                        if(controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty){
+                          DefaultDialogs.showDialog(
+                              title: "Apply for KYC",
+                              text: "Your KYC application is not approved yet. Please apply for KYC.",
+                              onCancel: (){
+                                Get.back();
+                              },
+                              onSubmitText: "Continue",
+                              onSubmit: ()async{
+
+                                Get.back();
+
+                                String url = '${kycBaseUrl()}applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
+                                Uri uri = Uri.parse(url);
+                                if (await canLaunchUrl(uri)) {
+                                  await launchUrl(uri,mode: LaunchMode.externalApplication);
+                                }
+                              }
+                          );
+                        } else {
+                          Get.to(const TransactionHistoryScreen());
+                        }
                       },
                     ),
                     const SizedBox(height: 10,),
                     DashboardExploreItem(title: "My Recipients",subtitle: "See your profile here",iconName: "users",
                       onTap: (){
-                        Get.to(const MyRecipientScreen());
+                        if(controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty){
+                          DefaultDialogs.showDialog(
+                              title: "Apply for KYC",
+                              text: "Your KYC application is not approved yet. Please apply for KYC.",
+                              onCancel: (){
+                                Get.back();
+                              },
+                              onSubmitText: "Continue",
+                              onSubmit: ()async{
+
+                                Get.back();
+
+                                String url = '${kycBaseUrl()}applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
+                                Uri uri = Uri.parse(url);
+                                if (await canLaunchUrl(uri)) {
+                                  await launchUrl(uri,mode: LaunchMode.externalApplication);
+                                }
+                              }
+                          );
+                        } else {
+                          Get.to(const MyRecipientScreen());
+                        }
                       },
                     ),
                   ],
                 ),
-                const SizedBox(height: 15,),
-                (controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty) ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),height: 25,),
-                    DefaultButton(buttonText: "Apply for KYC",onTap: ()async{
-                      String url = '${kycBaseUrl()}applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
-                      Uri uri = Uri.parse(url);
-                      if (await canLaunchUrl(uri)) {
-                        await launchUrl(uri,mode: LaunchMode.externalApplication);
-                      }
-                    },),
-                    Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),height: 25,),
-                  ],
-                ):const SizedBox(height: 10,),
                 const SizedBox(height: 15,),
                 Center(
                   child: Text(
@@ -262,37 +330,51 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 30.0),
-                          DefaultButton(
-                            buttonText: "Continue", onTap: ()async{
-                              if(controller.countryFrom.value.isoCode != null && controller.countryTo.value.isoCode != null){
-                                Utility.showLoadingDialog();
-
-                                bool isSuccessModeOfReceives = await controller.getModeOfReceives(controller.countryTo.value.isoCode!);
-                                // if(!isSuccessModeOfReceives){
-                                //   Get.back();
-                                //   return;
-                                // }
-
-                                bool isSuccessModeOfPayments = await controller.getModeOfPayments(controller.countryFrom.value.isoCode!);
-                                // if(!isSuccessModeOfPayments){
-                                //   Get.back();
-                                //   return;
-                                // }
-
-                                controller.serverCountryFrom.value = controller.getServerCountryFromCountryCode(controller.countryFrom.value.isoCode!);
-                                controller.serverCountryTo.value = controller.getServerCountryFromCountryCode(controller.countryTo.value.isoCode!);
-
-                                bool value = await controller.updateCurrencies();
-
-                                Get.back();
-
-                                if(value){
-                                  Get.to(()=> SendMoneyScreen());
+                          (controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty) ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              //Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),height: 25,),
+                              DefaultButton(buttonText: "Apply for KYC",onTap: ()async{
+                                String url = '${kycBaseUrl()}applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
+                                Uri uri = Uri.parse(url);
+                                if (await canLaunchUrl(uri)) {
+                                  await launchUrl(uri,mode: LaunchMode.externalApplication);
                                 }
-                              }else{
-                                Utility.showSnackBar("Select Country!");
+                              },),
+                              //Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),height: 25,),
+                            ],
+                          ):DefaultButton(
+                            buttonText: "Continue", onTap: ()async{
+                            if(controller.countryFrom.value.isoCode != null && controller.countryTo.value.isoCode != null){
+                              Utility.showLoadingDialog();
+
+                              bool isSuccessModeOfReceives = await controller.getModeOfReceives(controller.countryTo.value.isoCode!);
+                              // if(!isSuccessModeOfReceives){
+                              //   Get.back();
+                              //   return;
+                              // }
+
+                              bool isSuccessModeOfPayments = await controller.getModeOfPayments(controller.countryFrom.value.isoCode!);
+                              // if(!isSuccessModeOfPayments){
+                              //   Get.back();
+                              //   return;
+                              // }
+
+                              controller.serverCountryFrom.value = controller.getServerCountryFromCountryCode(controller.countryFrom.value.isoCode!);
+                              controller.serverCountryTo.value = controller.getServerCountryFromCountryCode(controller.countryTo.value.isoCode!);
+
+                              bool value = await controller.updateCurrencies();
+
+                              Get.back();
+
+                              if(value){
+                                Get.to(()=> SendMoneyScreen());
                               }
-                            },
+                            }else{
+                              Utility.showSnackBar("Select Country!");
+                            }
+                          },
                           ),
                         ],
                       );

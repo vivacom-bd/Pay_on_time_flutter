@@ -8,6 +8,7 @@ import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Cards/Accounts/account_holder_info_Screen.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Crard%20creation/card_holder_info_screen.dart';
+import 'package:hidmona/Views/Widgets/custom_dialogbox.dart';
 import 'package:hidmona/Views/Widgets/dashboard_item.dart';
 
 import 'account_screen.dart';
@@ -23,6 +24,7 @@ class CreateAccountOptionScreen extends StatefulWidget {
 class _CreateAccountOptionScreenState extends State<CreateAccountOptionScreen> {
   CommonController commonController = Get.find<CommonController>();
   bool checkAccountType = false;
+  String ? country;
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -68,27 +70,37 @@ class _CreateAccountOptionScreenState extends State<CreateAccountOptionScreen> {
                       const SizedBox(height: 10),
                       DashboardExploreItem(title: "Create Personal Account",subtitle: "Create your Account here",iconName: "personal_account",
                         onTap: (){
-                        for(String country in commonController.euroCountry){
-                          if(country == commonController.countryFrom.value.isoCode!){
+                        for(int i =0; i<commonController.euroCountry.length; i++){
+                          if(commonController.euroCountry[i] == commonController.countryFrom.value.isoCode!){
+                            print(commonController.countryFrom.value.isoCode!);
+                            country = commonController.euroCountry[i];
                             Get.to(const AccountHolderScreen());
                             break;
-                          } else {
-                            Utility.showSnackBar("Sorry you are not Allow for this");
+                          }else {
+                            print(commonController.countryFrom.value.isoCode!);
+                            //Utility.showSnackBar("Sorry we are not currently offering accounts and cards in your country. Please check back another time.");
                           }
-                          break;
+                        }
+                        if(country != commonController.countryFrom.value.isoCode!) {
+                          DefaultDialogs(context: context).showDialog(title: "Create Personal Account", text: "Sorry we are not currently offering accounts and cards in your country. Please check back another time.",
+                          onSubmit: () {
+                            Get.back();
+                          },
+                          onSubmitText: "Ok",
+                        );
                         }
                         },
                       ),
                       const SizedBox(height: 10),
                       DashboardExploreItem(title: "Create Company Account",subtitle: "See your Cards here",iconName: "card",
-                        onTap: () async {
-                          Utility.showLoadingDialog();
-                          bool value = await commonController.getPersonalAccount(0,25,commonController.userProfile.value.id!);
-                          Get.back();
-                          if(value){
-                            print(commonController.getAccountDetails.value.total);
-                            Get.to(()=> const AccountScreen());
-                          }
+                        onTap: () {
+                          // Utility.showLoadingDialog();
+                          // bool value = await commonController.getPersonalAccount(0,25,commonController.userProfile.value.id!);
+                          // Get.back();
+                          // if(value){
+                          //   print(commonController.getAccountDetails.value.total);
+                          //   Get.to(()=> const AccountScreen());
+                          // }
                         },
                       ),
                       const SizedBox(height: 20),

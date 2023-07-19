@@ -86,9 +86,16 @@ class _CardListScreenState extends State<CardListScreen> {
                         onTap: () async {
                           Utility.showLoadingDialog();
                           bool value = await commonController.getTitle();
-                          Get.back();
                           if(value){
-                            Get.to(const CardHolderInfoScreen());
+                            bool value = await commonController.getPersonalAccount(0,25,commonController.userProfile.value.id!);
+                            Get.back();
+                            if(value){
+                              if(commonController.getAccountDetails.value.total == 1){
+                                Get.to(const CardHolderInfoScreen());
+                              }else {
+                                Utility.showSnackBar("Create Account First");
+                              }
+                            }
                           }
                         },
                       ),

@@ -121,7 +121,7 @@ class _ActivateYourCardScreenState extends State<ActivateYourCardScreen> {
                   onTap: () async {
                     // Get.to(const CardConfirmationScreen());
                     Utility.showLoadingDialog();
-                    bool value = await commonController.activeCard(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![0].id!,int.parse(cardDigitController.text));
+                    bool value = await commonController.activeCard(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![0].id!,cardDigitController.text);
                     if(value){
                       bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![0].id!);
                       Get.back();

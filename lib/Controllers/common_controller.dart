@@ -480,7 +480,7 @@ class CommonController extends GetxController{
   }
 
   ///activeCard
-  Future<bool> activeCard(int userId, int accountCardPk, int lastFourDigit) async{
+  Future<bool> activeCard(int userId, int accountCardPk, String lastFourDigit) async{
     APIResponse<CardActivate> apiResponseActiveCard = await CardRemittanceRepository.activeCard(userId, accountCardPk, lastFourDigit);
     if(apiResponseActiveCard.data!=null){
       cardActive.value = apiResponseActiveCard.data!;

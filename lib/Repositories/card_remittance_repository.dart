@@ -281,8 +281,8 @@ class CardRemittanceRepository{
     });
   }
 
-  ///statusCheck
-  static Future<APIResponse<CardActivate>> activeCard(int senderId, int accountCardPk, int cardLastFourDigit) async{
+  ///active card
+  static Future<APIResponse<CardActivate>> activeCard(int senderId, int accountCardPk, String cardLastFourDigit) async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<CardActivate>(error: true, message: "Internet is not connected!");
     }
