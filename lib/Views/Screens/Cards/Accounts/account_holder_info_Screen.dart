@@ -311,7 +311,7 @@ class _AccountHolderScreenState extends State<AccountHolderScreen> {
                           //print(commonController.currentPersonalAccount.value.success);
                           Get.to(()=> const AccountScreen());
                         }
-                      }
+                      }else{Get.back();}
                     }
                   },
                 ),

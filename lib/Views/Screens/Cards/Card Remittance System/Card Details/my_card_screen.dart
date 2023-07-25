@@ -8,10 +8,7 @@ import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/Set%20Pin/set_pin_OTP_screen_my_card.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/View%20Pin/view_pin_otp_my_card.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Set%20Pin/set_pin_otp_screen.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/View%20Pin/view_pin_otp_screen.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/View%20Pin/view_pin_screen.dart';
-import 'package:hidmona/Views/Widgets/custom_dialogbox.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Loading/load_card_form.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
 class MyCardScreen extends StatefulWidget {
@@ -92,16 +89,16 @@ class _MyCardScreenState extends State<MyCardScreen> {
                                 const SizedBox(width: 15),
                                 Image.asset(AppImage.getPath("card1"),width: SizeConfig.screenWidth*.2, color: AppColor.defaultColorLight,),
                                 const SizedBox(height: 10,),
-                                Text("${commonController.personalAccountCard.value.data![0].externalId!.substring(0,4)}*****${commonController.personalAccountCard.value.data![0].externalId!.substring(commonController.personalAccountCard.value.data![0].externalId!.length - 4)} | EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                Text("${commonController.personalAccountCard.value.data![commonController.cardIndexNo].panFirst6}*****${commonController.personalAccountCard.value.data![commonController.cardIndexNo].panLast4} | EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
                                 const SizedBox(height: 2),
-                                Text("${commonController.personalAccountCard.value.data![0].cardHolder}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
+                                Text("${commonController.personalAccountCard.value.data![commonController.cardIndexNo].cardHolder}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
                                 const SizedBox(height: 10),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("Expiration Date: ",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
-                                    Text(commonController.personalAccountCard.value.data![0].expiry!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
+                                    Text(commonController.personalAccountCard.value.data![commonController.cardIndexNo].expiry!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
 
                                   ],
                                 ),
@@ -121,31 +118,59 @@ class _MyCardScreenState extends State<MyCardScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("Available Balance : ",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
-                                    Text("${commonController.personalAccountCard.value.data![0].balance} EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14, fontWeight: FontWeight.bold)),
+                                    Text("${commonController.personalAccountCard.value.data![commonController.cardIndexNo].balance} EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14, fontWeight: FontWeight.bold)),
 
                                   ],
                                 ),
                                 const SizedBox(height: 10),
-                                GestureDetector(
-                                  onTap: () async {
-                                    Utility.showLoadingDialog();
-                                    bool value = await commonController.sendOTP();
-                                    Get.back();
-                                    if(value){
-                                      Get.to(()=> const SetPinOTPScreenMyScreen());
-                                    } else {Get.back();}
-                                  },
-                                  child: RichText(
-                                    text: TextSpan(
-                                      text: 'Set Pin',
-                                      style: TextStyle(
-                                          color: AppColor.hyperlinkColor,
-                                          decoration: TextDecoration.underline,
-                                          decorationStyle: TextDecorationStyle.solid,
-                                          fontWeight: FontWeight.bold
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        Utility.showLoadingDialog();
+                                        bool value = await commonController.sendOTP();
+                                        Get.back();
+                                        if(value){
+                                          Get.to(()=> const SetPinOTPScreenMyScreen());
+                                        } else {Get.back();}
+                                      },
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: 'Set Pin',
+                                          style: TextStyle(
+                                              color: AppColor.hyperlinkColor,
+                                              decoration: TextDecoration.underline,
+                                              decorationStyle: TextDecorationStyle.solid,
+                                              fontWeight: FontWeight.bold
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    const SizedBox(width: 10,),
+                                    GestureDetector(
+                                      onTap: ()   async {
+                                        Utility.showLoadingDialog();
+                                        bool value = await commonController.sendOTP();
+                                        Get.back();
+                                        if(value){
+                                          Get.to(()=> const ViewPinOtpMyCardScreen());
+                                        } else {Get.back();}
+                                      },
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: 'View Pin',
+                                          style: TextStyle(
+                                              color: AppColor.hyperlinkColor,
+                                              decoration: TextDecoration.underline,
+                                              decorationStyle: TextDecorationStyle.solid,
+                                              fontWeight: FontWeight.bold
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(height: 5),
                                 GestureDetector(
@@ -169,31 +194,19 @@ class _MyCardScreenState extends State<MyCardScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    DefaultButton(
-                                        buttonText: "View Pin",
-                                        onTap: ()   async {
-                                          Utility.showLoadingDialog();
-                                          bool value = await commonController.sendOTP();
-                                          Get.back();
-                                          if(value){
-                                            Get.to(()=> const ViewPinOtpMyCardScreen());
-                                          } else {Get.back();}
-
-                                          // Utility.showLoadingDialog();
-                                          // bool value = await commonController.getCardPin(commonController.testID,commonController.personalAccountCard.value.data![0].id!);
-                                          // Get.back();
-                                          // if(value){
-                                          //   DefaultDialogs(context: context).showDialog(title: "View Pin", text: "Your Pin is ${commonController.cardPin.value.pin}",
-                                          //       onSubmit: () {
-                                          //         Get.back();
-                                          //       },
-                                          //       onSubmitText: "Ok",
-                                          //
-                                          //   );
-                                          //   print(commonController.cardPin.value.pin);
-                                          // }
+                                    DefaultButton(buttonText: 'Load Card',onTap: () async {
+                                      print("Card id ${commonController.cardIndexNo}");
+                                      Utility.showLoadingDialog();
+                                      bool value = await commonController.getPersonalAccount(0,25,commonController.userProfile.value.id!);
+                                      if(value){
+                                        bool value = await commonController.getPersonalAccountCard(0, 23, commonController.userProfile.value.id!);
+                                        Get.back();
+                                        if(value){
+                                          Get.to(()=> const LoadCardForm());
                                         }
-                                    ),
+
+                                      }
+                                    }),
                                     SizedBox(width: 5),
                                     DefaultButton(
                                       buttonText: "Report as Lost",

@@ -56,7 +56,7 @@ class DialogForSetPinMyCard extends StatelessWidget {
               onTap: () async {
                 if(pinController.text.isNotEmpty){
                   Utility.showLoadingDialog();
-                  bool value = await commonController.cardPinSet(commonController.personalAccountCard.value.data![0].id!, int.parse(pinController.text));
+                  bool value = await commonController.cardPinSet(commonController.personalAccountCard.value.data![commonController.cardIndexNo].id!, pinController.text);
                   Get.back();
                   if(value){
                     Utility.showSnackBar(commonController.pinSet.value.reason!);

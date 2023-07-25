@@ -9,9 +9,11 @@ import 'package:get/get.dart';
 import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/View%20Pin/view_pin_otp_my_card.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Loading/load_card_form.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Set%20Pin/set_card_pin_popup.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Set%20Pin/set_pin_otp_screen.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/View%20Pin/view_pin_screen.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
 class LoadCardScreen extends StatefulWidget {
@@ -89,7 +91,7 @@ class _LoadCardScreenState extends State<LoadCardScreen> {
                             ),
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: commonController.getCardDetails.value.data!.cards!.length,
+                              itemCount: 1,
                               itemBuilder: (context,index) {
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,16 +99,16 @@ class _LoadCardScreenState extends State<LoadCardScreen> {
                                     const SizedBox(width: 15),
                                     Image.asset(AppImage.getPath("card1"),width: SizeConfig.screenWidth*.2, color: AppColor.defaultColorLight,),
                                     const SizedBox(height: 10,),
-                                    Text("${commonController.getCardDetails.value.data!.cards![index].externalId!.substring(0,4)}*****${commonController.getCardDetails.value.data!.cards![index].externalId!.substring(commonController.getCardDetails.value.data!.cards![index].externalId!.length - 4)} | EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                    Text("${commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length - 1].panFirst6}*****${commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length - 1].panLast4} | EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
                                     const SizedBox(height: 2),
-                                    Text("${commonController.getCardDetails.value.data!.cardholderDto!.firstName} ${commonController.getCardDetails.value.data!.cardholderDto!.middleName} ${commonController.getCardDetails.value.data!.cardholderDto!.lastName}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
+                                    Text("${commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length - 1].cardHolder}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
                                     const SizedBox(height: 10),
                                     Row(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text("Expiration Date: ",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
-                                        Text(commonController.getCardDetails.value.data!.cards![index].expiry!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
+                                        Text(commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length - 1].expiry!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
 
                                       ],
                                     ),
@@ -145,26 +147,54 @@ class _LoadCardScreenState extends State<LoadCardScreen> {
                                       }
                                     }),
                                     const SizedBox(height: 10),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        Utility.showLoadingDialog();
-                                        bool value = await commonController.sendOTP();
-                                        Get.back();
-                                        if(value){
-                                          Get.to(()=> const SetPinOTPScreen());
-                                        } else {Get.back();}
-                                      },
-                                      child: RichText(
-                                        text: TextSpan(
-                                          text: 'Set Pin',
-                                          style: TextStyle(
-                                              color: AppColor.hyperlinkColor,
-                                              decoration: TextDecoration.underline,
-                                              decorationStyle: TextDecorationStyle.solid,
-                                              fontWeight: FontWeight.bold
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () async {
+                                            Utility.showLoadingDialog();
+                                            bool value = await commonController.sendOTP();
+                                            Get.back();
+                                            if(value){
+                                              Get.to(()=> const SetPinOTPScreen());
+                                            } else {Get.back();}
+                                          },
+                                          child: RichText(
+                                            text: TextSpan(
+                                              text: 'Set Pin',
+                                              style: TextStyle(
+                                                  color: AppColor.hyperlinkColor,
+                                                  decoration: TextDecoration.underline,
+                                                  decorationStyle: TextDecorationStyle.solid,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                        const SizedBox(width: 10,),
+                                        GestureDetector(
+                                          onTap: ()   async {
+                                            Utility.showLoadingDialog();
+                                            bool value = await commonController.sendOTP();
+                                            Get.back();
+                                            if(value){
+                                              Get.to(()=> const ViewPinOtpMyCardScreen());
+                                            } else {Get.back();}
+                                          },
+                                          child: RichText(
+                                            text: TextSpan(
+                                              text: 'View Pin',
+                                              style: TextStyle(
+                                                  color: AppColor.hyperlinkColor,
+                                                  decoration: TextDecoration.underline,
+                                                  decorationStyle: TextDecorationStyle.solid,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     const SizedBox(height: 5),
                                     GestureDetector(

@@ -42,6 +42,9 @@ class AppImage{
       case "card1": {
         return "assets/images/card.png";
       }
+      case "euro_flag": {
+        return "assets/images/euro_flag.png";
+      }
       default : {
         return "assets/images/logo.webp";
       }

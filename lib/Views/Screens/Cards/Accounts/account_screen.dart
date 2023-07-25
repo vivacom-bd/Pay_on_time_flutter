@@ -93,9 +93,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                       children: [
                                         CircleAvatar(
                                           radius: 35,
-                                          backgroundImage: AssetImage(
-                                            CountryPickerUtils.getFlagImageAssetPath(commonController.countryFrom.value.isoCode!),
-                                            package: "country_currency_pickers",),
+                                          backgroundImage: AssetImage(AppImage.getPath("euro_flag")),
+                                          // AssetImage(
+                                          //   CountryPickerUtils.getFlagImageAssetPath(commonController.countryFrom.value.isoCode!),
+                                          //   package: "country_currency_pickers",),
                                         ),
                                         const SizedBox(height: 10),
                                         Column(

@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         } else {
                           Utility.showLoadingDialog();
-                          bool value = await commonController.getPersonalAccount(0,25,commonController.userProfile.value.id!);
+                          bool value = await commonController.getPersonalAccount(0,25,commonController.userProfile.value.id!);//commonController.userProfile.value.id!
                           Get.back();
                           if(value){
                             if(commonController.getAccountDetails.value.data!.isNotEmpty){

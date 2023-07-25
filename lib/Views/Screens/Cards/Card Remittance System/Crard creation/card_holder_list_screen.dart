@@ -89,7 +89,7 @@ class _CardHolderListScreenState extends State<CardHolderListScreen> {
                             ),
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: commonController.getCardDetails.value.data!.cards!.length,
+                              itemCount: commonController.personalAccountCard.value.data!.length,
                               itemBuilder: (context, index) {
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,18 +97,21 @@ class _CardHolderListScreenState extends State<CardHolderListScreen> {
                                     const SizedBox(width: 15),
                                     CircleAvatar(
                                       radius: 35,
-                                      backgroundImage: AssetImage(
-                                        CountryPickerUtils.getFlagImageAssetPath(commonController.countryFrom.value.isoCode!),
-                                        package: "country_currency_pickers",),
+                                      backgroundImage: AssetImage(AppImage.getPath('euro_flag')),
+                                      // AssetImage(
+                                      //   CountryPickerUtils.getFlagImageAssetPath(commonController.countryFrom.value.isoCode!),
+                                      //   package: "country_currency_pickers",),
                                     ),
                                     const SizedBox(height: 5),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        Text("${commonController.createCardHolder.value.data!.cardholderDto!.firstName!} ${commonController.createCardHolder.value.data!.cardholderDto!.lastName}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                        Text("${commonController.personalAccountCard.value.data![index].cardHolder}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
                                         const SizedBox(height: 5),
-                                        Text("${commonController.getCardDetails.value.data!.cards![index].externalId!.substring(0,6)}******",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),),
-                                        //{commonController.getCardDetails.value.data!.cards![index].externalId!.substring(commonController.getCardDetails.value.data!.cards![index].externalId!.length - 4)}
+                                        Text(
+                                          (commonController.cardStatus.value.state! == "active") ? "${commonController.personalAccountCard.value.data![index].externalId!.substring(0,4)}*****${commonController.personalAccountCard.value.data![index].externalId!.substring(commonController.personalAccountCard.value.data![index].externalId!.length - 4)}" :
+                                          "${commonController.personalAccountCard.value.data![index].externalId!.substring(0,6)}*******"
+                                          ,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),),
                                       ],
                                     ),
                                   ],

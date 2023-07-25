@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
+import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Activation/active_card.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/card_details_showing.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Crard%20creation/card_confirmation_after_active.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Crard%20creation/card_holder_list_screen.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/existing_holder_list.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
 
@@ -21,6 +19,7 @@ class CardApplicationConfirmationScreen extends StatefulWidget {
 
 class _CardApplicationConfirmationScreenState extends State<CardApplicationConfirmationScreen> {
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+  CommonController commonController = Get.find<CommonController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,8 +87,12 @@ class _CardApplicationConfirmationScreenState extends State<CardApplicationConfi
                               DefaultButton(
                                 buttonText: "View card details",
                                 onTap: () async {
-
-                                  Get.to(const CardHolderListScreen());
+                                  Utility.showLoadingDialog();
+                                  bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length - 1].id!);
+                                  Get.back();
+                                  if(value){
+                                    Get.to(const ActiveCardScreen());
+                                  }
                                 },
                               ),
                               const SizedBox(height: 20),

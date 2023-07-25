@@ -45,7 +45,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../Models/Card Remittance System/card_status.dart';
 
 class CommonController extends GetxController{
-  //int testID = 227; // 200, 223
+  int cardIndexNo = 0;
+
   Rx<Country> countryFrom = Country().obs; // CountryPickerUtils.getCountryByIsoCode("SE").obs;
   Rx<Country> countryTo = Country().obs; // CountryPickerUtils.getCountryByIsoCode("SE").obs;
   Rx<Country> shippingCountry = Country().obs;
@@ -504,7 +505,7 @@ class CommonController extends GetxController{
   }
 
   ///Pin Set
-  Future<bool> cardPinSet(int cardPk, int pin) async{
+  Future<bool> cardPinSet(int cardPk, String pin) async{
     APIResponse<PinSet> apiResponsePinSet = await CardRemittanceRepository.pinSet(cardPk, pin);
     if(apiResponsePinSet.data!=null){
       pinSet.value = apiResponsePinSet.data!;

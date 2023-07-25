@@ -107,6 +107,31 @@ class _SetPinOTPScreenMyScreenState extends State<SetPinOTPScreenMyScreen> {
 
                                     }
                                 ),
+                                const SizedBox(height: 10,),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: ()   async {
+                                        Utility.showLoadingDialog();
+                                        bool value = await commonController.sendOTP();
+                                        Get.back();
+                                        if(value){
+                                          Utility.showSnackBar("Otp send to your email again");
+                                        } else {Get.back();}
+                                      },
+                                      child: Text(
+                                        'Resend OTP',
+                                        style: TextStyle(
+                                          color: AppColor.hyperlinkColor,
+                                          fontWeight: FontWeight.w900,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),

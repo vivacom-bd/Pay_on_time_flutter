@@ -103,7 +103,7 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                               const SizedBox(width: 15),
                               Text(heading1,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 2),
-                              Text(commonController.getAccountDetails.value.data![0].givenName!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
+                              Text(commonController.userProfile.value.fullName!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 20),
                               Text(heading2,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 16,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 2),

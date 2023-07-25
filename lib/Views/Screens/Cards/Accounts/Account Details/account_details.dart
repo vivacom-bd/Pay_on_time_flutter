@@ -81,9 +81,10 @@ class _AccountDetailsState extends State<AccountDetails> {
                                         children: [
                                           CircleAvatar(
                                             radius: 35,
-                                            backgroundImage: AssetImage(
-                                              CountryPickerUtils.getFlagImageAssetPath(commonController.countryFrom.value.isoCode!),
-                                              package: "country_currency_pickers",),
+                                            backgroundImage: AssetImage(AppImage.getPath("euro_flag")),
+                                            // AssetImage(
+                                            //   CountryPickerUtils.getFlagImageAssetPath(commonController.countryFrom.value.isoCode!),
+                                            //   package: "country_currency_pickers",),
                                           ),
                                           const SizedBox(width: 15),
                                           Column(
@@ -199,7 +200,6 @@ class CardTransection extends StatelessWidget {
                   Text("sent 30 May", style: TextStyle(fontSize: 13,fontWeight: FontWeight.w500),),
                 ],
               ),
-
             ],
           ),
         ),

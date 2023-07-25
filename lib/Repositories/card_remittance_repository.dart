@@ -339,7 +339,7 @@ class CardRemittanceRepository{
   }
 
   ///PinSet
-  static Future<APIResponse<PinSet>> pinSet(int cardPk, int pin) async{
+  static Future<APIResponse<PinSet>> pinSet(int cardPk, String pin) async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<PinSet>(error: true, message: "Internet is not connected!");
     }

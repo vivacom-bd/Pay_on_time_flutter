@@ -4,9 +4,8 @@ import 'package:hidmona/Utilities/images.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Activation/active_card.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/card_details_showing.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Crard%20creation/card_holder_list_screen.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Loading/load_card_screen.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/View%20Pin/view_pin_screen.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
 
@@ -87,7 +86,7 @@ class _CardConfirmationAfterActiveScreenState extends State<CardConfirmationAfte
                                 buttonText: "View card details",
                                 onTap: () async {
 
-                                  Get.to(const ActiveCardScreen());
+                                  Get.to(const LoadCardScreen());
                                 },
                               ),
                               const SizedBox(height: 20),

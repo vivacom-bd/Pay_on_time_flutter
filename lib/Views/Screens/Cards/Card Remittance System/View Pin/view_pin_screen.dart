@@ -86,7 +86,7 @@ class _ViewPinScreenState extends State<ViewPinScreen> {
                             ),
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: commonController.getCardDetails.value.data!.cards!.length,
+                              itemCount: 1,
                               itemBuilder: (context,index) {
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,16 +94,16 @@ class _ViewPinScreenState extends State<ViewPinScreen> {
                                     const SizedBox(width: 15),
                                     Image.asset(AppImage.getPath("card1"),width: SizeConfig.screenWidth*.2, color: AppColor.defaultColorLight,),
                                     const SizedBox(height: 10,),
-                                    Text("${commonController.getCardDetails.value.data!.cards![index].externalId!.substring(0,4)}*****${commonController.getCardDetails.value.data!.cards![index].externalId!.substring(commonController.getCardDetails.value.data!.cards![index].externalId!.length - 4)}| EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                    Text("${commonController.personalAccountCard.value.data![0].panFirst6}*****${commonController.personalAccountCard.value.data![0].panLast4}| EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
                                     const SizedBox(height: 2),
-                                    Text("${commonController.getCardDetails.value.data!.cardholderDto!.firstName} ${commonController.getCardDetails.value.data!.cardholderDto!.middleName} ${commonController.getCardDetails.value.data!.cardholderDto!.lastName}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
+                                    Text("${commonController.personalAccountCard.value.data![0].cardHolder} ",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
                                     const SizedBox(height: 10),
                                     Row(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text("Expiration Date: ",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
-                                        Text(commonController.personalAccountCard.value.data![index].expiry!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
+                                        Text(commonController.personalAccountCard.value.data![0].expiry!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
 
                                       ],
                                     ),

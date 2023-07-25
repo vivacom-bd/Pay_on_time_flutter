@@ -36,9 +36,9 @@ class _LoadCardFormState extends State<LoadCardForm> {
   @override
   void initState() {
     setState(() {
-      accountHolderController.text = commonController.personalAccountCard.value.data![0].cardHolder!;
-      currentBalanceController.text = commonController.getAccountDetails.value.data![0].bankAccountDetails!.balance!;
-      destinationBalanceController.text = (commonController.personalAccountCard.value.data![0].balance!.toString());
+      accountHolderController.text = (commonController.personalAccountCard.value.data![0].cardHolder != null) ? commonController.personalAccountCard.value.data![0].cardHolder! : "";
+      currentBalanceController.text = (commonController.getAccountDetails.value.data![0].bankAccountDetails!.balance != null) ? commonController.getAccountDetails.value.data![0].bankAccountDetails!.balance! : "0.0";
+      destinationBalanceController.text = (commonController.personalAccountCard.value.data![commonController.cardIndexNo].balance != null) ? (commonController.personalAccountCard.value.data![commonController.cardIndexNo].balance!.toString()) : "0";
       currencyController.text = "EUR";
     });
     // TODO: implement initState
@@ -282,6 +282,7 @@ class _LoadCardFormState extends State<LoadCardForm> {
                 DefaultButton(
                   buttonText: "Submit",
                   onTap: () async {
+                    print("${destinationCardId} ${commonController.getAccountDetails.value.data![0].id!}");
                     Utility.showLoadingDialog();
                     bool value = await commonController.loadingCard(destinationCardId!,commonController.getAccountDetails.value.data![0].id!,int.parse(topUpAmountController.text));
                     Get.back();
