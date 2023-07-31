@@ -8,6 +8,7 @@ import 'package:hidmona/Models/Card%20Remittance%20System/create_card_holder.dar
 import 'package:hidmona/Models/Card%20Remittance%20System/create_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_title.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/kyc_data_retrieve.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/load_card.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/otp.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/otp_verify.dart';
@@ -22,7 +23,7 @@ import 'package:http/http.dart' as http;
 class CardRemittanceRepository{
 
   ///CreatePersonalAccount
-  static Future<APIResponse<PersonalAccount>> createPersonalAccount(int userId, String familyName, String givenName, String countryCode, String dob, String phoneNumber, String email) async{
+  static Future<APIResponse<PersonalAccount>> createPersonalAccount() async{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
@@ -33,16 +34,7 @@ class CardRemittanceRepository{
     return http.post(
         url,
         headers: headersWithAuth,
-        body: json.encode({
-          "user_id" : userId,
-          "family_name": familyName,
-          "given_name": givenName,
-          "country_code_alpha3": countryCode,
-          "DOB": dob,
-          "mobile_phone": phoneNumber,
-          "email": email,
-
-        })
+        body: json.encode({})
     ).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
@@ -442,6 +434,28 @@ class CardRemittanceRepository{
     });
   }
 
+
+  ///KYC User Data
+  static Future<APIResponse<KYCDataRetrieve>> kycDataRetrieve() async{
+    ///internet check
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<KYCDataRetrieve>(error: true, message: "Internet is not connected!");
+    }
+    print(headersWithAuth);
+    Uri url = Uri.parse(baseAPIUrl()+'kyc_user_data');
+    return http.get(url,headers: headersWithAuth).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        return APIResponse<KYCDataRetrieve>(data: KYCDataRetrieve.fromJson(jsonData));
+      }
+      return APIResponse<KYCDataRetrieve>(error: true, message: jsonData["detail"]??"An error occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<KYCDataRetrieve>(error: true, message: "An Error Occurred!");
+    });
+  }
 
 
 }

@@ -6,6 +6,7 @@ import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Cards/Accounts/New%20Design%20for%20accont%20creat/confirmation_screen.dart';
 import 'package:hidmona/Views/Screens/Cards/Accounts/account_holder_info_Screen.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Crard%20creation/card_holder_info_screen.dart';
 import 'package:hidmona/Views/Widgets/custom_dialogbox.dart';
@@ -74,7 +75,7 @@ class _CreateAccountOptionScreenState extends State<CreateAccountOptionScreen> {
                           if(commonController.euroCountry[i] == commonController.countryFrom.value.isoCode!){
                             print(commonController.countryFrom.value.isoCode!);
                             country = commonController.euroCountry[i];
-                            Get.to(const AccountHolderScreen());
+                            Get.to(const ConfirmationScreen());
                             break;
                           }else {
                             print(commonController.countryFrom.value.isoCode!);

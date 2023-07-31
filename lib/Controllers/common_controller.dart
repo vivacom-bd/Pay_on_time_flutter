@@ -12,6 +12,7 @@ import 'package:hidmona/Models/Card%20Remittance%20System/create_card_holder.dar
 import 'package:hidmona/Models/Card%20Remittance%20System/create_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_personal_account.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/get_title.dart';
+import 'package:hidmona/Models/Card%20Remittance%20System/kyc_data_retrieve.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/load_card.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/otp.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/otp_verify.dart';
@@ -93,6 +94,7 @@ class CommonController extends GetxController{
   Rx<LoadCard> cardLoading= LoadCard().obs;
   Rx<OTP> otp= OTP().obs;
   Rx<OTPVerification> otpVerify= OTPVerification().obs;
+  Rx<KYCDataRetrieve> kycDataRetrieve= KYCDataRetrieve().obs;
 
 
 
@@ -388,9 +390,8 @@ class CommonController extends GetxController{
 
 
   ///PersonalAccountCreate
-  Future<bool> createAccount(int userId, String familyName, String givenName, String countryCode, String dob, String phoneNumber, String email) async{
-    APIResponse<PersonalAccount> apiResponseFromAcc = await CardRemittanceRepository.createPersonalAccount(
-      userId, familyName,givenName,countryCode,dob,phoneNumber,email);
+  Future<bool> createAccount() async{
+    APIResponse<PersonalAccount> apiResponseFromAcc = await CardRemittanceRepository.createPersonalAccount();
     if(apiResponseFromAcc.data!=null){
       currentPersonalAccount.value = apiResponseFromAcc.data!;
     }else{
@@ -547,6 +548,18 @@ class CommonController extends GetxController{
       otpVerify.value = apiResponseOtpVerify.data!;
     }else{
       Utility.showSnackBar(apiResponseOtpVerify.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///Kyc User Data
+  Future<bool> kycUserData() async{
+    APIResponse<KYCDataRetrieve> apiResponseKycData = await CardRemittanceRepository.kycDataRetrieve();
+    if(apiResponseKycData.data!=null){
+      kycDataRetrieve.value = apiResponseKycData.data!;
+    }else{
+      Utility.showSnackBar(apiResponseKycData.message??"No data Found");
       return false;
     }
     return true;

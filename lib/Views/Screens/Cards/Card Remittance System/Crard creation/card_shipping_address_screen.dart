@@ -202,9 +202,7 @@ class _CardShippingAddressState extends State<CardShippingAddress> {
                                       labelText: "Address Line 2",
                                       hindText: "Enter Address Line 2",
                                       keyboardType: TextInputType.text,
-                                      onChanged: (value) {
-
-                                      }
+                                      onChanged: (value) {}
                                   ),
                                 ],
                               ),
@@ -257,18 +255,10 @@ class _CardShippingAddressState extends State<CardShippingAddress> {
                     if(value){
                         Utility.showLoadingDialog();
                         bool value = await commonController.cardOrder(commonController.userProfile.value.id!, commonController.createCardHolder.value.data!.id!);
+                        Get.back();
                         if(value){
-                          bool value = await commonController.getPersonalAccountCard(0,25,commonController.userProfile.value.id!);
-                          if(value){
-                            bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![0].id!);
-                            Get.back();
-                            if(value){
-                              print("Success");
-                            }
-                          }
+                          Get.to(const CardApplicationConfirmationScreen());
                         }
-                      //print(commonController.currentPersonalAccount.value.success);
-                      Get.to(const CardApplicationConfirmationScreen());
                     }
                   },
                 ),

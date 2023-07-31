@@ -12,6 +12,7 @@ import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Home/home_screen.dart';
+import 'package:hidmona/Views/Screens/Login/OTP%20Screen/login_otp_screen.dart';
 import 'package:hidmona/Views/Screens/Login/forget_password_screen.dart';
 import 'package:hidmona/Views/Screens/Login/signup_screen.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
@@ -177,9 +178,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                               }
                                             }
                                           }
-
+                                          bool value = await commonController.sendOTP();
                                           Get.back();
-                                          Get.offAll(()=> const HomeScreen());
+                                          if(value){
+                                            Get.offAll(()=> const LoginOtpScreen());
+                                          }
 
                                         }else{
                                           Get.back();

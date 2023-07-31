@@ -280,7 +280,6 @@ class _AccountHolderScreenState extends State<AccountHolderScreen> {
                                   }
                               ),
                               const SizedBox(height: 10,),
-
                             ],
                           ),
                         ),
@@ -292,27 +291,27 @@ class _AccountHolderScreenState extends State<AccountHolderScreen> {
                   buttonText: "Confirm",
                   onTap: () async {
                     //Get.to(const AccountScreen());
-                    if(_formKey.currentState!.validate()){
-                      print("${familyNameController.text},\n${givenNameController.text},\n${nationalityController.text},\n${dobController.text},\n${phoneNumberController.text},\n${emailController.text},");
-                      Utility.showLoadingDialog();
-                      bool value = await commonController.createAccount(
-                        commonController.userProfile.value.id!,
-                        familyNameController.text,
-                        givenNameController.text,
-                        nationalityController.text,
-                        dobController.text,
-                        phoneNumberController.text,
-                        emailController.text,
-                      );
-                      if(value){
-                        bool value = await commonController.getPersonalAccount(0,25,commonController.userProfile.value.id!);
-                        Get.back();
-                        if(value){
-                          //print(commonController.currentPersonalAccount.value.success);
-                          Get.to(()=> const AccountScreen());
-                        }
-                      }else{Get.back();}
-                    }
+                    // if(_formKey.currentState!.validate()){
+                    //   print("${familyNameController.text},\n${givenNameController.text},\n${nationalityController.text},\n${dobController.text},\n${phoneNumberController.text},\n${emailController.text},");
+                    //   Utility.showLoadingDialog();
+                    //   bool value = await commonController.createAccount(
+                    //     commonController.userProfile.value.id!,
+                    //     familyNameController.text,
+                    //     givenNameController.text,
+                    //     nationalityController.text,
+                    //     dobController.text,
+                    //     phoneNumberController.text,
+                    //     emailController.text,
+                    //   );
+                    //   if(value){
+                    //     bool value = await commonController.getPersonalAccount(0,25,commonController.userProfile.value.id!);
+                    //     Get.back();
+                    //     if(value){
+                    //       //print(commonController.currentPersonalAccount.value.success);
+                    //       Get.to(()=> const AccountScreen());
+                    //     }
+                    //   }else{Get.back();}
+                    // }
                   },
                 ),
                 const SizedBox(height: 15,),

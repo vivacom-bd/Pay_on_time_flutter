@@ -43,17 +43,24 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-      //String phoneNumber = commonController.userProfile.value.phone!.substring(3);
       selectCardHolder.text = "1";
-      commonController.dobController.text = "";
       fullName = commonController.userProfile.value.fullName!;
       nameParts = fullName!.split(" ");
-      commonController.firstNameController.text = nameParts.first;
-      commonController.lastNameController.text = nameParts.last;
-      commonController.emailController.text = commonController.userProfile.value.email!;
+      commonController.firstNameController.text = commonController.kycDataRetrieve.value.firstName!;
+      commonController.middleNameController.text = commonController.kycDataRetrieve.value.middleName!;
+      commonController.lastNameController.text = commonController.kycDataRetrieve.value.lastName!;
+      commonController.dobController.text = commonController.kycDataRetrieve.value.dateOfBirth!;
+      commonController.emailController.text = commonController.kycDataRetrieve.value.email!;
       commonController.phoneNumberController.text = (commonController.userProfile.value.phone!.substring(3)).substring(0,10);
       commonController.addressController.text = commonController.userProfile.value.country!.name!;
-      (commonController.userProfile.value.city != null) ? commonController.cityController.text = commonController.userProfile.value.city!.name! : commonController.cityController.text ="";
+      commonController.cityController.text = commonController.kycDataRetrieve.value.physicalAddress!.city!;
+      commonController.stateController.text = commonController.kycDataRetrieve.value.physicalAddress!.province!;
+      commonController.postalCodeController.text = commonController.kycDataRetrieve.value.physicalAddress!.postalcode!;
+      commonController.addressLine1Controller.text = commonController.kycDataRetrieve.value.physicalAddress!.addressLine1!;
+      commonController.addressLine2Controller.text = commonController.kycDataRetrieve.value.physicalAddress!.addressLine2!;
+
+      //(commonController.userProfile.value.city != null) ? commonController.cityController.text = commonController.userProfile.value.city!.name! : commonController.cityController.text ="";
+
     }));
   }
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
@@ -213,7 +220,7 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                         }
                                         return null;
                                       },
-                                      //enabled: (selectCardHolder.text=="1") ? false : true,
+                                      enabled: (selectCardHolder.text=="1") ? false : true,
                                       labelText: "Middle Name",
                                       hindText: "Enter your Middle name",
                                       keyboardType: TextInputType.text,
@@ -239,6 +246,22 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                       }
                                   ),
                                   const SizedBox(height: 10,),
+                                  (selectCardHolder.text=="1") ? CustomTextFormField(
+                                      controller: commonController.dobController,
+                                      validator: (value) {
+                                        if(value!.isEmpty){
+                                          return "Name can't be empty";
+                                        }
+                                        return null;
+                                      },
+                                      enabled: (selectCardHolder.text=="1") ? false : true,
+                                      labelText: "Date of Birth",
+                                      hindText: "Date of Birth",
+                                      keyboardType: TextInputType.text,
+                                      onChanged: (value) {
+
+                                      }
+                                  ) :
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -297,10 +320,10 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                               DateFormat('dd/MM/yyyy').format(pickedDate);
                                               print(
                                                   formattedDate); //formatted date output using intl package =>  2021-03-16
-                                              setState(() {
-                                                commonController.dobController.text =
-                                                    formattedDate; //set output date to TextField value.
-                                              });
+                                              // setState(() {
+                                              //   commonController.dobController.text =
+                                              //       formattedDate; //set output date to TextField value.
+                                              // });
                                             } else {}
 
                                             //when click we have to show the datepicker
@@ -413,7 +436,7 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
                                       controller: commonController.cityController,
-                                      enabled: true,
+                                      enabled: (selectCardHolder.text=="1") ? false : true,
                                       validator: (value) {
                                         if(value!.isEmpty){
                                           return "City can't be empty";
@@ -430,7 +453,7 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
                                       controller: commonController.stateController,
-                                      enabled: true,
+                                      enabled: (selectCardHolder.text=="1") ? false : true,
                                       validator: (value) {
                                         if(value!.isEmpty){
                                           return "State can't be empty";
@@ -447,7 +470,7 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
                                       controller:  commonController.postalCodeController,
-                                      enabled: true,
+                                      enabled: (selectCardHolder.text=="1") ? false : true,
                                       validator: (value) {
                                         if(value!.isEmpty){
                                           return "State can't be empty";
@@ -462,10 +485,9 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                       }
                                   ),
                                   const SizedBox(height: 10,),
-
                                   CustomTextFormField(
                                       controller:  commonController.addressLine1Controller,
-                                      enabled: true,
+                                      enabled: (selectCardHolder.text=="1") ? false : true,
                                       validator: (value) {
                                         if(value!.isEmpty){
                                           return "Address Line 1 can't be empty";
@@ -482,7 +504,7 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
                                       controller: commonController.addressLine2Controller,
-                                      enabled: true,
+                                      enabled: (selectCardHolder.text=="1") ? false : true,
                                       validator: (value) {
                                         if(value!.isEmpty){
                                           return null;

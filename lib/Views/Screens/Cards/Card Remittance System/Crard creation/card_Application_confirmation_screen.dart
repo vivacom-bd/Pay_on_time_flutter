@@ -88,10 +88,13 @@ class _CardApplicationConfirmationScreenState extends State<CardApplicationConfi
                                 buttonText: "View card details",
                                 onTap: () async {
                                   Utility.showLoadingDialog();
-                                  bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length - 1].id!);
-                                  Get.back();
+                                  bool value = await commonController.getPersonalAccountCard(0,25,commonController.userProfile.value.id!);
                                   if(value){
-                                    Get.to(const ActiveCardScreen());
+                                    bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![0].id!);
+                                    if(value){
+                                      Get.to(const ActiveCardScreen());
+                                      print("Success");
+                                    }
                                   }
                                 },
                               ),
