@@ -108,7 +108,7 @@ class CardRemittanceRepository{
     });
   }
 
-  ///getTitle
+  ///getCardHolder
   static Future<APIResponse<CreateCardHolder>> createCardHolder(
       int userId,
       int accountPK,

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Loading/New%20Card%20Details/card_details%20showing.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Crard%20creation/card_Application_confirmation_screen.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/my_card_screen.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
@@ -94,7 +95,7 @@ class _LoadCardSuccessfulState extends State<LoadCardSuccessful> {
                                     bool value = await commonController.getPersonalAccountCard(0, 23, commonController.userProfile.value.id!);
                                     Get.back();
                                     if(value){
-                                      Get.to(()=> const MyCardScreen());
+                                      Get.to(()=> const CardDetailsScreen());
                                       //Get.to(()=> const CardConfirmationScreen());
                                     }
                                   }

@@ -9,6 +9,7 @@ import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Cards/Accounts/Account%20Details/account_details.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Activation/active_card.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/Active%20Old%20Card/active_card_from_existing_holder.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Crard%20creation/card_holder_info_screen.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/my_card_screen.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
@@ -89,7 +90,10 @@ class _ExistingCardHolderListState extends State<ExistingCardHolderList> {
                                         bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![index].id!);
                                         Get.back();
                                         if(value){
-                                          Get.to(()=> (commonController.personalAccountCard.value.data![index].active == "Yes") ?  const MyCardScreen() : const ActiveCardScreen());
+                                          setState(() {
+                                            commonController.cardIndexNo = index;
+                                          });
+                                          Get.to(()=> (commonController.personalAccountCard.value.data![index].active == "Yes") ?  const MyCardScreen() : const ActiveCardFromExistingHolderScreen());
                                         }
                                       }
                                     } else {
@@ -124,7 +128,7 @@ class _ExistingCardHolderListState extends State<ExistingCardHolderList> {
                                                 const SizedBox(height: 5),
                                                 Text(
                                                   (commonController.personalAccountCard.value.data![index].active == "Yes") ? "${commonController.personalAccountCard.value.data![index].panFirst6}*****${commonController.personalAccountCard.value.data![index].panLast4}" :
-                                                  "${commonController.personalAccountCard.value.data![index].externalId!.substring(0,6)}*******"
+                                                  "${commonController.personalAccountCard.value.data![index].panFirst6 !.substring(0,6)}*******"
                                                   ,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.w600),),
                                               ],
                                             ),

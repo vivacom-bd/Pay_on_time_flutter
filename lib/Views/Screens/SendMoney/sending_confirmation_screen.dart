@@ -63,6 +63,8 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                           Divider(color: AppColor.defaultColor,thickness: .5,),
                           SendDetailsItem(title: "Amount to receive",value: "${commonController.currencyConversionDetails.value.amountToReceive!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
+                          SendDetailsItem(title: "Amount to receive in USD",value: "${commonController.currencyConversionDetails.value.receivingAmountInUsd!.toStringAsFixed(2)} USD",),
+                          Divider(color: AppColor.defaultColor,thickness: .5,),
                           SendDetailsItem(title: "Fees",value: "${commonController.currencyConversionDetails.value.fees!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
                           SendDetailsItem(title: "Total to pay",value: "${commonController.currencyConversionDetails.value.amountToPay!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),

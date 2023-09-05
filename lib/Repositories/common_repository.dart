@@ -106,7 +106,7 @@ class CommonRepository{
 
 
   /// getCurrencyConversion
-  static Future<APIResponse<CurrencyConversionDetails>> getConversionDetails(double amount, int fromCurrencyId, int toCurrencyId, int fromCountryId, int toCountryId) async{
+  static Future<APIResponse<CurrencyConversionDetails>> getConversionDetails(String currencySource ,double amount, int fromCurrencyId, int toCurrencyId, int fromCountryId, int toCountryId) async{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
@@ -117,7 +117,7 @@ class CommonRepository{
     return http.post(
         url,
         headers: headers,
-        body: json.encode({"amount" : amount})
+        body: json.encode({"amount" : amount, "currency_source" : currencySource})
     ).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);

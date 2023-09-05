@@ -116,6 +116,8 @@ class CommonController extends GetxController{
   TextEditingController othersEmailController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController othersPhoneNumberController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
+  TextEditingController othersCountryController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController othersCityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
@@ -126,6 +128,7 @@ class CommonController extends GetxController{
   TextEditingController othersAddressLine1Controller = TextEditingController();
   TextEditingController addressLine2Controller = TextEditingController();
   TextEditingController othersAddressLine2Controller = TextEditingController();
+  bool checkForMeButton = true;
 
 
   final getStorage = GetStorage();
@@ -334,8 +337,8 @@ class CommonController extends GetxController{
 
 
   /// getConversionDetails
-  Future<APIResponse<CurrencyConversionDetails>> getConversionDetails(double amount, ServerCurrency serverCurrencyFrom, ServerCurrency serverCurrencyTo) async{
-    APIResponse<CurrencyConversionDetails> apiResponse = await CommonRepository.getConversionDetails(amount, serverCurrencyFrom.id!, serverCurrencyTo.id!, serverCountryFrom.value.id!, serverCountryTo.value.id!);
+  Future<APIResponse<CurrencyConversionDetails>> getConversionDetails(String currencySource,double amount, ServerCurrency serverCurrencyFrom, ServerCurrency serverCurrencyTo) async{
+    APIResponse<CurrencyConversionDetails> apiResponse = await CommonRepository.getConversionDetails(currencySource,amount, serverCurrencyFrom.id!, serverCurrencyTo.id!, serverCountryFrom.value.id!, serverCountryTo.value.id!);
 
     return apiResponse;
   }

@@ -190,21 +190,21 @@ class CardTransection extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 7,),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text("#11222", style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
                   Text("12/12/12", style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
                 ],
               ),
               const SizedBox(height: 5,),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text("Send To", style: TextStyle(fontSize: 13,fontWeight: FontWeight.w300),),
                         SizedBox(height: 3,),
                         Text("111231133", style: TextStyle(fontSize: 17,fontWeight: FontWeight.w600),),
@@ -214,7 +214,7 @@ class CardTransection extends StatelessWidget {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: const [
+                      children: [
                         Text("Amount", style: TextStyle(fontSize: 13,fontWeight: FontWeight.w300),),
                         SizedBox(height: 3,),
                         Text("3343", style: TextStyle(fontSize: 17,fontWeight: FontWeight.w600),),
@@ -224,7 +224,6 @@ class CardTransection extends StatelessWidget {
                   )
                 ],
               ),
-
             ],
           ),
         ),

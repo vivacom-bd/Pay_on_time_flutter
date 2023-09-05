@@ -7,7 +7,7 @@ class KYCDataRetrieve {
   String? middleName;
   String? lastName;
   String? dateOfBirth;
-  String? nationality;
+  Nationality? nationality;
   PhysicalAddress? physicalAddress;
 
   KYCDataRetrieve(
@@ -31,7 +31,9 @@ class KYCDataRetrieve {
     middleName = json['middle_name'];
     lastName = json['last_name'];
     dateOfBirth = json['date_of_birth'];
-    nationality = json['nationality'];
+    nationality = json['nationality'] != null
+        ? new Nationality.fromJson(json['nationality'])
+        : null;
     physicalAddress = json['physical_address'] != null
         ? new PhysicalAddress.fromJson(json['physical_address'])
         : null;
@@ -47,10 +49,49 @@ class KYCDataRetrieve {
     data['middle_name'] = this.middleName;
     data['last_name'] = this.lastName;
     data['date_of_birth'] = this.dateOfBirth;
-    data['nationality'] = this.nationality;
+    if (this.nationality != null) {
+      data['nationality'] = this.nationality!.toJson();
+    }
     if (this.physicalAddress != null) {
       data['physical_address'] = this.physicalAddress!.toJson();
     }
+    return data;
+  }
+}
+
+class Nationality {
+  String? name;
+  int? id;
+  String? code;
+  String? countryCodeAlpha2;
+  String? countryCodeAlpha3;
+  Null? logo;
+
+  Nationality(
+      {this.name,
+        this.id,
+        this.code,
+        this.countryCodeAlpha2,
+        this.countryCodeAlpha3,
+        this.logo});
+
+  Nationality.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    id = json['id'];
+    code = json['code'];
+    countryCodeAlpha2 = json['country_code_alpha2'];
+    countryCodeAlpha3 = json['country_code_alpha3'];
+    logo = json['logo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['id'] = this.id;
+    data['code'] = this.code;
+    data['country_code_alpha2'] = this.countryCodeAlpha2;
+    data['country_code_alpha3'] = this.countryCodeAlpha3;
+    data['logo'] = this.logo;
     return data;
   }
 }

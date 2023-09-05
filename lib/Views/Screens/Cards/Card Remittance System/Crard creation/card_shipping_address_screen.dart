@@ -214,7 +214,7 @@ class _CardShippingAddressState extends State<CardShippingAddress> {
                     ),
                   ),
                 ),
-                DefaultButton(
+                (commonController.checkForMeButton == true) ? DefaultButton(
                   buttonText: "Submit",
                   onTap: () async {
                     print(
@@ -258,7 +258,57 @@ class _CardShippingAddressState extends State<CardShippingAddress> {
                         Get.back();
                         if(value){
                           Get.to(const CardApplicationConfirmationScreen());
+                          print("For me");
                         }
+                    }
+                  },
+                ) :
+                DefaultButton(
+                  buttonText: "Submit for others",
+                  onTap: () async {
+                    print(
+                      "${commonController.countryFrom.value.iso3Code!},${commonController.phoneNumberController.text},${commonController.selectedTitleId},${commonController.firstNameController.text},${commonController.middleNameController.text},${commonController.lastNameController.text},${commonController.dobController.text},${commonController.emailController.text},${commonController.cityController.text},${commonController.stateController.text},${commonController.addressLine1Controller.text},${commonController.addressLine2Controller.text},",
+                    );
+                    print("${commonController.shippingCountry.value.iso3Code}.${cityController.text},${cityController.text},${stateController.text},${addressLine1Controller.text},${addressLine2Controller.text} ${commonController.othersDobController}");
+                    Utility.showLoadingDialog();
+                    bool value = await commonController.cardHolder(
+                        commonController.userProfile.value.id!,
+                        commonController.getAccountDetails.value.data![0].id!,
+                        commonController.selectedTitleId!,
+                        "SuffixName",
+                        commonController.othersFirstNameController.text,
+                        commonController.othersMiddleNameController.text,
+                        commonController.othersLastNameController.text,
+                        "embossedNmmm",
+                        commonController.othersDobController.text,
+                        commonController.othersEmailController.text,
+                        "username",
+                        "clientRef",
+                        commonController.countryFrom.value.iso3Code!,
+                        commonController.othersPhoneNumberController.text,
+                        commonController.countryFrom.value.iso3Code!,
+                        commonController.othersCityController.text,
+                        commonController.othersStateController.text,
+                        commonController.othersPostalCodeController.text,
+                        commonController.othersAddressLine1Controller.text,
+                        commonController.othersAddressLine2Controller.text,
+                        commonController.shippingCountry.value.iso3Code!,
+                        cityController.text,
+                        stateController.text,
+                        postalCodeController.text,
+                        addressLine1Controller.text,
+                        addressLine2Controller.text,
+                        false
+                    );
+                    Get.back();
+                    if(value){
+                      Utility.showLoadingDialog();
+                      bool value = await commonController.cardOrder(commonController.userProfile.value.id!, commonController.createCardHolder.value.data!.id!);
+                      Get.back();
+                      if(value){
+                        Get.to(const CardApplicationConfirmationScreen());
+                        print("For others");
+                      }
                     }
                   },
                 ),

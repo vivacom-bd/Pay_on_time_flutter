@@ -34,9 +34,6 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
   String ? fullName;
   List<String> nameParts = [];
   Data ?_selectedTitle;
-  //int ? _selectedTitleId;
-
-
 
   CardGroup _value = CardGroup.forMe;
   @override
@@ -51,16 +48,24 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
       commonController.lastNameController.text = commonController.kycDataRetrieve.value.lastName!;
       commonController.dobController.text = commonController.kycDataRetrieve.value.dateOfBirth!;
       commonController.emailController.text = commonController.kycDataRetrieve.value.email!;
-      commonController.phoneNumberController.text = (commonController.userProfile.value.phone!.substring(3)).substring(0,10);
-      commonController.addressController.text = commonController.userProfile.value.country!.name!;
+      commonController.phoneNumberController.text = (commonController.userProfile.value.phone!.substring(3)).substring(0,(commonController.userProfile.value.phone!.length-3));
+      commonController.countryController.text = commonController.kycDataRetrieve.value.nationality!.name!;
       commonController.cityController.text = commonController.kycDataRetrieve.value.physicalAddress!.city!;
       commonController.stateController.text = commonController.kycDataRetrieve.value.physicalAddress!.province!;
       commonController.postalCodeController.text = commonController.kycDataRetrieve.value.physicalAddress!.postalcode!;
       commonController.addressLine1Controller.text = commonController.kycDataRetrieve.value.physicalAddress!.addressLine1!;
       commonController.addressLine2Controller.text = commonController.kycDataRetrieve.value.physicalAddress!.addressLine2!;
-
-      //(commonController.userProfile.value.city != null) ? commonController.cityController.text = commonController.userProfile.value.city!.name! : commonController.cityController.text ="";
-
+      commonController.othersFirstNameController.text = "";
+      commonController.othersMiddleNameController.text = "";
+      commonController.othersLastNameController.text = "";
+      commonController.othersDobController.text = "";
+      commonController.othersEmailController.text = "";
+      commonController.othersPhoneNumberController.text = "";
+      commonController.othersCityController.text = "";
+      commonController.othersStateController.text = "";
+      commonController.othersPostalCodeController.text = "";
+      commonController.othersAddressLine1Controller.text = "";
+      commonController.othersAddressLine2Controller.text = "";
     }));
   }
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
@@ -196,13 +201,8 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   ),
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
-                                      controller: commonController.firstNameController,
-                                      validator: (value) {
-                                        if(value!.isEmpty){
-                                          return "Name can't be empty";
-                                        }
-                                        return null;
-                                      },
+                                      controller: (selectCardHolder.text=="1") ? commonController.firstNameController : commonController.othersFirstNameController,
+                                      validator: (value) {},
                                       labelText: "First Name",
                                       enabled: (selectCardHolder.text=="1") ? false : true,
                                       hindText: "Enter your First name",
@@ -213,13 +213,8 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   ),
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
-                                      controller: commonController.middleNameController,
-                                      validator: (value) {
-                                        if(value!.isEmpty){
-                                          return "Name can't be empty";
-                                        }
-                                        return null;
-                                      },
+                                      controller: (selectCardHolder.text=="1") ? commonController.middleNameController : commonController.othersMiddleNameController,
+                                      validator: (value) {},
                                       enabled: (selectCardHolder.text=="1") ? false : true,
                                       labelText: "Middle Name",
                                       hindText: "Enter your Middle name",
@@ -230,13 +225,8 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   ),
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
-                                      controller: commonController.lastNameController,
-                                      validator: (value) {
-                                        if(value!.isEmpty){
-                                          return "Name can't be empty";
-                                        }
-                                        return null;
-                                      },
+                                      controller: (selectCardHolder.text=="1") ? commonController.lastNameController : commonController.othersLastNameController,
+                                      validator: (value) {},
                                       enabled: (selectCardHolder.text=="1") ? false : true,
                                       labelText: "Last Name",
                                       hindText: "Enter your Last name",
@@ -268,7 +258,7 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                       Text("Date of Birth",style: TextStyle(fontWeight: FontWeight.w600,color: AppColor.textColor),),
                                       const SizedBox(height: 5,),
                                       TextFormField(
-                                          controller: commonController.dobController,
+                                          controller: commonController.othersDobController,
                                           validator: (value) {
                                             if (value != null && !_isDateFormatValid(value)) {
                                               return 'Invalid date format, try dd/MM/yyyy';
@@ -320,10 +310,10 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                               DateFormat('dd/MM/yyyy').format(pickedDate);
                                               print(
                                                   formattedDate); //formatted date output using intl package =>  2021-03-16
-                                              // setState(() {
-                                              //   commonController.dobController.text =
-                                              //       formattedDate; //set output date to TextField value.
-                                              // });
+                                              setState(() {
+                                                commonController.othersDobController.text =
+                                                    formattedDate; //set output date to TextField value.
+                                              });
                                             } else {}
 
                                             //when click we have to show the datepicker
@@ -333,12 +323,8 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   ),
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
-                                      controller: commonController.emailController ,
+                                      controller: (selectCardHolder.text=="1") ? commonController.emailController : commonController.othersEmailController,
                                       validator: (value) {
-                                        if(value!.isEmpty){
-                                          return "Email can't be empty";
-                                        }
-                                        return null;
                                       },
                                       enabled: (selectCardHolder.text=="1") ? false : true,
                                       labelText: "Email",
@@ -350,12 +336,8 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   ),
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
-                                      controller: commonController.phoneNumberController ,
+                                      controller: (selectCardHolder.text=="1") ? commonController.phoneNumberController : commonController.othersPhoneNumberController,
                                       validator: (value) {
-                                        if(value!.isEmpty){
-                                          return "Phone number can't be empty";
-                                        }
-                                        return null;
                                       },
                                       enabled: (selectCardHolder.text=="1") ? false : true,
                                       labelText: "Phone Number",
@@ -375,34 +357,17 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 10,),
-                                  (selectCardHolder.text=="1") ? InkWell(
-                                    onTap: (){
-                                      //_openFromCountryPickerDialog();
-                                    },
-                                    child: Container(
-                                      height: 45,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(.2),
-                                        borderRadius  : BorderRadius.circular(10),
-                                      ),
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          Expanded(
-                                            child: Container(padding: const EdgeInsets.only(left: 10),child: CountryItem(country: commonController.countryFrom.value)),
-                                          ),
-                                          Container(
-                                              padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 20) ,
-                                              decoration: BoxDecoration(
-                                                //color: AppColor.defaultColorLight,
-                                                  gradient: AppGradient.getColorGradient('grey')
-                                              ),
-                                              child: const Icon(Icons.keyboard_arrow_down_rounded,color: Colors.white,size: 30,)
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                  (selectCardHolder.text=="1") ? CustomTextFormField(
+                                      controller: commonController.countryController,
+                                      validator: (value) {
+                                      },
+                                      enabled: (selectCardHolder.text=="1") ? false : true,
+                                      labelText: "Country",
+                                      hindText: "Enter your Country",
+                                      keyboardType: TextInputType.text,
+                                      onChanged: (value) {
+
+                                      }
                                   ) :
                                   InkWell(
                                     onTap: (){
@@ -435,13 +400,10 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   ),
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
-                                      controller: commonController.cityController,
+                                      controller: (selectCardHolder.text=="1") ? commonController.cityController : commonController.othersCityController,
                                       enabled: (selectCardHolder.text=="1") ? false : true,
                                       validator: (value) {
-                                        if(value!.isEmpty){
-                                          return "City can't be empty";
-                                        }
-                                        return null;
+
                                       },
                                       labelText: "City",
                                       hindText: "Enter your City",
@@ -452,13 +414,10 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   ),
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
-                                      controller: commonController.stateController,
+                                      controller: (selectCardHolder.text=="1") ? commonController.stateController : commonController.othersStateController,
                                       enabled: (selectCardHolder.text=="1") ? false : true,
                                       validator: (value) {
-                                        if(value!.isEmpty){
-                                          return "State can't be empty";
-                                        }
-                                        return null;
+
                                       },
                                       labelText: "State",
                                       hindText: "Enter your State",
@@ -469,13 +428,10 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   ),
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
-                                      controller:  commonController.postalCodeController,
+                                      controller:  (selectCardHolder.text=="1") ? commonController.postalCodeController : commonController.othersPostalCodeController,
                                       enabled: (selectCardHolder.text=="1") ? false : true,
                                       validator: (value) {
-                                        if(value!.isEmpty){
-                                          return "State can't be empty";
-                                        }
-                                        return null;
+
                                       },
                                       labelText: "Postal Code",
                                       hindText: "Enter your postal code",
@@ -486,13 +442,10 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   ),
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
-                                      controller:  commonController.addressLine1Controller,
+                                      controller:  (selectCardHolder.text=="1") ? commonController.addressLine1Controller : commonController.othersAddressLine1Controller,
                                       enabled: (selectCardHolder.text=="1") ? false : true,
                                       validator: (value) {
-                                        if(value!.isEmpty){
-                                          return "Address Line 1 can't be empty";
-                                        }
-                                        return null;
+
                                       },
                                       labelText: "Address Line 1",
                                       hindText: "Enter Address Line 1",
@@ -503,13 +456,10 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                                   ),
                                   const SizedBox(height: 10,),
                                   CustomTextFormField(
-                                      controller: commonController.addressLine2Controller,
+                                      controller: (selectCardHolder.text=="1") ? commonController.addressLine2Controller : commonController.othersAddressLine2Controller,
                                       enabled: (selectCardHolder.text=="1") ? false : true,
                                       validator: (value) {
-                                        if(value!.isEmpty){
-                                          return null;
-                                        }
-                                        return null;
+
                                       },
                                       labelText: "Address Line 2",
                                       hindText: "Enter Address Line 2",
@@ -530,6 +480,9 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
                 DefaultButton(
                   buttonText: "Next",
                   onTap: (){
+                    setState(() {
+                      commonController.checkForMeButton = (selectCardHolder.text=="1") ? true : false;
+                    });
                     Get.to(const CardShippingAddress());
                   },
                 ),

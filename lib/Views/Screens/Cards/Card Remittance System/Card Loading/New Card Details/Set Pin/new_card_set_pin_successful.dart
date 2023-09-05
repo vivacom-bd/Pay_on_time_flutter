@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
-import 'package:hidmona/Utilities/utility.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Activation/active_card.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/my_card_screen.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Loading/New%20Card%20Details/card_details%20showing.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Loading/load_card_screen.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
 
-class CardApplicationConfirmationScreen extends StatefulWidget {
-  const CardApplicationConfirmationScreen({Key? key}) : super(key: key);
+class NewCardSetPinSuccessfulMyCardScreen extends StatefulWidget {
+  const NewCardSetPinSuccessfulMyCardScreen({Key? key}) : super(key: key);
 
   @override
-  State<CardApplicationConfirmationScreen> createState() => _CardApplicationConfirmationScreenState();
+  State<NewCardSetPinSuccessfulMyCardScreen> createState() => _NewCardSetPinSuccessfulMyCardScreenState();
 }
 
-class _CardApplicationConfirmationScreenState extends State<CardApplicationConfirmationScreen> {
+class _NewCardSetPinSuccessfulMyCardScreenState extends State<NewCardSetPinSuccessfulMyCardScreen> {
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
-  CommonController commonController = Get.find<CommonController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +59,7 @@ class _CardApplicationConfirmationScreenState extends State<CardApplicationConfi
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Card Application Confirmation",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
+                        Text("Setting PIN Confirmation",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
                         const SizedBox(height: 3,),
                       ],
                     ),
@@ -82,20 +81,13 @@ class _CardApplicationConfirmationScreenState extends State<CardApplicationConfi
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text("Thank you for applying for Hidmona prepaid card. You have successfully submitted your application and your card will be shipped to your shipping address with instructions on how to activate your card.",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.bold),),
+                              Text("Your card PIN has been set successfully!",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,fontWeight: FontWeight.bold),),
                               const SizedBox(height: 25),
                               DefaultButton(
                                 buttonText: "View card details",
                                 onTap: () async {
-                                  Utility.showLoadingDialog();
-                                  bool value = await commonController.getPersonalAccountCard(0,25,commonController.userProfile.value.id!);
-                                  if(value){
-                                    bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length - 1].id!);
-                                    if(value){
-                                      Get.to(const ActiveCardScreen());
-                                      print("Success");
-                                    }
-                                  }
+
+                                  Get.to(const CardDetailsScreen());
                                 },
                               ),
                               const SizedBox(height: 20),

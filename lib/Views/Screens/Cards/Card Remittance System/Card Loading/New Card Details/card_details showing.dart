@@ -9,18 +9,20 @@ import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/Load%20Card/load_card_from_card_details.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/Set%20Pin/set_pin_OTP_screen_my_card.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/View%20Pin/view_pin_otp_my_card.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Loading/New%20Card%20Details/Set%20Pin/new_card_set_pin_otp_screen.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Loading/New%20Card%20Details/View%20Pin/new_card_view_pin_otp.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Loading/load_card_form.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 
-class MyCardScreen extends StatefulWidget {
+class CardDetailsScreen extends StatefulWidget {
   static const String routeName = "MyCardScreen";
-  const MyCardScreen({Key? key}) : super(key: key);
+  const CardDetailsScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyCardScreen> createState() => _MyCardScreenState();
+  State<CardDetailsScreen> createState() => _CardDetailsScreenState();
 }
 
-class _MyCardScreenState extends State<MyCardScreen> {
+class _CardDetailsScreenState extends State<CardDetailsScreen> {
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   CommonController commonController = Get.find<CommonController>();
   bool hidePinSetButtonChecker = false;
@@ -43,13 +45,13 @@ class _MyCardScreenState extends State<MyCardScreen> {
                     Row(
                       children: [
                         IconButton(
-                            onPressed: (){
-                              _globalKey.currentState?.openDrawer();
-                            },
-                            icon: Icon(
-                                Icons.menu,
-                              color: AppColor.defaultColorLight,
-                            ),
+                          onPressed: (){
+                            _globalKey.currentState?.openDrawer();
+                          },
+                          icon: Icon(
+                            Icons.menu,
+                            color: AppColor.defaultColorLight,
+                          ),
                         ),
                         const SizedBox(width: 40,),
                         Center(
@@ -90,16 +92,16 @@ class _MyCardScreenState extends State<MyCardScreen> {
                                 const SizedBox(width: 15),
                                 Image.asset(AppImage.getPath("card1"),width: SizeConfig.screenWidth*.2, color: AppColor.defaultColorLight,),
                                 const SizedBox(height: 10,),
-                                Text("${commonController.personalAccountCard.value.data![commonController.cardIndexNo].panFirst6}*****${commonController.personalAccountCard.value.data![commonController.cardIndexNo].panLast4} | EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
+                                Text("${commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length - 1].panFirst6}*****${commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length - 1].panLast4} | EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
                                 const SizedBox(height: 2),
-                                Text("${commonController.personalAccountCard.value.data![commonController.cardIndexNo].cardHolder}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
+                                Text("${commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length-1].cardHolder}",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 20,fontWeight: FontWeight.bold),),
                                 const SizedBox(height: 10),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("Expiration Date: ",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
-                                    Text(commonController.personalAccountCard.value.data![commonController.cardIndexNo].expiry!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
+                                    Text(commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length-1].expiry!,style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14,)),
 
                                   ],
                                 ),
@@ -119,7 +121,7 @@ class _MyCardScreenState extends State<MyCardScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("Available Balance : ",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 18,fontWeight: FontWeight.bold),),
-                                    Text("${commonController.personalAccountCard.value.data![commonController.cardIndexNo].balance} EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14, fontWeight: FontWeight.bold)),
+                                    Text("${commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length-1].balance} EUR",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 14, fontWeight: FontWeight.bold)),
 
                                   ],
                                 ),
@@ -134,7 +136,7 @@ class _MyCardScreenState extends State<MyCardScreen> {
                                         bool value = await commonController.sendOTP();
                                         Get.back();
                                         if(value){
-                                          Get.to(()=> const SetPinOTPScreenMyScreen());
+                                          Get.to(()=> const NewCardSetPinOTPScreenMyScreen());
                                         } else {Get.back();}
                                       },
                                       child: RichText(
@@ -156,7 +158,7 @@ class _MyCardScreenState extends State<MyCardScreen> {
                                         bool value = await commonController.sendOTP();
                                         Get.back();
                                         if(value){
-                                          Get.to(()=> const ViewPinOtpMyCardScreen());
+                                          Get.to(()=> const NewCardViewPinOtpMyCardScreen());
                                         } else {Get.back();}
                                       },
                                       child: RichText(
@@ -191,7 +193,7 @@ class _MyCardScreenState extends State<MyCardScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 15),
-                                 Row(
+                                Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [

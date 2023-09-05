@@ -6,6 +6,7 @@ import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/side_bar.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Details/Load%20Card/successfull_screen.dart';
 import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Card%20Loading/load_card_successful.dart';
 import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
@@ -13,14 +14,14 @@ import 'package:hidmona/Views/Widgets/default_button.dart';
 
 import 'package:hidmona/Models/Card%20Remittance%20System/personal_account_card.dart';
 
-class LoadCardForm extends StatefulWidget {
-  const LoadCardForm({Key? key}) : super(key: key);
+class LoadCardFromCardDetails extends StatefulWidget {
+  const LoadCardFromCardDetails({Key? key}) : super(key: key);
 
   @override
-  State<LoadCardForm> createState() => _LoadCardFormState();
+  State<LoadCardFromCardDetails> createState() => _LoadCardFromCardDetailsState();
 }
 
-class _LoadCardFormState extends State<LoadCardForm> {
+class _LoadCardFromCardDetailsState extends State<LoadCardFromCardDetails> {
   Data ? destinationCard;
   int ? destinationCardId;
   final _formKey = GlobalKey<FormState>();
@@ -36,9 +37,9 @@ class _LoadCardFormState extends State<LoadCardForm> {
   @override
   void initState() {
     setState(() {
-      accountHolderController.text = (commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length - 1].cardHolder != null) ? commonController.personalAccountCard.value.data![0].cardHolder! : "";
+      accountHolderController.text = (commonController.personalAccountCard.value.data![0].cardHolder != null) ? commonController.personalAccountCard.value.data![0].cardHolder! : "";
       currentBalanceController.text = (commonController.getAccountDetails.value.data![0].bankAccountDetails!.balance != null) ? commonController.getAccountDetails.value.data![0].bankAccountDetails!.balance! : "0.0";
-      destinationBalanceController.text = (commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length - 1].balance != null) ? (commonController.personalAccountCard.value.data![commonController.personalAccountCard.value.data!.length - 1].balance!.toString()) : "0";
+      destinationBalanceController.text = (commonController.personalAccountCard.value.data![commonController.cardIndexNo].balance != null) ? (commonController.personalAccountCard.value.data![commonController.cardIndexNo].balance!.toString()) : "0";
       currencyController.text = "EUR";
     });
     // TODO: implement initState
@@ -288,9 +289,9 @@ class _LoadCardFormState extends State<LoadCardForm> {
                     Get.back();
                     if(value){
                       Utility.showSnackBar(commonController.cardLoading.value.reason!);
-                      Get.to(()=> const LoadCardSuccessful());
+                      Get.to(()=> const SuccessfulScreen());
                     }
-                    
+
                   },
                 ),
                 const SizedBox(height: 15,),

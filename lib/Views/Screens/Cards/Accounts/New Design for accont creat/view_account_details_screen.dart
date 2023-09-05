@@ -59,7 +59,7 @@ class _ViewAccountDetailsScreenState extends State<ViewAccountDetailsScreen> {
                   const SizedBox(height: 10,),
                   Padding(
                     padding: const EdgeInsets.only(left: 30.0,right: 10),
-                    child: Text(  "You are about to open a personal EURO account. Confirm using the button below.",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,),),
+                    child: Text( "Congratulations! You have successfully opened a personal account. Please use the button below to see account details.",style: TextStyle(color: AppColor.defaultTextColor,fontSize: 15,),),
                   ),
                   const SizedBox(height: 30,),
                   DefaultButton(

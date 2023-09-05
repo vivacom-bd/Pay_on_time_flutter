@@ -287,7 +287,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                           Obx((){
                             if(inputAmount.value!=0){
                               return FutureBuilder(
-                                future: commonController.getConversionDetails(inputAmount.value, commonController.serverCountryFrom.value.selectedCurrency!, commonController.serverCountryTo.value.selectedCurrency!),
+                                future: commonController.getConversionDetails((commonController.countryTo.value.iso3Code == 'ETH' && commonController.modeOfReceives == 'Bank') ? "dashen_bank" :'',inputAmount.value, commonController.serverCountryFrom.value.selectedCurrency!, commonController.serverCountryTo.value.selectedCurrency!),
                                 builder: (context, AsyncSnapshot<APIResponse<CurrencyConversionDetails>> snapshot){
 
                                   if(snapshot.data!=null){
@@ -298,6 +298,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                                       CurrencyConversionDetails currencyConversionDetails = apiResponse.data!;
 
                                       commonController.currencyConversionDetails.value = currencyConversionDetails;
+
 
                                       return Column(
                                         children: [
@@ -324,6 +325,12 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                                             iconPath: AppSvg.getPath("Amount_to_receive"),
                                             title: "Amount to receive",
                                             value: '${currencyConversionDetails.amountToReceive!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}',
+                                          ),
+                                          const SizedBox(height: 10,),
+                                          SendMoneyCalculationItem(
+                                            iconPath: AppSvg.getPath("Amount_to_receive"),
+                                            title: "Amount to receive in USD",
+                                            value: '${currencyConversionDetails.receivingAmountInUsd!.toStringAsFixed(2)} USD',
                                           ),
                                           const SizedBox(height: 10,),
                                           SendMoneyCalculationItem(
