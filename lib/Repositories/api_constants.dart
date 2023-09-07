@@ -5,11 +5,11 @@ import 'package:hidmona/Controllers/common_controller.dart';
 bool isDev = true;
 
 String baseUrl(){
-  return isDev ? 'https://dev.hidmona.ch/' : 'https://hidmona.ch/';
+  return isDev ? 'http://45.77.224.119:8001/api/' : 'http://45.77.224.119:8001/api/';
 }
 
 String baseAPIUrl(){
-  return isDev ? 'https://apidev.hidmona.ch/api/v1/' : 'https://api.hidmona.ch/api/v1/';
+  return isDev ? 'http://45.77.224.119:8001/api/' : 'http://45.77.224.119:8001/api/';
 }
 
 String kycBaseUrl(){
