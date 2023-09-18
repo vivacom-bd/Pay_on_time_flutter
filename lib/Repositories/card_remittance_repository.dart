@@ -392,7 +392,7 @@ class CardRemittanceRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<OTP>(error: true, message: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'otp');
+    Uri url = Uri.parse(baseAPIUrl()+'create-otp');
     return http.post(
         url,
         headers: headersWithAuth,
@@ -402,7 +402,7 @@ class CardRemittanceRepository{
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
-      if(data.statusCode == 201){
+      if(data.statusCode == 200){
         return APIResponse<OTP>(data: OTP.fromJson(jsonData));
       }
       return APIResponse<OTP>(error: true, message: jsonData["detail"]??"An Error Occurred");
@@ -419,15 +419,15 @@ class CardRemittanceRepository{
       return APIResponse<OTPVerification>(error: true, message: "Internet is not connected!");
     }
     print(headersWithAuth);
-    Uri url = Uri.parse(baseAPIUrl()+'otpVerification/$otp');
+    Uri url = Uri.parse(baseAPIUrl()+'otp-verification/$otp');
     return http.get(url,headers: headersWithAuth).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
-      if(data.statusCode == 201){
+      if(data.statusCode == 200){
         return APIResponse<OTPVerification>(data: OTPVerification.fromJson(jsonData));
       }
-      return APIResponse<OTPVerification>(error: true, message: jsonData["detail"]??"An error occurred");
+      return APIResponse<OTPVerification>(error: true, message: jsonData["message"]??"An error occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<OTPVerification>(error: true, message: "An Error Occurred!");

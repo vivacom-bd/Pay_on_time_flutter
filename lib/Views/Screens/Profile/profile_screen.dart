@@ -59,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // ),
                 const SizedBox(height: 10,),
                 ContactItem(
-                  iconData: Icons.account_circle_outlined,text: "${commonController.userProfile.value.fullName?? commonController.userProfile.value.username}",
+                  iconData: Icons.account_circle_outlined,text: "${commonController.userProfile.value.firstName?? commonController.userProfile.value.firstName}",
                 ),
                 const SizedBox(height: 10,),
                 ContactItem(
@@ -90,7 +90,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // ),
                 const SizedBox(height: 10,),
                 ContactItem(
+                  // iconData: Icons.location_on_rounded,text: "Country: ${commonController.userProfile.value.country==null? "--": commonController.userProfile.value.country!.name??"--"}",
                   iconData: Icons.location_on_rounded,text: "Country: ${commonController.userProfile.value.country==null? "--": commonController.userProfile.value.country!.name??"--"}",
+
                   onTap: () async{
 
                   },

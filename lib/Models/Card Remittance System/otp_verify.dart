@@ -1,15 +1,15 @@
 class OTPVerification {
-  String? detail;
+  String? message;
 
-  OTPVerification({this.detail});
+  OTPVerification({this.message});
 
   OTPVerification.fromJson(Map<String, dynamic> json) {
-    detail = json['detail'];
+    message = json['message'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['detail'] = this.detail;
+    data['message'] = this.message;
     return data;
   }
 }

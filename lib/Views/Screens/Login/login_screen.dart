@@ -73,45 +73,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  // Text(
-                                  //   'Select country',
-                                  //   textAlign: TextAlign.left,
-                                  //   style: TextStyle(
-                                  //     color: AppColor.textColor,
-                                  //     fontSize: 14.0,
-                                  //     fontWeight: FontWeight.w600,
-                                  //   ),
-                                  // ),
-                                  // const SizedBox(height: 7,),
-                                  // InkWell(
-                                  //   onTap: (){
-                                  //     _openCountryPickerDialog();
-                                  //   },
-                                  //   child: Container(
-                                  //     height: 45,
-                                  //     clipBehavior: Clip.antiAlias,
-                                  //     decoration: BoxDecoration(
-                                  //       color: Colors.grey.withOpacity(.2),
-                                  //       borderRadius  : BorderRadius.circular(10),
-                                  //     ),
-                                  //     child: Row(
-                                  //       crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  //       children: [
-                                  //         Expanded(
-                                  //           child: Container(padding: const EdgeInsets.only(left: 10),child: CountryItem(country: controller.countryFrom.value)),
-                                  //         ),
-                                  //         Container(
-                                  //             padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 20) ,
-                                  //             decoration: BoxDecoration(
-                                  //               gradient: AppGradient.getColorGradient('default')
-                                  //             ),
-                                  //             child: const Icon(Icons.keyboard_arrow_down_rounded,color: Colors.white,size: 30,)
-                                  //         ),
-                                  //       ],
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // const SizedBox(height: 7,),
                                   CustomTextFormField(
                                       controller: emailController,
                                       validator: (value) {
@@ -160,9 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     FocusScope.of(context).unfocus();
 
                                     if(_formKey.currentState!.validate()){
-
                                       Utility.showLoadingDialog();
-
                                       UserRepository.customerLogin(emailController.text.trim(), passwordController.text).then((value)async{
                                         if(value.data != null){
 
@@ -170,14 +129,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                           var userProfileResponse =  await UserRepository.getUserProfile();
                                           if(userProfileResponse.data != null){
                                             commonController.userProfile.value = userProfileResponse.data!;
-                                            if(commonController.userProfile.value.country != null){
-                                              List<ServerCountry> countries = commonController.serverCountries.where((country) => commonController.userProfile.value.country!.id == country.id).toList();
+                                            if(commonController.userProfile.value.countryId != null){
+                                              List<ServerCountry> countries = commonController.serverCountries.where((country) => commonController.userProfile.value.countryId == country.id).toList();
                                               if (countries.isNotEmpty) {
                                                 //serverCountryFrom.value = userProfile.value.country!;
                                                 commonController.countryFrom.value = CountryPickerUtils.getCountryByIsoCode(countries.first.countryCode!);
                                               }
                                             }
                                           }
+                                          //Get.offAll(()=> const HomeScreen());
                                           bool value = await commonController.sendOTP();
                                           Get.back();
                                           if(value){

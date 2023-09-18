@@ -1,15 +1,15 @@
 class OTP {
-  String? detail;
+  String? message;
 
-  OTP({this.detail});
+  OTP({this.message});
 
   OTP.fromJson(Map<String, dynamic> json) {
-    detail = json['detail'];
+    message = json['message'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['detail'] = this.detail;
+    data['message'] = this.message;
     return data;
   }
 }

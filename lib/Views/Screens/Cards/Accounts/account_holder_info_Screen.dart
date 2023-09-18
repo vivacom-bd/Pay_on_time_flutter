@@ -40,7 +40,7 @@ class _AccountHolderScreenState extends State<AccountHolderScreen> {
     super.initState();
     setState(() {
       dobController.text = "";
-      fullName = commonController.userProfile.value.fullName!;
+      //fullName = commonController.userProfile.value.fullName!;
       nameParts = fullName!.split(" ");
       givenNameController.text = nameParts.first;
       emailController.text = commonController.userProfile.value.email!;

@@ -4,16 +4,24 @@ import 'package:hidmona/Models/server_currency.dart';
 class RecipientBank {
   String? bankName;
   String? bankAddress;
-  String? status;
+  String? swiftCode;
+  int? status;
   int? id;
   ServerCountry? country;
 
   RecipientBank(
-      {this.bankName, this.bankAddress, this.status, this.id, this.country});
+      {
+        this.bankName,
+        this.bankAddress,
+        this.swiftCode,
+        this.status,
+        this.id,
+        this.country});
 
   RecipientBank.fromJson(Map<String, dynamic> json) {
     bankName = json['bank_name'];
     bankAddress = json['bank_address'];
+    swiftCode = json['bank_swift_code'];
     status = json['status'];
     id = json['id'];
     country =
@@ -24,6 +32,7 @@ class RecipientBank {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['bank_name'] = bankName;
     data['bank_address'] = bankAddress;
+    data['bank_swift_code'] = swiftCode;
     data['status'] = status;
     data['id'] = id;
     if (country != null) {
@@ -43,7 +52,7 @@ class RecipientBank {
 class RecipientBankBranch {
   String? branchName;
   String? branchAddress;
-  String? status;
+  int? status;
   int? id;
   RecipientBank? bank;
 

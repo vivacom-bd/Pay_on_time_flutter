@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
+import 'package:hidmona/Models/transaction.dart';
+import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/transaction_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/size_config.dart';
@@ -59,15 +61,15 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         children: [
                           const Center(child: Text("Your Money Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                           Divider(color: AppColor.defaultColor,thickness: 2,),
-                          SendDetailsItem(title: "Amount to send",value: "${commonController.currencyConversionDetails.value.amountToSend!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
+                          SendDetailsItem(title: "Amount to send",value: "${commonController.currencyConversionDetails.value.data!.amountToSend!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Amount to receive",value: "${commonController.currencyConversionDetails.value.amountToReceive!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}",),
+                          SendDetailsItem(title: "Amount to receive",value: "${commonController.currencyConversionDetails.value.data!.amountToReceive!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Amount to receive in USD",value: "${commonController.currencyConversionDetails.value.receivingAmountInUsd!.toStringAsFixed(2)} USD",),
+                          SendDetailsItem(title: "Amount to receive in USD",value: "${commonController.currencyConversionDetails.value.data!.receivingAmountInUsd!.toStringAsFixed(2)} USD",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Fees",value: "${commonController.currencyConversionDetails.value.fees!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
+                          SendDetailsItem(title: "Fees",value: "${commonController.currencyConversionDetails.value.data!.fees!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Total to pay",value: "${commonController.currencyConversionDetails.value.amountToPay!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
+                          SendDetailsItem(title: "Total to pay",value: "${commonController.currencyConversionDetails.value.data!.amountToPay!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
                         ],
                       ),
                     ),
@@ -106,6 +108,7 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                           SendDetailsItem(title: "Full name",value: "${commonController.selectedRecipient!.fullName}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
                           SendDetailsItem(title: "Mobile Number",value: "${commonController.selectedRecipient!.phone}",),
+
                           Divider(color: AppColor.defaultColor,thickness: .5,),
                           SendDetailsItem(title: "City",value: "${commonController.selectedRecipient!.city!.name}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
@@ -115,8 +118,8 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         ],
                       ),
                     ),
-                    if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bank") const SizedBox(height: 20,),
-                    if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bank") Container(
+                    if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bankaccount") const SizedBox(height: 20,),
+                    if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bankaccount") Container(
                       padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
                           color: AppColor.defaultColor.withOpacity(.1),
@@ -128,15 +131,15 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         children: [
                           const Center(child: Text("Your Recipient Bank Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                           Divider(color: AppColor.defaultColor,thickness: 2,),
-                          SendDetailsItem(title: "Bank Name",value: "${commonController.transactionRequestBody!.bankName}",),
+                          SendDetailsItem(title: "Bank Name",value: "${commonController.transactionRequestBodyForBank!.bankName}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Bank Account No",value: "${commonController.transactionRequestBody!.bankAccountNo}",),
+                          SendDetailsItem(title: "Bank Account No",value: "${commonController.transactionRequestBodyForBank!.bankAccountNo}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Account Holder Name",value: "${commonController.transactionRequestBody!.bankAccountTitle}",),
+                          SendDetailsItem(title: "Account Holder Name",value: "${commonController.transactionRequestBodyForBank!.bankAccountTitle}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Branch Name",value: "${commonController.transactionRequestBody!.branchName}",),
+                          SendDetailsItem(title: "Branch Name",value: "${commonController.transactionRequestBodyForBank!.branchName}",),
                           // Divider(color: AppColor.defaultColor,thickness: .5,),
-                          // SendDetailsItem(title: "Bank Address",value: "${commonController.transactionRequestBody!.bankAddress}",),
+                          // SendDetailsItem(title: "Bank Address",value: "${commonController.transactionRequestBodyForBank!.bankAddress}",),
                         ],
                       ),
                     ),
@@ -204,11 +207,13 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
               ),
               const SizedBox(height: 20,),
               InkWell(
-                onTap: (){
+                onTap: () async {
                   if(isInformationCorrect) {
-
                     Utility.showLoadingDialog();
-                    TransactionRepository.createTransaction(commonController.transactionRequestBody!).then((value){
+                    if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bankaccount") {
+                      TransactionRepository.createTransactionForBank(
+                      commonController.transactionRequestBodyForBank!,
+                    ).then((value){
                       Get.back();
                       if(value.data != null){
                         commonController.currentTransaction = value.data;
@@ -223,8 +228,26 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         Utility.showSnackBar(value.message??"An Error Occurred");
                       }
                     });
+                    } else {
+                      TransactionRepository.createTransaction(
+                        commonController.transactionRequestBody!,
+                      ).then((value){
+                        Get.back();
+                        if(value.data != null){
+                          commonController.currentTransaction = value.data;
 
+                          if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debit or credit" || commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit"){
+                            Get.offAll(const PaymentNewScreen());
+                          }else{
+                            Get.offAll(const SendingSuccessFulScreen());
+                          }
 
+                        }else{
+                          Utility.showSnackBar(value.message??"An Error Occurred");
+                        }
+                      });
+
+                    }
                   }else{
                     Utility.showSnackBar("Please ensure this information is correct");
                   }

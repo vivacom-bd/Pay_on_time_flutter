@@ -2,9 +2,13 @@ class UserSignupRequest {
   String? email;
   String? phone;
   String? password;
+  String? confirmPassword;
   String? username;
-  int? countryId;
+  String? countryId;
   String? fullName;
+  String? firstName;
+  String? middleName;
+  String? lastName;
   int? cityId;
   bool? isCitizen;
   int? citizenCountryId;
@@ -16,9 +20,13 @@ class UserSignupRequest {
       {this.email,
         this.phone,
         this.password,
+        this.confirmPassword,
         this.username,
         this.countryId,
         this.fullName,
+        this.firstName,
+        this.middleName,
+        this.lastName,
         this.cityId,
         this.isCitizen,
         this.citizenCountryId,
@@ -30,9 +38,14 @@ class UserSignupRequest {
     email = json['email'];
     phone = json['phone'];
     password = json['password'];
+    confirmPassword = json['password_confirmation'];
     username = json['username'];
-    countryId = json['country_id'];
+    //countryId = json['country_id'];
+    countryId = json['country_code'];
     fullName = json['full_name'];
+    firstName = json['first_name'];
+    middleName = json['middle_name'];
+    lastName = json['last_name'];
     cityId = json['city_id'];
     isCitizen = json['is_citizen'];
     citizenCountryId = json['citizen_country_id'];
@@ -46,9 +59,14 @@ class UserSignupRequest {
     data['email'] = email;
     data['phone'] = phone;
     data['password'] = password;
+    data['password_confirmation'] = confirmPassword;
     data['username'] = username;
-    data['country_id'] = countryId;
+    //data['country_id'] = countryId;
+    data['country_code'] = countryId;
     data['full_name'] = fullName;
+    data['first_name'] = firstName;
+    data['middle_name'] = middleName;
+    data['last_name'] = lastName;
     data['city_id'] = cityId;
     data['is_citizen'] = isCitizen;
     data['citizen_country_id'] = citizenCountryId;

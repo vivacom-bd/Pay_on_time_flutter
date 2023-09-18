@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/transaction.dart';
 import 'package:hidmona/Repositories/api_constants.dart';
 import 'package:hidmona/Repositories/api_response.dart';
@@ -7,8 +10,11 @@ import 'package:hidmona/Utilities/utility.dart';
 import 'package:http/http.dart' as http;
 
 class TransactionRepository{
+  CommonController commonController = Get.find<CommonController>();
+
   /// create Transaction
-  static Future<APIResponse<Transaction>> createTransaction(TransactionRequestBody requestBody) async{
+  static Future<APIResponse<Transaction>> createTransaction(TransactionRequestBody requestBody,
+      ) async{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
@@ -20,14 +26,44 @@ class TransactionRepository{
     Uri url = Uri.parse(baseAPIUrl()+'transactions');
     return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentType,
         body: json.encode(requestBody.toJson())
     ).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
       if(data.statusCode == 201){
-        return APIResponse<Transaction>(data: Transaction.fromJson(jsonData['data']));
+        return APIResponse<Transaction>(data: Transaction.fromJson(jsonData));
+      }
+      return APIResponse<Transaction>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<Transaction>(error: true, message: "An Error Occurred!");
+    });
+  }
+
+  /// create Transaction
+  static Future<APIResponse<Transaction>> createTransactionForBank(TransactionRequestBodyforBank requestBody,
+      ) async{
+
+    ///internet check
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<Transaction>(error: true, message: "Internet is not connected!");
+    }
+
+    print(json.encode(requestBody.toJson()));
+
+    Uri url = Uri.parse(baseAPIUrl()+'transactions');
+    return http.post(
+        url,
+        headers: headersWithAuthAndContentType,
+        body: json.encode(requestBody.toJson())
+    ).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 201){
+        return APIResponse<Transaction>(data: Transaction.fromJson(jsonData));
       }
       return APIResponse<Transaction>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
@@ -92,7 +128,7 @@ class TransactionRepository{
   }
 
 
-  ///getRecipients
+  ///Transaction List
   static Future<APIResponse<List<Transaction>>> getTransactions({int limit=100, offset=0}) async{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<Transaction>>(error: true, message: "Internet is not connected!");

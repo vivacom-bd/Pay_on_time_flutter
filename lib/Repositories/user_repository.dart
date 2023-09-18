@@ -50,8 +50,10 @@ class UserRepository{
     Uri url = Uri.parse(baseAPIUrl()+'customer-login');
     return http.post(
         url,
-        headers: headers,
-        body: json.encode({"email" : email, "password": password})
+        body: json.encode({
+          'email' : email,
+          'password': password,
+        }),headers: headers,
     ).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
@@ -111,7 +113,7 @@ class UserRepository{
 
     print(headersWithAuth);
 
-    Uri url = Uri.parse(baseAPIUrl()+'my_profile');
+    Uri url = Uri.parse(baseAPIUrl()+'profile');
     return http.get(url,headers: headersWithAuth).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);

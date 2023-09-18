@@ -3,7 +3,6 @@ import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/country_wise_bank.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
 import 'package:hidmona/Models/mode_of_payment.dart';
-import 'package:hidmona/Models/recipient.dart';
 import 'package:hidmona/Models/recipient_bank.dart';
 import 'package:hidmona/Models/sending_purpose.dart';
 import 'package:hidmona/Models/server_country.dart';
@@ -22,7 +21,7 @@ class CommonRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<ServerCountry>>(error: true, message: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'public/country');
+    Uri url = Uri.parse(baseAPIUrl()+'get-countries');
     return http.get(url).then((data) async {
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
@@ -31,14 +30,6 @@ class CommonRepository{
         List<ServerCountry> countries = [];
         for(int i=0; i<jsonData.length; i++) {
           ServerCountry serverCountry = ServerCountry.fromJson(jsonData[i]);
-
-          // APIResponse<ServerCurrency> apiResponse = await getCountryDefaultCurrency(serverCountry.id!);
-          // if(apiResponse.data!=null){
-          //   serverCountry.defaultCurrency = apiResponse.data;
-          // }else{
-          //   return APIResponse<List<ServerCountry>>(error: true, errorMessage: "No default currency for ${serverCountry.name}");
-          // }
-
           countries.add(serverCountry);
         }
 
@@ -83,7 +74,7 @@ class CommonRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<ServerCurrency>>(error: true, message: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'public/currencies?country_id=$countryId');
+    Uri url = Uri.parse(baseAPIUrl()+'get-currencies?country_id=$countryId');
     return http.get(url,headers: headersWithAuth)
         .then((data){
       print(data.body);
@@ -112,12 +103,18 @@ class CommonRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<CurrencyConversionDetails>(error: true, message: "Internet is not connected!");
     }
-
-    Uri url = Uri.parse(baseAPIUrl()+'public/currency_conversion?from_currency_id=$fromCurrencyId&to_currency_id=$toCurrencyId&from_country_id=$fromCountryId&to_country_id=$toCountryId');
-    return http.post(
+    body: json.encode({
+      "amount" : amount,
+      "from_currency_id" : fromCurrencyId,
+      "to_currency_id" : toCurrencyId,
+      "from_country_id" : fromCountryId,
+      "to_country_id" : toCountryId
+      // "currency_source" : currencySource
+    });
+    Uri url = Uri.parse(baseAPIUrl()+'currency_conversion?from_currency_id=$fromCurrencyId&to_currency_id=$toCurrencyId&from_country_id=$fromCountryId&to_country_id=$toCountryId&amount=$amount');
+    return http.get(
         url,
         headers: headers,
-        body: json.encode({"amount" : amount, "currency_source" : currencySource})
     ).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
@@ -138,15 +135,15 @@ class CommonRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<ModeOfPayment>>(error: true, message: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'public/payment_method/$countryId');
-    return http.get(url,headers: headersWithAuth)
+    Uri url = Uri.parse(baseAPIUrl()+'get-payment-methods/$countryId');
+    return http.get(url,headers: headers)
         .then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
       if(data.statusCode == 200){
         List<ModeOfPayment> modes = [];
-        jsonData.forEach((mode){
+        jsonData['data'].forEach((mode){
           modes.add(ModeOfPayment.fromJson(mode));
         });
         return APIResponse<List<ModeOfPayment>>(data: modes);
@@ -163,15 +160,15 @@ class CommonRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<ModeOfPayment>>(error: true, message: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'public/receive_method/$countryId');
-    return http.get(url,headers: headersWithAuth)
+    Uri url = Uri.parse(baseAPIUrl()+'get-receive-methods/$countryId');
+    return http.get(url,headers: headers)
         .then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
       if(data.statusCode == 200){
         List<ModeOfPayment> modes = [];
-        jsonData.forEach((mode){
+        jsonData['data'].forEach((mode){
           modes.add(ModeOfPayment.fromJson(mode));
         });
         return APIResponse<List<ModeOfPayment>>(data: modes);
@@ -188,7 +185,7 @@ class CommonRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<SendingPurpose>>(error: true, message: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'sending_purposes');
+    Uri url = Uri.parse(baseAPIUrl()+'getSendingPurposes');
     return http.get(url,headers: headersWithAuth)
         .then((data){
       print(data.body);
@@ -196,7 +193,7 @@ class CommonRepository{
       final jsonData = json.decode(responseData);
       if(data.statusCode == 200){
         List<SendingPurpose> purposes = [];
-        jsonData['items'].forEach((purpose){
+        jsonData['data'].forEach((purpose){
           purposes.add(SendingPurpose.fromJson(purpose));
         });
         return APIResponse<List<SendingPurpose>>(data: purposes);
@@ -213,12 +210,13 @@ class CommonRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<City>>(error: true, message: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'public/city_list_based_on_country/$countryId');
+    Uri url = Uri.parse(baseAPIUrl()+'city_list_based_on_country/$countryId');
     return http.get(url,headers: headersWithAuth)
         .then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
-      final jsonData = json.decode(responseData);
+      final jsonData1 = json.decode(responseData);
+      final jsonData = jsonData1['data'];
       if(data.statusCode == 200){
         List<City> cities = [];
         jsonData.forEach((purpose){
@@ -239,7 +237,7 @@ class CommonRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<CountryWiseBank>>(error: true, message: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'country_wise_bank/accepted_banks/$countryId');
+    Uri url = Uri.parse(baseAPIUrl()+'getCountryWiseBanks?country_id=$countryId');
     return http.get(url,headers: headersWithAuth)
         .then((data){
       print(data.body);
@@ -247,7 +245,7 @@ class CommonRepository{
       final jsonData = json.decode(responseData);
       if(data.statusCode == 200){
         List<CountryWiseBank> banks = [];
-        jsonData['items'].forEach((bank){
+        jsonData['data'].forEach((bank){
           banks.add(CountryWiseBank.fromJson(bank));
         });
         return APIResponse<List<CountryWiseBank>>(data: banks);
@@ -264,7 +262,7 @@ class CommonRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<RecipientBank>>(error: true, message: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'public/recipient_banks?country_id=$countryId');
+    Uri url = Uri.parse(baseAPIUrl()+'get-recipient-banks/$countryId');
     return http.get(url,headers: headersWithAuth)
         .then((data){
       print(data.body);
@@ -289,7 +287,7 @@ class CommonRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<RecipientBankBranch>>(error: true, message: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'public/recipient_bank_branchs?bank_id=$bankId');
+    Uri url = Uri.parse(baseAPIUrl()+'get-recipient-bank-branches/$bankId');
     return http.get(url,headers: headersWithAuth)
         .then((data){
       print(data.body);

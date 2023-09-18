@@ -3,19 +3,17 @@ import 'package:hidmona/Models/server_currency.dart';
 class ServerCountry {
   String? name;
   int? id;
-  String? code;
   String? countryCode;
   String? logo;
   ServerCurrency? selectedCurrency;
   List<ServerCurrency>? currencies;
 
-  ServerCountry({this.name, this.id, this.code, this.countryCode, this.selectedCurrency});
+  ServerCountry({this.name, this.id,  this.countryCode, this.selectedCurrency});
 
   ServerCountry.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     id = json['id'];
-    code = json['code'];
-    countryCode = json['country_code']??json['country_code_alpha2'];
+    countryCode = json['iso_code_alpha_2'];
     logo = json['logo'];
   }
 
@@ -23,8 +21,7 @@ class ServerCountry {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['id'] = id;
-    data['code'] = code;
-    data['country_code'] = countryCode;
+    data['iso_code_alpha_2'] = countryCode;
     data['logo'] = logo;
     return data;
   }

@@ -51,6 +51,11 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
 
   String? phoneNumber;
 
+  List<String> nameParts = [];
+  String firstName = '';
+  String middleName = '';
+  String lastName = '';
+
 
   @override
   void initState() {
@@ -61,6 +66,8 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
     addressTextEditingController.text = widget.recipient.streetAddress??"";
     postalCodeTextEditingController.text = widget.recipient.postalCode.toString();
     dateOfBirthTextEditingController.text = widget.recipient.dateOfBirth.toString();
+
+    commonController.phoneNumberController.text = widget.recipient.phone??"";
 
     //dateTime = DateFormat("yyyy-MM-dd").parse(widget.recipient.dateOfBirth.toString());
 
@@ -74,8 +81,8 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
       // });
     }
 
-    if(widget.recipient.country != null){
-      List<ServerCountry> countries = commonController.serverCountries.where((country) => widget.recipient.country!.id == country.id).toList();
+    if(widget.recipient.countryId != null){
+      List<ServerCountry> countries = commonController.serverCountries.where((country) => widget.recipient.countryId == country.id).toList();
       if (countries.isNotEmpty) {
         selectedCountry = CountryPickerUtils.getCountryByIsoCode(countries.first.countryCode!);
         selectedPhoneCountry = selectedCountry;
@@ -83,8 +90,8 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
       }
     }
 
-    if(widget.recipient.citizenCountry != null){
-      List<ServerCountry> countries = commonController.serverCountries.where((country) => widget.recipient.citizenCountry!.id == country.id).toList();
+    if(widget.recipient.countryId != null){
+      List<ServerCountry> countries = commonController.serverCountries.where((country) => widget.recipient.countryId == country.id).toList();
       if (countries.isNotEmpty) {
         selectedCitizenCountry = CountryPickerUtils.getCountryByIsoCode(countries.first.countryCode!);
       }
@@ -236,15 +243,16 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
                                     validator: (value) {
                                       if(value!.isEmpty){
                                         return "Field can't be empty";
-                                      }else{
-                                        if(value.length<7) return "Invalid phone number";
-
-                                        phoneNumberValidator(value);
-
-                                        if(!isPhoneNumberValid){
-                                          return "Invalid phone number";
-                                        }
                                       }
+                                      // else{
+                                      //   if(value.length<7) return "Invalid phone number";
+                                      //
+                                      //   // phoneNumberValidator(value);
+                                      //
+                                      //   if(!isPhoneNumberValid){
+                                      //     return "Invalid phone number";
+                                      //   }
+                                      // }
                                     },
                                     labelText: "",
                                     hindText: "",
@@ -415,10 +423,23 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
                         if(_formKey.currentState!.validate()){
 
                           Utility.showLoadingDialog();
+                          setState(() {
+                            nameParts =  nameTextEditingController.text.split(" ");
+                            if (nameParts.length >= 1) {
+                              firstName = nameParts[0];
+                            }
+                            if (nameParts.length >= 2) {
+                              lastName = nameParts[nameParts.length - 1];
+                              middleName = nameParts.sublist(1, nameParts.length - 1).join(' ');
+                            }
+                          });
 
                           RecipientRequestBody recipientRequestBody =  RecipientRequestBody(
                             //email: emailTextEditingController.text,
                             fullName: nameTextEditingController.text,
+                            firstName: firstName,
+                            middleName: middleName,
+                            lastName: lastName,
                             phone: phoneNumber,
                             streetAddress: addressTextEditingController.text,
                             //postalCode: int.tryParse(postalCodeTextEditingController.text),
@@ -536,8 +557,8 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
       countryCities.clear();
       countryCities.addAll(apiResponse1.data!);
 
-      if(widget.recipient.city != null && selectedRecipientCity == null){
-        List<City> cities = countryCities.where((city) => widget.recipient.city!.id == city.id).toList();
+      if(widget.recipient.cityId != null && selectedRecipientCity == null){
+        List<City> cities = countryCities.where((city) => widget.recipient.cityId== city.id).toList();
         if(cities.isNotEmpty){
           selectedRecipientCity = cities.first;
         }

@@ -15,10 +15,10 @@ class RecipientRepository{
       return APIResponse<Recipient>(error: true, message: "Internet is not connected!");
     }
 
-    Uri url = Uri.parse(baseAPIUrl()+'recipients');
+    Uri url = Uri.parse(baseAPIUrl()+'recipients/create');
     return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentType,
         body: json.encode(requestBody.toJson())
     ).then((data){
       print(data.body);
@@ -43,16 +43,16 @@ class RecipientRepository{
       return APIResponse<Recipient>(error: true, message: "Internet is not connected!");
     }
 
-    Uri url = Uri.parse(baseAPIUrl()+'recipients/$recipientId');
-    return http.put(
+    Uri url = Uri.parse(baseAPIUrl()+'recipients/update/$recipientId');
+    return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentType,
         body: json.encode(requestBody.toJson())
     ).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
-      if(data.statusCode == 202){
+      if(data.statusCode == 201){
         return APIResponse<Recipient>(data: Recipient.fromJson(jsonData['data']));
       }
       return APIResponse<Recipient>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
@@ -71,8 +71,8 @@ class RecipientRepository{
       return APIResponse<bool>(error: true, message: "Internet is not connected!");
     }
 
-    Uri url = Uri.parse(baseAPIUrl()+'recipients/$recipientId');
-    return http.delete(
+    Uri url = Uri.parse(baseAPIUrl()+'recipients/delete/$recipientId');
+    return http.post(
         url,
         headers: headersWithAuth,
     ).then((data){
@@ -95,17 +95,20 @@ class RecipientRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<List<Recipient>>(error: true, message: "Internet is not connected!");
     }
-    Uri url = Uri.parse(baseAPIUrl()+'recipients?limit=100'+query);
+    Uri url = Uri.parse(baseAPIUrl()+'recipients?limit=100');
     return http.get(url,headers: headersWithAuth).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
       if(data.statusCode == 200){
         List<Recipient> recipients = [];
-        jsonData['items'].forEach((purpose){
+        jsonData['data'] .forEach((purpose){
           recipients.add(Recipient.fromJson(purpose));
         });
         return APIResponse<List<Recipient>>(data: recipients);
+      } else if(data.statusCode == 404){
+        return APIResponse<List<Recipient>>(error: true, message: jsonData["message"]??"An Error Occurred");
+
       }
       return APIResponse<List<Recipient>>(error: true, message: jsonData["detail"]??"An Error Occurred");
     }).catchError((onError){

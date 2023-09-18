@@ -41,7 +41,7 @@ class _CardHolderInfoScreenState extends State<CardHolderInfoScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
       selectCardHolder.text = "1";
-      fullName = commonController.userProfile.value.fullName!;
+      fullName = commonController.userProfile.value.firstName!;
       nameParts = fullName!.split(" ");
       commonController.firstNameController.text = commonController.kycDataRetrieve.value.firstName!;
       commonController.middleNameController.text = commonController.kycDataRetrieve.value.middleName!;

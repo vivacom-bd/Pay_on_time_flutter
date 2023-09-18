@@ -106,21 +106,21 @@ class _CardListScreenState extends State<CardListScreen> {
                   ),
                 ),
                 const SizedBox(height: 15,),
-                (controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty) ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),height: 25,),
-                    DefaultButton(buttonText: "Apply for KYC",onTap: ()async{
-                      String url = '${kycBaseUrl()}applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
-                      Uri uri = Uri.parse(url);
-                      if (await canLaunchUrl(uri)) {
-                        await launchUrl(uri,mode: LaunchMode.externalApplication);
-                      }
-                    },),
-                    Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),height: 25,),
-                  ],
-                ):const SizedBox(height: 10,),
+                // (controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty) ? Column(
+                //   crossAxisAlignment: CrossAxisAlignment.stretch,
+                //   mainAxisSize: MainAxisSize.min,
+                //   children: [
+                //     Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),height: 25,),
+                //     DefaultButton(buttonText: "Apply for KYC",onTap: ()async{
+                //       String url = '${kycBaseUrl()}applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
+                //       Uri uri = Uri.parse(url);
+                //       if (await canLaunchUrl(uri)) {
+                //         await launchUrl(uri,mode: LaunchMode.externalApplication);
+                //       }
+                //     },),
+                //     Divider(thickness: 1,color: AppColor.defaultColor.withOpacity(.5),height: 25,),
+                //   ],
+                // ):const SizedBox(height: 10,),
                 const SizedBox(height: 15,),
                 Center(
                   child: Text(

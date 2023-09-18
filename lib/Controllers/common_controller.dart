@@ -69,6 +69,7 @@ class CommonController extends GetxController{
 
   Rx<CurrencyConversionDetails> currencyConversionDetails = CurrencyConversionDetails().obs;
   TransactionRequestBody? transactionRequestBody;
+  TransactionRequestBodyforBank ? transactionRequestBodyForBank;
   Transaction? currentTransaction;
 
   ModeOfPayment? selectedModeOfReceive;
@@ -78,6 +79,17 @@ class CommonController extends GetxController{
   List<RecipientBank> recipientBanks = [];
   City? recipientCity;
   CountryWiseBank? selectedCountryWiseBank;
+  int? bankId;
+  String ? bankAccountTitle;
+  String ? recipientBankBranch;
+
+  TextEditingController bankNameTextEditingController = TextEditingController();
+  TextEditingController bankSwiftCodeTextEditingController = TextEditingController();
+  final TextEditingController bankAccountTitleTextEditingController = TextEditingController();
+  final TextEditingController bankAccountNoTextEditingController = TextEditingController();
+
+
+
 
   /// Card Remittance.
   Rx<PersonalAccount> currentPersonalAccount = PersonalAccount().obs; //Create Personal Account
@@ -171,7 +183,7 @@ class CommonController extends GetxController{
 
               //savedLogin
               String? email = getStorage.read<String>("email");
-              String? password = getStorage.read<String>("password");
+             String? password = getStorage.read<String>("password");
 
               if(email != null && password != null){
                 bool isSuccessful = await customerLogin(email,password);
@@ -202,8 +214,10 @@ class CommonController extends GetxController{
         var userProfileResponse =  await UserRepository.getUserProfile();
         if(userProfileResponse.data != null){
           userProfile.value = userProfileResponse.data!;
-          if(userProfile.value.country != null){
-            List<ServerCountry> countries = serverCountries.where((country) => userProfile.value.country!.id == country.id).toList();
+          //if(userProfile.value.country != null){
+          if(userProfile.value.countryId != null){
+            List<ServerCountry> countries = serverCountries.where((country) => userProfile.value.countryId == country.id).toList();
+            // List<ServerCountry> countries = serverCountries.where((country) => userProfile.value.country!.id == country.id).toList();
             if (countries.isNotEmpty) {
               //serverCountryFrom.value = userProfile.value.country!;
               countryFrom.value = CountryPickerUtils.getCountryByIsoCode(countries.first.countryCode!);

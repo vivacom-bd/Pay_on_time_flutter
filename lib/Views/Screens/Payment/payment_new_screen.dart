@@ -67,9 +67,9 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                     children: [
                       const Center(child: Text("Payment Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                       Divider(color: AppColor.defaultColor,thickness: 2,),
-                      SendDetailsItem(title: "Amount to pay",value: "${commonController.currentTransaction!.totalAmount!.toStringAsFixed(2)} ${commonController.currentTransaction!.payoutCurrency}",),
+                      SendDetailsItem(title: "Amount to pay",value: "${commonController.currentTransaction!.data!.totalAmount!.toStringAsFixed(2)} ${commonController.currentTransaction!.data!.payoutCurrency!.code!}",),
                       Divider(color: AppColor.defaultColor,thickness: .5,),
-                      SendDetailsItem(title: "Transaction ID",value: commonController.currentTransaction!.transactionNumber??"--"),
+                      SendDetailsItem(title: "Transaction ID",value: commonController.currentTransaction!.data!.transactionNumber??"--"),
                     ],
                   ),
                 ),
@@ -123,7 +123,7 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                                     if(selectedCard != null){
                                       Utility.showLoadingDialog();
 
-                                      APIResponse<bool> apiResponse = await PaymentRepository.paymentByCardId(selectedCard!.id!, commonController.currentTransaction!.transactionNumber!);
+                                      APIResponse<bool> apiResponse = await PaymentRepository.paymentByCardId(selectedCard!.id!, commonController.currentTransaction!.data!.transactionNumber!);
 
                                       Get.back();
 
@@ -164,7 +164,7 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                                       onTap: ()async{
                                         Utility.showLoadingDialog();
 
-                                        APIResponse<PaymentAuthResponse> apiResponse = await PaymentRepository.payment3dAuth(commonController.currentTransaction!.transactionNumber!,isCardSave);
+                                        APIResponse<PaymentAuthResponse> apiResponse = await PaymentRepository.payment3dAuth(commonController.currentTransaction!.data!.transactionNumber!,isCardSave);
 
                                         if(apiResponse.data != null){
                                           String? returnUrl = await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Payment3DAuthScreen(paymentAuthResponse: apiResponse.data!,)));
@@ -230,7 +230,7 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                                       onTap: ()async{
                                         Utility.showLoadingDialog();
 
-                                        APIResponse<PaymentAuthResponse> apiResponse = await PaymentRepository.payment3dAuth(commonController.currentTransaction!.transactionNumber!,isCardSave);
+                                        APIResponse<PaymentAuthResponse> apiResponse = await PaymentRepository.payment3dAuth(commonController.currentTransaction!.data!.transactionNumber!,isCardSave);
 
                                         if(apiResponse.data != null){
                                           String? returnUrl = await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Payment3DAuthScreen(paymentAuthResponse: apiResponse.data!,)));

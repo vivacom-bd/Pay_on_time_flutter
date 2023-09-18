@@ -4,7 +4,7 @@ class CountryWiseBank {
   String? bankName;
   String? bankAccountNumber;
   String? bankAccountTitle;
-  String? status;
+  int? status;
   String? branchName;
   int? id;
   ServerCountry? country;

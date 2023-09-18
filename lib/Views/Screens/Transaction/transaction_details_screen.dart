@@ -66,13 +66,13 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                             children: [
                               const Center(child: Text("Your Money Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                               Divider(color: AppColor.defaultColor,thickness: 2,),
-                              SendDetailsItem(title: "From",value: "${transaction.senderCountry!.name}",),
+                              SendDetailsItem(title: "From",value: "${transaction.data!.sender!.country!.name}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "To",value: "${transaction.recipientCountry!.name}",),
+                              SendDetailsItem(title: "To",value: "${transaction.data!.receiver!.country!.name}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Payout amount",value: "${transaction.payoutAmount!.toStringAsFixed(2)} ${transaction.payoutCurrency}",),
+                              SendDetailsItem(title: "Payout amount",value: "${transaction..data!.payoutAmount!.toStringAsFixed(2)} ${transaction.data!.payoutCurrency!.code}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Receiving amount",value: "${transaction.receivingAmount!.toStringAsFixed(2)} ${transaction.receivingCurrency}",),
+                              SendDetailsItem(title: "Receiving amount",value: "${transaction..data!.receivedAmount!.toStringAsFixed(2)} ${transaction.data!.receivedCurrency!.code}",),
                             ],
                           ),
                         ),
@@ -90,20 +90,20 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                             children: [
                               const Center(child: Text("Your Recipient Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                               Divider(color: AppColor.defaultColor,thickness: 2,),
-                              SendDetailsItem(title: "Full name",value: "${transaction.recipient?.fullName}",),
+                              SendDetailsItem(title: "Full name",value: transaction.data!.receiver!.name!,),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
                               // SendDetailsItem(title: "Mobile Number",value: "${transaction.recipient!.phone}",),
                               // Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "City",value: "${transaction.recipientCity?.name}",),
+                              SendDetailsItem(title: "City",value: "${transaction..data!.receiver!.city!.name}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Country",value: "${transaction.recipientCountry?.name}",),
+                              SendDetailsItem(title: "Country",value: "${transaction..data!.receiver!.country!.name}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Mode of Receive",value: "${transaction.receiveMethod!.name}",),
+                              SendDetailsItem(title: "Mode of Receive",value: "${transaction.data!.receiverMethod!.name!}",),
                             ],
                           ),
                         ),
-                        if(transaction.bankName !=null && transaction.bankName!.isNotEmpty) const SizedBox(height: 20,),
-                        if(transaction.bankName !=null && transaction.bankName!.isNotEmpty) Container(
+                        if(transaction.data!.bankName !=null && transaction.data!.bankName!.isNotEmpty) const SizedBox(height: 20,),
+                        if(transaction.data!.bankName !=null && transaction.data!.bankName!.isNotEmpty) Container(
                           padding: const EdgeInsets.all(15),
                           decoration: BoxDecoration(
                               color: AppColor.defaultColor.withOpacity(.1),
@@ -115,15 +115,15 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                             children: [
                               const Center(child: Text("Your Recipient Bank Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                               Divider(color: AppColor.defaultColor,thickness: 2,),
-                              SendDetailsItem(title: "Bank Name",value: "${transaction.bankName}",),
+                              SendDetailsItem(title: "Bank Name",value: "${transaction.data!.bankName}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Bank Account No",value: "${transaction.bankAccountNo}",),
+                              SendDetailsItem(title: "Bank Account No",value: "${transaction.data!.bankAccountNo}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Account Holder Name",value: "${transaction.bankAccountTitle}",),
+                              SendDetailsItem(title: "Account Holder Name",value: "${transaction.data!.bankAccountTitle}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Branch Name",value: "${transaction.branchName}",),
+                              SendDetailsItem(title: "Branch Name",value: "${transaction.data!.branchName}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Bank Address",value: "${transaction.bankAddress}",),
+                              SendDetailsItem(title: "Bank Address",value: "",),//${transaction.data!.bankAddress}
                             ],
                           ),
                         ),
@@ -140,26 +140,27 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                             children: [
                               const Center(child: Text("Transaction Details",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                               Divider(color: AppColor.defaultColor,thickness: 2,),
-                              SendDetailsItem(title: "Mode of Payment",value: "${transaction.paymentMethod!.name}",),
+                              SendDetailsItem(title: "Mode of Payment",value: "${transaction.data!.senderMethod!.name}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Remitter Status",value: "${transaction.remitterStatus}",),
+                              SendDetailsItem(title: "Remitter Status",value: "",),//${transaction.remitterStatus}
                               Divider(color: AppColor.defaultColor,thickness: .5,),
                               // SendDetailsItem(title: "Mode of Receive",value: "${transaction.receiveMethod!.name}",),
                               // Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Purpose",value: "${transaction.purpose}",),
+                              SendDetailsItem(title: "Purpose",value: "${transaction.data!.sendingPurpose!.name}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Transaction Number",value: "${transaction.transactionNumber}",),
+                              SendDetailsItem(title: "Transaction Number",value: "${transaction.data!.transactionNumber}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Transaction Date",value: DateFormat("dd MMM, yyyy hh:mm").format(DateFormat("yyyy-MM-ddThh:mm:ss").parse(transaction.transactionDate!),),),
+                              SendDetailsItem(title: "Transaction Date",value: DateFormat("dd MMM, yyyy hh:mm").format(DateFormat("yyyy-MM-ddThh:mm:ss").parse(transaction.data!.createdAt!.substring(0,0)),),),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Benificiary Status",value: transaction.benificiaryStatus??"",),
+                              SendDetailsItem(title: "Benificiary Status",value: transaction.data!.beneficiaryStatus!.toString() ??"",),
                             ],
                           ),
                         ),
                         const SizedBox(height: 20,),
-                        if(transaction.paymentMethod!.name!.toLowerCase() == "bank") InkWell(
+                         if(transaction.data!.senderMethod!.name!.toLowerCase() == "bank") InkWell(
+                        //if(transaction.data!.senderMethodId! == 2) InkWell(
                           onTap: (){
-                            Get.to(UploadBankReceiptScreen(transactionId: transaction.id!));
+                            Get.to(UploadBankReceiptScreen(transactionId: transaction.data!.id!));
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
@@ -186,35 +187,35 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                           ),
                         ),
                         const SizedBox(height: 20,),
-                        if(transaction.remitterStatus!.toUpperCase() == "INPROCESS") InkWell(
-                          onTap: (){
-                            commonController.currentTransaction = transaction;
-                            Get.to(const PaymentNewScreen());
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-                            decoration: BoxDecoration(
-                                color: AppColor.defaultColor.withOpacity(.1),
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text("Pay Through Card",style: TextStyle(fontWeight: FontWeight.w600),),
-                                Container(
-                                    height: 30,
-                                    width: 30,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: AppColor.defaultColor.withOpacity(.15),
-                                        borderRadius: BorderRadius.circular(20)
-                                    ),
-                                    child: Icon(Icons.credit_card_rounded,size: 17,color: AppColor.defaultColor,)
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        // if(transaction.remitterStatus!.toUpperCase() == "INPROCESS") InkWell(
+                        //   onTap: (){
+                        //     commonController.currentTransaction = transaction;
+                        //     Get.to(const PaymentNewScreen());
+                        //   },
+                        //   child: Container(
+                        //     padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                        //     decoration: BoxDecoration(
+                        //         color: AppColor.defaultColor.withOpacity(.1),
+                        //         borderRadius: BorderRadius.circular(10)
+                        //     ),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         const Text("Pay Through Card",style: TextStyle(fontWeight: FontWeight.w600),),
+                        //         Container(
+                        //             height: 30,
+                        //             width: 30,
+                        //             alignment: Alignment.center,
+                        //             decoration: BoxDecoration(
+                        //                 color: AppColor.defaultColor.withOpacity(.15),
+                        //                 borderRadius: BorderRadius.circular(20)
+                        //             ),
+                        //             child: Icon(Icons.credit_card_rounded,size: 17,color: AppColor.defaultColor,)
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
                         const SizedBox(height: 20,),
                       ],
                     ),

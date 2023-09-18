@@ -11,7 +11,12 @@ class ServerCurrency {
     id = json['id'];
     name = json['name'];
     code = json['code'];
-    defaultCurrency = json['default_currency']??false;
+    if(json['default_currency'] == 1){
+      defaultCurrency = true;
+    } else {
+      defaultCurrency = false;
+    }
+    //defaultCurrency = json['default_currency']??false;
   }
 
   Map<String, dynamic> toJson() {

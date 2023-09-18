@@ -36,6 +36,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController fullNameController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController middleNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   // TextEditingController usernameController = TextEditingController();
   // TextEditingController dateOfBirthController = TextEditingController();
   // TextEditingController addressController = TextEditingController();
@@ -61,6 +64,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // RxList<City> countryCities = <City>[].obs;
 
   String? phoneNumber;
+  List<String> nameParts = [];
+  String firstName = '';
+  String middleName = '';
+  String lastName = '';
 
   @override
   Widget build(BuildContext context) {
@@ -96,16 +103,64 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
+                                // CustomTextFormField(
+                                //     controller: fullNameController,
+                                //     validator: (value) {
+                                //       if(value!.isEmpty){
+                                //         return "Name can't be empty";
+                                //       }
+                                //       return null;
+                                //     },
+                                //     labelText: "Full Name",
+                                //     hindText: "Enter your full name",
+                                //     keyboardType: TextInputType.text,
+                                //     onChanged: (value) {
+                                //
+                                //     }
+                                // ),
+                                // const SizedBox(height: 10,),
                                 CustomTextFormField(
-                                    controller: fullNameController,
+                                    controller: firstNameController,
                                     validator: (value) {
                                       if(value!.isEmpty){
-                                        return "Name can't be empty";
+                                        return "First Name can't be empty";
                                       }
                                       return null;
                                     },
-                                    labelText: "Full Name",
-                                    hindText: "Enter your full name",
+                                    labelText: "First Name",
+                                    hindText: "Enter your First name",
+                                    keyboardType: TextInputType.text,
+                                    onChanged: (value) {
+
+                                    }
+                                ),
+                                const SizedBox(height: 10,),
+                                CustomTextFormField(
+                                    controller: middleNameController,
+                                    validator: (value) {
+                                      if(value!.isEmpty){
+                                        return "Middle Name can't be empty";
+                                      }
+                                      return null;
+                                    },
+                                    labelText: "Middle Name",
+                                    hindText: "Enter your middle name",
+                                    keyboardType: TextInputType.text,
+                                    onChanged: (value) {
+
+                                    }
+                                ),
+                                const SizedBox(height: 10,),
+                                CustomTextFormField(
+                                    controller: lastNameController,
+                                    validator: (value) {
+                                      if(value!.isEmpty){
+                                        return "Last Name can't be empty";
+                                      }
+                                      return null;
+                                    },
+                                    labelText: "Last Name",
+                                    hindText: "Enter your last name",
                                     keyboardType: TextInputType.text,
                                     onChanged: (value) {
 
@@ -118,7 +173,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       if(value!.isEmpty){
                                         return "Email can't be empty";
                                       }else if(!value.isEmail){
-                                        return "Enter correct email address";
+                                        //return "Enter correct email address";
                                       }
                                       return null;
                                     },
@@ -448,12 +503,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     }
 
                                     Utility.showLoadingDialog();
+                                    print(selectedCountry!.iso3Code!);
+                                    // setState(() {
+                                    //   nameParts =  fullNameController.text.split(" ");
+                                    //   if (nameParts.length >= 1) {
+                                    //     firstName = nameParts[0];
+                                    //   }
+                                    //   if (nameParts.length >= 2) {
+                                    //     lastName = nameParts[nameParts.length - 1];
+                                    //     middleName = nameParts.sublist(1, nameParts.length - 1).join(' ');
+                                    //   }
+                                    // });
 
                                     UserSignupRequest userSignupRequest = UserSignupRequest(
                                       email: emailController.text.trim(),
-                                      fullName: fullNameController.text.trim(),
+                                      //fullName: fullNameController.text.trim(),
+                                      firstName: firstNameController.text,
+                                      middleName: middleNameController.text,
+                                      lastName: lastNameController.text,
                                       //dateOfBirth: DateFormat("yyyy-MM-dd").format(dateOfBirth!),
-                                      countryId: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id,
+                                      //countryId: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).toString(),
+                                        countryId: selectedCountry!.iso3Code!,
                                       // citizenCountryId: commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
                                       // isCitizen: commonController.getServerCountryFromCountryCode(selectedCountry!.isoCode!).id == commonController.getServerCountryFromCountryCode(selectedCitizenCountry!.isoCode!).id,
                                       // cityId: selectedCity!.id!,
@@ -461,7 +531,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       // postalCode: int.parse(postCodeController.text),
                                       phone: phoneNumber,
                                       // username: usernameController.text,
-                                      password: passwordController.text
+                                      password: passwordController.text,
+                                      confirmPassword: confirmPasswordController.text
                                     );
 
                                     UserRepository.signUp(userSignupRequest).then((value){

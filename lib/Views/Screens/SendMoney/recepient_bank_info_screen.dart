@@ -27,11 +27,7 @@ class TransactionBankInfoScreen extends StatefulWidget {
 
 class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController bankNameTextEditingController = TextEditingController();
-  final TextEditingController bankAccountNoTextEditingController = TextEditingController();
-  final TextEditingController bankAccountTitleTextEditingController = TextEditingController();
   final TextEditingController bankAddressTextEditingController = TextEditingController();
-  final TextEditingController bankSwiftCodeTextEditingController = TextEditingController();
   // final TextEditingController branchNameTextEditingController = TextEditingController();
 
   CommonController commonController = Get.find<CommonController>();
@@ -48,7 +44,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
 
     commonController.selectedSendingPurpose = null;
     commonController.selectedCountryWiseBank = null;
-    bankAccountTitleTextEditingController.text = commonController.selectedRecipient!.fullName!;
+    commonController.bankAccountTitleTextEditingController.text = commonController.selectedRecipient!.fullName!;
   }
 
 
@@ -122,9 +118,9 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                       ],
                     ),
                   ),
-                  if(commonController.selectedModeOfReceive?.name!.toLowerCase() == "bank")const SizedBox(height: 15,),
+                  if(commonController.selectedModeOfReceive?.name!.toLowerCase() == "bankaccount")const SizedBox(height: 15,),
 
-                  if(commonController.selectedModeOfReceive?.name!.toLowerCase() == "bank")Column(
+                  if(commonController.selectedModeOfReceive?.name!.toLowerCase() == "bankaccount")Column(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -170,8 +166,8 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                 onChanged: (value) async{
                                   //if(recipientBank==null || recipientBank!.id != (value as RecipientBank).id){
                                   recipientBank = value as RecipientBank;
-                                  bankNameTextEditingController.text = recipientBank!.bankName!;
-                                  recipientBankBranch = null;
+                                  commonController.bankNameTextEditingController.text = recipientBank!.bankName!;
+                                  commonController.bankId = recipientBank!.id;
                                   Utility.showLoadingDialog();
                                   APIResponse<List<RecipientBankBranch>> apiResponse = await CommonRepository.getRecipientBankBranches(recipientBank!.id!);
 
@@ -211,6 +207,10 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                                   onChanged: (value) {
 
                                     recipientBankBranch = value as RecipientBankBranch;
+                                    commonController.recipientBankBranch = recipientBankBranch!.branchName!;
+                                    commonController.bankSwiftCodeTextEditingController.text = recipientBank!.swiftCode!;
+
+
                                     // branchNameTextEditingController.text = recipientBankBranch!.branchName!;
 
                                   }
@@ -248,7 +248,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             // ),
                             // const SizedBox(height: 10,),
                             CustomTextFormField(
-                                controller: bankAccountNoTextEditingController,
+                                controller: commonController.bankAccountNoTextEditingController,
                                 validator: (value) {
                                   if(value!.isEmpty){
                                     return "Field can't be empty";
@@ -278,7 +278,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             ),
                             const SizedBox(height: 10,),
                             CustomTextFormField(
-                                controller: bankAccountTitleTextEditingController,
+                                controller: commonController.bankAccountTitleTextEditingController,
                                 enabled:false,
                                 validator: (value) {
                                   if(value!.isEmpty){
@@ -362,8 +362,8 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                     ],
                   ),
 
-                  if(commonController.selectedModeOfPayment?.name!.toLowerCase() == "bank")const SizedBox(height: 15,),
-                  if(commonController.selectedModeOfPayment?.name!.toLowerCase() == "bank")Column(
+                  if(commonController.selectedModeOfPayment?.name!.toLowerCase() == "bankaccount")const SizedBox(height: 15,),
+                  if(commonController.selectedModeOfPayment?.name!.toLowerCase() == "bankaccount")Column(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -463,34 +463,51 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                       buttonText: "Continue", onTap: () {
                         FocusScope.of(context).unfocus();
                         if(_formKey.currentState!.validate()){
+                          if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bankaccount") {
+                            commonController.transactionRequestBodyForBank = TransactionRequestBodyforBank(
+
+                              bankId: commonController.bankId,
+                              bankAccountNo: commonController.bankAccountNoTextEditingController.text,
+                              bankAccountTitle: commonController.bankAccountTitleTextEditingController.text,
+                              bankSwiftCode: commonController.bankSwiftCodeTextEditingController.text,
+                              payoutCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
+                              receivingCurrency: commonController.serverCountryTo.value.selectedCurrency!.code,
+                              payoutAmount: commonController.currencyConversionDetails.value.data?.amountToSend,
+                              receiverMethodId: commonController.selectedModeOfReceive!.id,
+                              senderMethodId: commonController.selectedModeOfPayment!.id,
+                              recipientId: commonController.selectedRecipient!.id,
+                              senderCountryId: commonController.serverCountryFrom.value.id,
+                              receiverCityId: commonController.recipientCity!.id,
+                              receiverCountryId: commonController.selectedRecipient!.countryId!,
+                              purposeId: commonController.selectedSendingPurpose!.id!,
+                              bankName: commonController.bankNameTextEditingController.text,
+                              branchName: commonController.recipientBankBranch,
+
+                            );
+                          } else{
+                            commonController.transactionRequestBody = TransactionRequestBody(
+
+                              bankId: commonController.bankId,
+                              bankAccountNo: commonController.bankAccountNoTextEditingController.text,
+                              bankAccountTitle: commonController.bankAccountTitleTextEditingController.text,
+                              bankSwiftCode: commonController.bankSwiftCodeTextEditingController.text,
+                              payoutCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
+                              receivingCurrency: commonController.serverCountryTo.value.selectedCurrency!.code,
+                              payoutAmount: commonController.currencyConversionDetails.value.data?.amountToSend,
+                              receiverMethodId: commonController.selectedModeOfReceive!.id,
+                              senderMethodId: commonController.selectedModeOfPayment!.id,
+                              recipientId: commonController.selectedRecipient!.id,
+                              senderCountryId: commonController.serverCountryFrom.value.id,
+                              receiverCityId: commonController.recipientCity!.id,
+                              receiverCountryId: commonController.selectedRecipient!.countryId!,
+                              purposeId: commonController.selectedSendingPurpose!.id!,
+                              bankName: commonController.bankNameTextEditingController.text,
+                              branchName: commonController.recipientBankBranch,
+
+                            );
+                          }
 
 
-                           commonController.transactionRequestBody = TransactionRequestBody(
-                            bankName: bankNameTextEditingController.text,
-                            bankAccountNo: bankAccountNoTextEditingController.text,
-                            bankAccountTitle: bankAccountTitleTextEditingController.text,
-                            bankSwiftCode: bankSwiftCodeTextEditingController.text,
-                            bankAddress: "........",//bankAddressTextEditingController.text,
-                            branchName: recipientBankBranch?.branchName,
-                            payoutCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
-                            receivingCurrency: commonController.serverCountryTo.value.selectedCurrency!.code,
-                            // transactionDate: DateFormat("yyyy-mm-dd").format(DateTime.now()),
-                            purpose: commonController.selectedSendingPurpose!.name,
-                            purposeDescription: commonController.selectedSendingPurpose!.description,
-                            sendingPurposeId: commonController.selectedSendingPurpose!.id,
-                            settlementCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
-                            remarks: "Transaction from app",
-                            paymentMethodId: commonController.selectedModeOfPayment!.id,
-                            receiveMethodId: commonController.selectedModeOfReceive!.id,
-                            recipientId: commonController.selectedRecipient!.id,
-                            // recipientCityId: commonController.selectedRecipient!.city!.id,
-                            recipientCityId: commonController.recipientCity!.id,
-                            recipientCountryId: commonController.serverCountryTo.value.id,
-                            senderCountryId: commonController.serverCountryFrom.value.id,
-                            //senderCityId: commonController.senderCity!.id,
-                            amount: commonController.currencyConversionDetails.value.amountToSend,
-                            paymentBankId: commonController.selectedCountryWiseBank == null? null : commonController.selectedCountryWiseBank!.id,
-                          );
 
 
                            Get.to(const SendingMoneyConfirmationScreen());
@@ -520,14 +537,14 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           setState(() {
             isAccountNumberValidate=true;
-            bankAccountTitleTextEditingController.text = value.data?.name??commonController.selectedRecipient!.fullName!;
+            commonController.bankAccountTitleTextEditingController.text = value.data?.name??commonController.selectedRecipient!.fullName!;
           });
         });
       }else{
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           setState(() {
             isAccountNumberValidate=false;
-            bankAccountTitleTextEditingController.text = commonController.selectedRecipient!.fullName!;
+            commonController.bankAccountTitleTextEditingController.text = commonController.selectedRecipient!.fullName!;
           });
         });
       }

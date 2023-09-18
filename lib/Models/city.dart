@@ -1,7 +1,7 @@
 class City {
   String? name;
   String? description;
-  String? status;
+  int? status;
   int? id;
 
   City({this.name, this.description, this.status, this.id});

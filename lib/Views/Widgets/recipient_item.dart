@@ -140,7 +140,7 @@ class _RecipientItemState extends State<RecipientItem> {
                     children: [
                       const Icon(Icons.location_city_outlined,size: 20,),
                       const SizedBox(width: 5,),
-                      Expanded(child: Text("${widget.recipient.city!.name}, ${widget.recipient.country!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),)),
+                      Expanded(child: Text("${widget.recipient.city!.name!}, ${widget.recipient.country!.name!}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),)),
                     ],
                   ),
                 ),
@@ -148,7 +148,7 @@ class _RecipientItemState extends State<RecipientItem> {
                   onTap: () async{
 
                     commonController.selectedRecipient = widget.recipient;
-                    commonController.countryTo.value = CountryPickerUtils.getCountryByIsoCode(widget.recipient.country!.countryCode!);
+                    commonController.countryTo.value = CountryPickerUtils.getCountryByIsoCode(widget.recipient.countryId.toString());
 
                     if(commonController.countryFrom.value.isoCode != null && commonController.countryTo.value.isoCode != null){
                       Utility.showLoadingDialog();

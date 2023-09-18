@@ -110,7 +110,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                             ),
                             filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
                             onChanged: (value) {
-                              commonController.selectedRecipient = value as Recipient;
+                              commonController.selectedRecipient = value as Recipient?;
 
                               // emailTextEditingController.text = selectedRecipient!.email??"";
                               // nameTextEditingController.text = selectedRecipient!.fullName??"";

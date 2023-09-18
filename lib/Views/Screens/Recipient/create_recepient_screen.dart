@@ -49,6 +49,10 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
   RxList<City> countryCities = <City>[].obs;
 
   String? phoneNumber;
+  List<String> nameParts = [];
+  String firstName = '';
+  String middleName = '';
+  String lastName = '';
 
 
   @override
@@ -376,10 +380,24 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                         if(_formKey.currentState!.validate()){
 
                           Utility.showLoadingDialog();
+                          setState(() {
+                            nameParts =  nameTextEditingController.text.split(" ");
+                            if (nameParts.length >= 1) {
+                              firstName = nameParts[0];
+                            }
+                            if (nameParts.length >= 2) {
+                              lastName = nameParts[nameParts.length - 1];
+                              middleName = nameParts.sublist(1, nameParts.length - 1).join(' ');
+                            }
+                          });
+
 
                           RecipientRequestBody recipientRequestBody =  RecipientRequestBody(
                             //email: emailTextEditingController.text,
                             fullName: nameTextEditingController.text,
+                            firstName: firstName,
+                            middleName: middleName,
+                            lastName: lastName,
                             phone: phoneNumber,
                             streetAddress: addressTextEditingController.text,
                             //postalCode: int.tryParse(postalCodeTextEditingController.text),

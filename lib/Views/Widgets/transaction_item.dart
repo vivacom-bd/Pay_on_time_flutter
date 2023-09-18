@@ -23,7 +23,7 @@ class TransactionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        Get.to(()=>TransactionDetailsScreen(transactionNumber: transaction.id!));
+        Get.to(()=>TransactionDetailsScreen(transactionNumber: transaction.data!.id!));
       },
       child: Card(
         elevation: 2,
@@ -58,10 +58,10 @@ class TransactionItem extends StatelessWidget {
                         ),
                         child: Icon(Icons.visibility,size: 17,color: AppColor.defaultColor,)
                       ),
-                      if(transaction.paymentMethod!.name!.toLowerCase() == "bank") const SizedBox(width: 7,),
-                      if(transaction.paymentMethod!.name!.toLowerCase() == "bank") InkWell(
+                      if(transaction.data!.senderMethod!.name!.toLowerCase() == "bank") const SizedBox(width: 7,),
+                      if(transaction.data!.senderMethod!.name!.toLowerCase() == "bank") InkWell(
                         onTap: (){
-                          Get.to(UploadBankReceiptScreen(transactionId: transaction.id!));
+                          Get.to(UploadBankReceiptScreen(transactionId: transaction.data!.id!));
                         },
                         child: Container(
                             height: 30,
@@ -74,23 +74,23 @@ class TransactionItem extends StatelessWidget {
                             child: Icon(Icons.cloud_upload,size: 17,color: AppColor.defaultColor,)
                         ),
                       ),
-                      if(transaction.remitterStatus != null && transaction.remitterStatus!.toUpperCase() == "INPROCESS") const SizedBox(width: 7,),
-                      if(transaction.remitterStatus != null && transaction.remitterStatus!.toUpperCase() == "INPROCESS") InkWell(
-                        onTap: (){
-                          Get.find<CommonController>().currentTransaction = transaction;
-                          Get.to(const PaymentNewScreen());
-                        },
-                        child: Container(
-                            height: 30,
-                            width: 30,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: AppColor.defaultColor.withOpacity(.15),
-                                borderRadius: BorderRadius.circular(20)
-                            ),
-                            child: Icon(Icons.credit_card_rounded,size: 17,color: AppColor.defaultColor,)
-                        ),
-                      ),
+                      // if(transaction.remitterStatus != null && transaction.remitterStatus!.toUpperCase() == "INPROCESS") const SizedBox(width: 7,),
+                      // if(transaction.remitterStatus != null && transaction.remitterStatus!.toUpperCase() == "INPROCESS") InkWell(
+                      //   onTap: (){
+                      //     Get.find<CommonController>().currentTransaction = transaction;
+                      //     Get.to(const PaymentNewScreen());
+                      //   },
+                      //   child: Container(
+                      //       height: 30,
+                      //       width: 30,
+                      //       alignment: Alignment.center,
+                      //       decoration: BoxDecoration(
+                      //           color: AppColor.defaultColor.withOpacity(.15),
+                      //           borderRadius: BorderRadius.circular(20)
+                      //       ),
+                      //       child: Icon(Icons.credit_card_rounded,size: 17,color: AppColor.defaultColor,)
+                      //   ),
+                      // ),
                     ],
                   ),
                 ],
@@ -99,8 +99,8 @@ class TransactionItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("#${transaction.transactionNumber}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
-                  Text(DateFormat("dd MMM, yyyy hh:mm").format(DateFormat("yyyy-MM-ddThh:mm:ss").parse(transaction.transactionDate!)), style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
+                  Text("#${transaction.data!.transactionNumber}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
+                  Text(DateFormat("dd MMM, yyyy hh:mm").format(DateFormat("yyyy-MM-ddThh:mm:ss").parse(transaction.data!.createdAt!)), style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
                 ],
               ),
               const SizedBox(height: 5,),
@@ -108,7 +108,7 @@ class TransactionItem extends StatelessWidget {
                 children: [
                   const Icon(Icons.person,size: 21),
                   const SizedBox(width: 7,),
-                  Text("${transaction.recipient!.fullName}", style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                  Text(transaction.data!.receiver!.name!, style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
                 ],
               ),
               const SizedBox(height: 5,),
@@ -121,9 +121,9 @@ class TransactionItem extends StatelessWidget {
                       children: [
                         const Text("Payout Amount", style: TextStyle(fontSize: 13,fontWeight: FontWeight.w300),),
                         const SizedBox(height: 3,),
-                        Text("${transaction.payoutAmount!.toStringAsFixed(2)} ${transaction.payoutCurrency}", style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w600),),
+                        Text("${transaction.data!.payoutAmount!.toStringAsFixed(2)} ${transaction.data!.payoutCurrency}", style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w600),),
                         const SizedBox(height: 3,),
-                        Text("${transaction.paymentMethod!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w500),),
+                        Text("${transaction.data!.senderMethod!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w500),),
                       ],
                     ),
                   ),
@@ -133,9 +133,9 @@ class TransactionItem extends StatelessWidget {
                       children: [
                         const Text("Receiving Amount", style: TextStyle(fontSize: 13,fontWeight: FontWeight.w300),),
                         const SizedBox(height: 3,),
-                        Text("${transaction.receivingAmount!.toStringAsFixed(2)} ${transaction.receivingCurrency}", style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w600),),
+                        Text("${transaction.data!.receivedAmount!.toStringAsFixed(2)} ${transaction.data!.receivedCurrency}", style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w600),),
                         const SizedBox(height: 3,),
-                        Text("${transaction.receiveMethod!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w500),),
+                        Text("${transaction.data!.receiverMethod!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w500),),
                       ],
                     ),
                   )
