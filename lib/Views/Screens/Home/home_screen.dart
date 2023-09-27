@@ -136,44 +136,60 @@ class _HomeScreenState extends State<HomeScreen> {
                         // }
                       },
                     ),
-                    DashboardExploreItem(title: "Card",subtitle: "See your Card here",iconName: "card", onTap: () {  },
-                      // onTap: () async {
-                      //   if(controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty){
-                      //     DefaultDialogs.showDialog(
-                      //         title: "Apply for KYC",
-                      //         text: "Your KYC application is not approved yet. Please apply for KYC.",
-                      //         onCancel: (){
-                      //           Get.back();
-                      //         },
-                      //         onSubmitText: "Continue",
-                      //         onSubmit: ()async{
-                      //           Get.back();
-                      //           String url = '${kycBaseUrl()}applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
-                      //           Uri uri = Uri.parse(url);
-                      //           if (await canLaunchUrl(uri)) {
-                      //             await launchUrl(uri,mode: LaunchMode.externalApplication);
-                      //           }
-                      //         }
-                      //     );
-                      //   } else {
-                      //     Utility.showLoadingDialog();
-                      //     bool value = await commonController.getPersonalAccountCard(0,25,commonController.userProfile.value.id!);
-                      //     if(value){
-                      //       if(commonController.personalAccountCard.value.data!.isNotEmpty){
-                      //         bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![0].id!);
-                      //         Get.back();
-                      //         if(value){
-                      //           Get.to(()=> const ExistingCardHolderList());
-                      //         } else {
-                      //           Utility.showSnackBar("can not call");
-                      //         }
-                      //
-                      //       } else {
-                      //         Get.to(const CardListScreen());
-                      //       }
-                      //     }
-                      //   }
-                      // },
+                    DashboardExploreItem(title: "Card",subtitle: "See your Card here",iconName: "card",
+                      onTap: () async {
+                        Utility.showLoadingDialog();
+                        bool value = await commonController.getPersonalAccountCard(0,25,commonController.userProfile.value.id!);
+                        if(value){
+                          if(commonController.personalAccountCard.value.data!.isNotEmpty){
+                            bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![0].id!);
+                            Get.back();
+                            if(value){
+                              Get.to(()=> const ExistingCardHolderList());
+                            } else {
+                              Utility.showSnackBar("can not call");
+                            }
+
+                          } else {
+                            Get.to(const CardListScreen());
+                          }
+                        }
+                        // if(controller.currentUser.value.kycUserToken !=null && controller.currentUser.value.kycUserToken!.isNotEmpty && controller.currentUser.value.kycApplicationId !=null && controller.currentUser.value.kycApplicationId!.isNotEmpty){
+                        //   DefaultDialogs.showDialog(
+                        //       title: "Apply for KYC",
+                        //       text: "Your KYC application is not approved yet. Please apply for KYC.",
+                        //       onCancel: (){
+                        //         Get.back();
+                        //       },
+                        //       onSubmitText: "Continue",
+                        //       onSubmit: ()async{
+                        //         Get.back();
+                        //         String url = '${kycBaseUrl()}applications/${controller.currentUser.value.kycApplicationId}?access_token=${controller.currentUser.value.kycUserToken}';
+                        //         Uri uri = Uri.parse(url);
+                        //         if (await canLaunchUrl(uri)) {
+                        //           await launchUrl(uri,mode: LaunchMode.externalApplication);
+                        //         }
+                        //       }
+                        //   );
+                        // } else {
+                        //   Utility.showLoadingDialog();
+                        //   bool value = await commonController.getPersonalAccountCard(0,25,commonController.userProfile.value.id!);
+                        //   if(value){
+                        //     if(commonController.personalAccountCard.value.data!.isNotEmpty){
+                        //       bool value = await commonController.getCardStatus(commonController.userProfile.value.id!, commonController.personalAccountCard.value.data![0].id!);
+                        //       Get.back();
+                        //       if(value){
+                        //         Get.to(()=> const ExistingCardHolderList());
+                        //       } else {
+                        //         Utility.showSnackBar("can not call");
+                        //       }
+                        //
+                        //     } else {
+                        //       Get.to(const CardListScreen());
+                        //     }
+                        //   }
+                        // }
+                      },
                     ),
                     const SizedBox(height: 10,),
                     DashboardExploreItem(title: "Transaction History",subtitle: "See your previous transactions",iconName: "history",

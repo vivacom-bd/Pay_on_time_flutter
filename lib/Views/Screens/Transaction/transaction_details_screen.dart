@@ -16,7 +16,7 @@ class TransactionDetailsScreen extends StatefulWidget {
 
   static const String routeName = "TransactionDetailsScreen";
 
-  final int transactionNumber;
+  final String transactionNumber;
 
   const TransactionDetailsScreen({Key? key, required this.transactionNumber}) : super(key: key);
 
@@ -66,13 +66,13 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                             children: [
                               const Center(child: Text("Your Money Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                               Divider(color: AppColor.defaultColor,thickness: 2,),
-                              SendDetailsItem(title: "From",value: "${transaction.data!.sender!.country!.name}",),
+                              SendDetailsItem(title: "From",value: transaction.data!.sender!.country!.name!),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "To",value: "${transaction.data!.receiver!.country!.name}",),
+                              SendDetailsItem(title: "To",value: transaction.data!.receiver!.country!.name!),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Payout amount",value: "${transaction..data!.payoutAmount!.toStringAsFixed(2)} ${transaction.data!.payoutCurrency!.code}",),
+                              SendDetailsItem(title: "Payout amount",value: "${transaction.data!.payoutAmount!.toStringAsFixed(2)} ${transaction.data!.payoutCurrency!.code}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Receiving amount",value: "${transaction..data!.receivedAmount!.toStringAsFixed(2)} ${transaction.data!.receivedCurrency!.code}",),
+                              SendDetailsItem(title: "Receiving amount",value: "${transaction.data!.receivedAmount!.toStringAsFixed(2)} ${transaction.data!.receivedCurrency!.code}",),
                             ],
                           ),
                         ),
@@ -90,20 +90,20 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                             children: [
                               const Center(child: Text("Your Recipient Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                               Divider(color: AppColor.defaultColor,thickness: 2,),
-                              SendDetailsItem(title: "Full name",value: transaction.data!.receiver!.name!,),
+                              SendDetailsItem(title: "Full name",value: transaction.data!.receiver!.name !=null ? transaction.data!.receiver!.name! : "",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
                               // SendDetailsItem(title: "Mobile Number",value: "${transaction.recipient!.phone}",),
                               // Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "City",value: "${transaction..data!.receiver!.city!.name}",),
+                              SendDetailsItem(title: "City",value: transaction.data!.receiver!.city!.name!),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Country",value: "${transaction..data!.receiver!.country!.name}",),
+                              SendDetailsItem(title: "Country",value: transaction.data!.receiver!.country!.name!),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Mode of Receive",value: "${transaction.data!.receiverMethod!.name!}",),
+                              SendDetailsItem(title: "Mode of Receive",value: transaction.data!.receiverMethod!.name!,),
                             ],
                           ),
                         ),
-                        if(transaction.data!.bankName !=null && transaction.data!.bankName!.isNotEmpty) const SizedBox(height: 20,),
-                        if(transaction.data!.bankName !=null && transaction.data!.bankName!.isNotEmpty) Container(
+                        if(transaction.data!.bankName !=null && transaction.data!.bankName!.isNotEmpty && transaction.data!.receiverMethod!.name!.toLowerCase() != "cash") const SizedBox(height: 20,),
+                        if(transaction.data!.bankName !=null && transaction.data!.bankName!.isNotEmpty && transaction.data!.receiverMethod!.name!.toLowerCase() != "cash") Container(
                           padding: const EdgeInsets.all(15),
                           decoration: BoxDecoration(
                               color: AppColor.defaultColor.withOpacity(.1),
@@ -140,24 +140,24 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                             children: [
                               const Center(child: Text("Transaction Details",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                               Divider(color: AppColor.defaultColor,thickness: 2,),
-                              SendDetailsItem(title: "Mode of Payment",value: "${transaction.data!.senderMethod!.name}",),
+                              SendDetailsItem(title: "Mode of Payment",value: transaction.data!.senderMethod !=null ? "${transaction.data!.senderMethod!.name}" : "",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
                               SendDetailsItem(title: "Remitter Status",value: "",),//${transaction.remitterStatus}
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              // SendDetailsItem(title: "Mode of Receive",value: "${transaction.receiveMethod!.name}",),
-                              // Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Purpose",value: "${transaction.data!.sendingPurpose!.name}",),
+                              SendDetailsItem(title: "Mode of Receive",value: "${transaction.data!.receiverMethod!.name}",),
+                              Divider(color: AppColor.defaultColor,thickness: .5,),
+                              SendDetailsItem(title: "Purpose",value: transaction.data!.sendingPurpose !=null ? "${transaction.data!.sendingPurpose!.name}" :  "",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
                               SendDetailsItem(title: "Transaction Number",value: "${transaction.data!.transactionNumber}",),
                               Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Transaction Date",value: DateFormat("dd MMM, yyyy hh:mm").format(DateFormat("yyyy-MM-ddThh:mm:ss").parse(transaction.data!.createdAt!.substring(0,0)),),),
-                              Divider(color: AppColor.defaultColor,thickness: .5,),
+                              // SendDetailsItem(title: "Transaction Date",value: DateFormat("dd MMM, YYYY hh:mm").format(DateFormat("yyyy-MM-ddThh:mm:ss").parse(transaction.data!.createdAt!.substring(0,0)),),),
+                              // Divider(color: AppColor.defaultColor,thickness: .5,),
                               SendDetailsItem(title: "Benificiary Status",value: transaction.data!.beneficiaryStatus!.toString() ??"",),
                             ],
                           ),
                         ),
                         const SizedBox(height: 20,),
-                         if(transaction.data!.senderMethod!.name!.toLowerCase() == "bank") InkWell(
+                         if(transaction.data!.senderMethod !=null && transaction.data!.senderMethod!.name!.toLowerCase() == "bank") InkWell(
                         //if(transaction.data!.senderMethodId! == 2) InkWell(
                           onTap: (){
                             Get.to(UploadBankReceiptScreen(transactionId: transaction.data!.id!));

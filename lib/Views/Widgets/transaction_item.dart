@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/transaction.dart';
+import 'package:hidmona/Models/transaction_list_model.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Views/Screens/Payment/payment_new_screen.dart';
 import 'package:hidmona/Views/Screens/Payment/payment_screen.dart';
@@ -16,14 +17,14 @@ class TransactionItem extends StatelessWidget {
     required this.index
   }) : super(key: key);
 
-  final Transaction transaction;
+  final TransactionData transaction;
   final int index;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        Get.to(()=>TransactionDetailsScreen(transactionNumber: transaction.data!.id!));
+        Get.to(()=>TransactionDetailsScreen(transactionNumber: transaction.transactionNumber!));
       },
       child: Card(
         elevation: 2,
@@ -58,10 +59,10 @@ class TransactionItem extends StatelessWidget {
                         ),
                         child: Icon(Icons.visibility,size: 17,color: AppColor.defaultColor,)
                       ),
-                      if(transaction.data!.senderMethod!.name!.toLowerCase() == "bank") const SizedBox(width: 7,),
-                      if(transaction.data!.senderMethod!.name!.toLowerCase() == "bank") InkWell(
+                      (transaction.senderMethod!.name!.toLowerCase() == "bank") ?  const SizedBox(width: 7,) : SizedBox(width: 0,),
+                      if(transaction.senderMethod!.name!.toLowerCase() == "bank") InkWell(
                         onTap: (){
-                          Get.to(UploadBankReceiptScreen(transactionId: transaction.data!.id!));
+                          Get.to(UploadBankReceiptScreen(transactionId: transaction.id!));
                         },
                         child: Container(
                             height: 30,
@@ -99,8 +100,8 @@ class TransactionItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("#${transaction.data!.transactionNumber}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
-                  Text(DateFormat("dd MMM, yyyy hh:mm").format(DateFormat("yyyy-MM-ddThh:mm:ss").parse(transaction.data!.createdAt!)), style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
+                  Text("#${transaction.transactionNumber}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
+                  Text(DateFormat("dd MMM, yyyy hh:mm").format(DateFormat("yyyy-MM-ddThh:mm:ss").parse(transaction.createdAt!)), style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
                 ],
               ),
               const SizedBox(height: 5,),
@@ -108,7 +109,9 @@ class TransactionItem extends StatelessWidget {
                 children: [
                   const Icon(Icons.person,size: 21),
                   const SizedBox(width: 7,),
-                  Text(transaction.data!.receiver!.name!, style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                  Text(
+                    transaction.receiver!.name !=null ? transaction.receiver!.name! : "",
+                    style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
                 ],
               ),
               const SizedBox(height: 5,),
@@ -121,9 +124,9 @@ class TransactionItem extends StatelessWidget {
                       children: [
                         const Text("Payout Amount", style: TextStyle(fontSize: 13,fontWeight: FontWeight.w300),),
                         const SizedBox(height: 3,),
-                        Text("${transaction.data!.payoutAmount!.toStringAsFixed(2)} ${transaction.data!.payoutCurrency}", style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w600),),
+                        Text("${transaction.payoutAmount!.toStringAsFixed(2)} ${transaction.payoutCurrency}", style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w600),),
                         const SizedBox(height: 3,),
-                        Text("${transaction.data!.senderMethod!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w500),),
+                        Text("${transaction.senderMethod!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w500),),
                       ],
                     ),
                   ),
@@ -133,9 +136,9 @@ class TransactionItem extends StatelessWidget {
                       children: [
                         const Text("Receiving Amount", style: TextStyle(fontSize: 13,fontWeight: FontWeight.w300),),
                         const SizedBox(height: 3,),
-                        Text("${transaction.data!.receivedAmount!.toStringAsFixed(2)} ${transaction.data!.receivedCurrency}", style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w600),),
+                        Text("${transaction.receivedAmount !=null ?   transaction.receivedAmount!.toStringAsFixed(2) : 0}  ${transaction.receivedCurrency}", style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w600),),
                         const SizedBox(height: 3,),
-                        Text("${transaction.data!.receiverMethod!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w500),),
+                        Text("${transaction.receiverMethod!.name}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w500),),
                       ],
                     ),
                   )

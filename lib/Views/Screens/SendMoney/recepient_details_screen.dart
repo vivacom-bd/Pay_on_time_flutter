@@ -9,6 +9,7 @@ import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/common_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Recipient/create_recepient_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/recepient_bank_info_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/recepient_details_new_screen.dart';
 import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
@@ -43,6 +44,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
   void initState() {
     super.initState();
     commonController.recipientCity = null;
+    //commonController.selectedRecipient = null;
 
   }
 
@@ -199,6 +201,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                       children: [
                         DefaultButton(buttonText: "Add New Recipient",onTap: (){
                           Get.to(()=>const RecipientDetailsNewScreen());
+                          //Get.to(() => const CreateRecipientScreen());
                         },),
                       ],
                     ),

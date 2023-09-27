@@ -70,7 +70,7 @@ class Data {
     account = json['account'];
     cardHolder = json['card_holder'];
     externalId = json['externalId'];
-    balance = json['balance'];
+    balance = json['balance'].toDouble();
     state = json['state'];
     type = json['type'];
     sequenceNumber = json['sequenceNumber'];

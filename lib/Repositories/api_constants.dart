@@ -31,7 +31,7 @@ final headers = {
 
 get headersWithAuth{
   return {
-    //"Content-Type": "application/json",
+
     // "x-org-domain": "hidmona",
     'Accept' : 'application/json',
     'Authorization': 'Bearer '+ (Get.find<CommonController>().currentUser.value.data!.token??"bearer"),
@@ -44,6 +44,17 @@ get headersWithAuthAndContentType{
   return {
     "Content-Type": "application/json",
     // "x-org-domain": "hidmona",
+    'Authorization': 'Bearer '+ (Get.find<CommonController>().currentUser.value.data!.token??"bearer"),
+
+    //'Authorization': Get.find<CommonController>().currentUser.value.data!.token ??'bearer',
+  };
+}
+
+get headersWithAuthAndContentTypeAndAccept{
+  return {
+    "Content-Type": "application/json",
+    // "x-org-domain": "hidmona",
+    'Accept' : 'application/json',
     'Authorization': 'Bearer '+ (Get.find<CommonController>().currentUser.value.data!.token??"bearer"),
 
     //'Authorization': Get.find<CommonController>().currentUser.value.data!.token ??'bearer',

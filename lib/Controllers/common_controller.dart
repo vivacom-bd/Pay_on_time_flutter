@@ -72,6 +72,9 @@ class CommonController extends GetxController{
   TransactionRequestBodyforBank ? transactionRequestBodyForBank;
   Transaction? currentTransaction;
 
+  int ? modeOfReceiveId;
+  int ? modeOfPaymentId;
+
   ModeOfPayment? selectedModeOfReceive;
   ModeOfPayment? selectedModeOfPayment;
   SendingPurpose? selectedSendingPurpose;
@@ -110,7 +113,7 @@ class CommonController extends GetxController{
 
 
 
-  List<String> euroCountry = ['SE','ER','AT','BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK','SI', 'ES', 'SE', 'GB'];
+  List<String> euroCountry = ['BD','SO','SE','ER','AT','BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK','SI', 'ES', 'SE', 'GB'];
   Country? selectedCountry;
   Country? selectedCitizenCountry;
 
@@ -407,8 +410,8 @@ class CommonController extends GetxController{
 
 
   ///PersonalAccountCreate
-  Future<bool> createAccount() async{
-    APIResponse<PersonalAccount> apiResponseFromAcc = await CardRemittanceRepository.createPersonalAccount();
+  Future<bool> createAccount(int userId) async{
+    APIResponse<PersonalAccount> apiResponseFromAcc = await CardRemittanceRepository.createPersonalAccount(userId);
     if(apiResponseFromAcc.data!=null){
       currentPersonalAccount.value = apiResponseFromAcc.data!;
     }else{

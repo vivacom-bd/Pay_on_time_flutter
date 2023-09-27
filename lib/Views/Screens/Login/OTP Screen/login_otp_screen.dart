@@ -136,6 +136,10 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                     bool value = await commonController.verifyOTP(int.parse(otpController.text));
                     Get.back();
                     if(value){
+                      bool value = await commonController.kycUserData();
+                      if(value){
+                        Get.offAll(()=> const HomeScreen());
+                      }
                       Get.offAll(()=> const HomeScreen());
                     } else {Get.back();}
 

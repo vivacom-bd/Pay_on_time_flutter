@@ -67,7 +67,7 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                           Divider(color: AppColor.defaultColor,thickness: .5,),
                           SendDetailsItem(title: "Amount to receive in USD",value: "${commonController.currencyConversionDetails.value.data!.receivingAmountInUsd!.toStringAsFixed(2)} USD",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Fees",value: "${commonController.currencyConversionDetails.value.data!.fees!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
+                          SendDetailsItem(title: "Fees",value: "${commonController.currencyConversionDetails.value.data!.ourFees!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
                           SendDetailsItem(title: "Total to pay",value: "${commonController.currencyConversionDetails.value.data!.amountToPay!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
                         ],
@@ -118,8 +118,8 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         ],
                       ),
                     ),
-                    if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bankaccount") const SizedBox(height: 20,),
-                    if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bankaccount") Container(
+                    if(commonController.selectedModeOfReceive!.id == 3) const SizedBox(height: 20,),
+                    if(commonController.selectedModeOfReceive!.id == 3) Container(
                       padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
                           color: AppColor.defaultColor.withOpacity(.1),
@@ -210,7 +210,7 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                 onTap: () async {
                   if(isInformationCorrect) {
                     Utility.showLoadingDialog();
-                    if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bankaccount") {
+                    if(commonController.selectedModeOfReceive!.id == 3) {
                       TransactionRepository.createTransactionForBank(
                       commonController.transactionRequestBodyForBank!,
                     ).then((value){

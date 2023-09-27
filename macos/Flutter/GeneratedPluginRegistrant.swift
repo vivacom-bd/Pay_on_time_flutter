@@ -7,7 +7,7 @@ import Foundation
 
 import cloud_firestore
 import firebase_core
-import package_info_plus_macos
+import package_info_plus
 import path_provider_foundation
 import sqflite
 import url_launcher_macos

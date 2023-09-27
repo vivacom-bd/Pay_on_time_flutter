@@ -23,7 +23,7 @@ import 'package:http/http.dart' as http;
 class CardRemittanceRepository{
 
   ///CreatePersonalAccount
-  static Future<APIResponse<PersonalAccount>> createPersonalAccount() async{
+  static Future<APIResponse<PersonalAccount>> createPersonalAccount(int userID) async{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
@@ -33,8 +33,10 @@ class CardRemittanceRepository{
     Uri url = Uri.parse(baseAPIUrl()+'card_remittance/create-personal-account');
     return http.post(
         url,
-        headers: headersWithAuth,
-        body: json.encode({})
+        headers: headersWithAuthAndContentTypeAndAccept,
+        body: json.encode({
+          'user_id' : userID
+        })
     ).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
@@ -42,7 +44,7 @@ class CardRemittanceRepository{
       if(data.statusCode == 200){
         return APIResponse<PersonalAccount>(data: PersonalAccount.fromJson(jsonData));
       }
-      return APIResponse<PersonalAccount>(error: true, message: jsonData["detail"]??"An error occurred");
+      return APIResponse<PersonalAccount>(error: true, message: jsonData["reason"]??"An error occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<PersonalAccount>(error: true, message: "An Error Occurred!");
@@ -60,7 +62,7 @@ class CardRemittanceRepository{
     Uri url = Uri.parse(baseAPIUrl()+'card_remittance/get-personal-account');
     return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentTypeAndAccept,
         body: json.encode({
           "start" : start,
           "limit": limit,
@@ -88,7 +90,7 @@ class CardRemittanceRepository{
     Uri url = Uri.parse(baseAPIUrl()+'card_remittance/get-title');
     return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentTypeAndAccept,
         body: json.encode({
           "start" : start,
           "limit" : limit,
@@ -144,7 +146,7 @@ class CardRemittanceRepository{
     Uri url = Uri.parse(baseAPIUrl()+'card_remittance/create-card-holder');
     return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentTypeAndAccept,
         body: json.encode({
           "user_id" : userId,
           "account_pk" : accountPK,
@@ -154,7 +156,7 @@ class CardRemittanceRepository{
           "m_name": mName,
           "l_name": lName,
           "embossed_name": embossedName,
-          "DOB": dob,
+          "dob": dob,
           "email": email,
           "username": userName,
           "client_ref": clientRef,
@@ -182,7 +184,7 @@ class CardRemittanceRepository{
       if(data.statusCode == 200){
         return APIResponse<CreateCardHolder>(data: CreateCardHolder.fromJson(jsonData));
       }
-      return APIResponse<CreateCardHolder>(error: true, message: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<CreateCardHolder>(error: true, message: jsonData["reason"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<CreateCardHolder>(error: true, message: "An Error Occurred!");
@@ -197,7 +199,7 @@ class CardRemittanceRepository{
     Uri url = Uri.parse(baseAPIUrl()+'card_remittance/order-card');
     return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentTypeAndAccept,
         body: json.encode({
           "sender_id" : senderId,
           "card_holder_pk" : cardHolderId,
@@ -209,7 +211,7 @@ class CardRemittanceRepository{
       if(data.statusCode == 200){
         return APIResponse<CardDetails>(data: CardDetails.fromJson(jsonData));
       }
-      return APIResponse<CardDetails>(error: true, message: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<CardDetails>(error: true, message: jsonData["reason"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<CardDetails>(error: true, message: "An Error Occurred!");
@@ -224,7 +226,7 @@ class CardRemittanceRepository{
     Uri url = Uri.parse(baseAPIUrl()+'card_remittance/get-personal-account-cards');
     return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentTypeAndAccept,
         body: json.encode({
           "start" : start,
           "limit" : limit,
@@ -253,7 +255,7 @@ class CardRemittanceRepository{
     Uri url = Uri.parse(baseAPIUrl()+'card_remittance/card-status');
     return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentTypeAndAccept,
         body: json.encode({
           "sender_id" : senderId,
           "account_card_pk" : accountCardPk,
@@ -281,7 +283,7 @@ class CardRemittanceRepository{
     Uri url = Uri.parse(baseAPIUrl()+'card_remittance/activate-card');
     return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentTypeAndAccept,
         body: json.encode({
           "sender_id" : senderId,
           "account_card_pk" : accountCardPk,
@@ -310,7 +312,7 @@ class CardRemittanceRepository{
     Uri url = Uri.parse(baseAPIUrl()+'card_remittance/card-pin');
     return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentTypeAndAccept,
         body: json.encode({
           "sender_id" : senderId,
           "account_card_pk" : accountCardPk,
@@ -323,7 +325,7 @@ class CardRemittanceRepository{
       if(data.statusCode == 200){
         return APIResponse<CardPin>(data: CardPin.fromJson(jsonData));
       }
-      return APIResponse<CardPin>(error: true, message: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<CardPin>(error: true, message: jsonData["reason"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<CardPin>(error: true, message: "An Error Occurred!");
@@ -338,7 +340,7 @@ class CardRemittanceRepository{
     Uri url = Uri.parse(baseAPIUrl()+'card_remittance/set-card-pin');
     return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentTypeAndAccept,
         body: json.encode({
           "card_pk" : cardPk,
           "pin" : pin,
@@ -366,7 +368,7 @@ class CardRemittanceRepository{
     Uri url = Uri.parse(baseAPIUrl()+'card_remittance/load-card');
     return http.post(
         url,
-        headers: headersWithAuth,
+        headers: headersWithAuthAndContentTypeAndAccept,
         body: json.encode({
           "card_pk" : cardPk,
           "account_pk" : accountPk,
@@ -380,7 +382,7 @@ class CardRemittanceRepository{
       if(data.statusCode == 200){
         return APIResponse<LoadCard>(data: LoadCard.fromJson(jsonData));
       }
-      return APIResponse<LoadCard>(error: true, message: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<LoadCard>(error: true, message: jsonData["reason"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<LoadCard>(error: true, message: "An Error Occurred!");
@@ -441,16 +443,15 @@ class CardRemittanceRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<KYCDataRetrieve>(error: true, message: "Internet is not connected!");
     }
-    print(headersWithAuth);
     Uri url = Uri.parse(baseAPIUrl()+'kyc_user_data');
-    return http.get(url,headers: headersWithAuth).then((data){
+    return http.get(url,headers: headersWithAuthAndContentTypeAndAccept).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
-      if(data.statusCode == 200){
+      if(data.statusCode == 201){
         return APIResponse<KYCDataRetrieve>(data: KYCDataRetrieve.fromJson(jsonData));
       }
-      return APIResponse<KYCDataRetrieve>(error: true, message: jsonData["detail"]??"An error occurred");
+      return APIResponse<KYCDataRetrieve>(error: true, message: jsonData["message"]??"An error occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<KYCDataRetrieve>(error: true, message: "An Error Occurred!");

@@ -2,6 +2,7 @@ import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hidmona/Models/transaction.dart';
+import 'package:hidmona/Models/transaction_list_model.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/transaction_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
@@ -32,16 +33,16 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
       body: SafeArea(
         child: FutureBuilder(
           future: TransactionRepository.getTransactions(),
-          builder: (context,AsyncSnapshot< APIResponse<List<Transaction>>> snapshot){
+          builder: (context,AsyncSnapshot< APIResponse<List<TransactionData>>> snapshot){
 
             if(snapshot.data!=null){
 
-              APIResponse<List<Transaction>> response = snapshot.data!;
+              APIResponse<List<TransactionData>> response = snapshot.data!;
 
               if(response.data != null){
-                List<Transaction> transactions = response.data!;
+                List<TransactionData> transactions = response.data!;
 
-                //transactions = transactions.reversed.toList();
+                transactions = transactions.reversed.toList();
 
                 return CustomRefreshIndicator(
                   onRefresh: () => Future.delayed(const Duration(seconds: 1),(){

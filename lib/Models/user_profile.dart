@@ -8,21 +8,21 @@ class UserProfile {
   String? postalCode;
   int? countryId;
   int? cityId;
-  Null? organizationId;
+  int? organizationId;
   int? isBeneficiary;
   String? referenceNo;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
-  Null? createdByUserId;
+  String? deletedAt;
+  int? createdByUserId;
   String? firstName;
   String? middleName;
   String? lastName;
-  Null? emailVerifiedAt;
-  Null? dateOfBirth;
+  String? emailVerifiedAt;
+  String? dateOfBirth;
   Null? profilePicture;
   Null? otp;
-  Null? otpCreatedAt;
+  String? otpCreatedAt;
   UserCountry? country;
   UserCity? city;
 

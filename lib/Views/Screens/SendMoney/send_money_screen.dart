@@ -157,6 +157,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                                   onChanged: (value) {
                                     setState(() {
                                       commonController.selectedModeOfReceive = value as ModeOfPayment;
+                                      commonController.modeOfReceiveId = commonController.selectedModeOfReceive!.id;
                                     });
                                   }
                               ),
@@ -287,7 +288,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                           Obx((){
                             if(inputAmount.value!=0){
                               return FutureBuilder(
-                                future: commonController.getConversionDetails((commonController.countryTo.value.iso3Code == 'ETH' && commonController.modeOfReceives == 'Bank') ? "dashen_bank" :'',inputAmount.value, commonController.serverCountryFrom.value.selectedCurrency!, commonController.serverCountryTo.value.selectedCurrency!),
+                                future: commonController.getConversionDetails((commonController.countryTo.value.iso3Code == 'ETH' && commonController.modeOfReceiveId == 3) ? "dashen_bank" :'',inputAmount.value, commonController.serverCountryFrom.value.selectedCurrency!, commonController.serverCountryTo.value.selectedCurrency!),
                                 builder: (context, AsyncSnapshot<APIResponse<CurrencyConversionDetails>> snapshot){
 
                                   if(snapshot.data!=null){
@@ -402,6 +403,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                             onChanged: (value) {
                               setState(() {
                                 commonController.selectedModeOfPayment = value as ModeOfPayment;
+                                commonController.modeOfPaymentId = commonController.selectedModeOfPayment!.id;
                               });
                             }
                         ),

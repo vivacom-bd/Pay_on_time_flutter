@@ -30,7 +30,7 @@ dependencies:
   custom_refresh_indicator: ^1.1.1
 #  flutter_datetime_picker: ^1.5.1
   image_picker: ^0.8.5
-  package_info_plus:
+  package_info_plus: ^4.1.0
   flutter_inappwebview:
   android_intent_plus:
   flutter_credit_card: ^3.0.6

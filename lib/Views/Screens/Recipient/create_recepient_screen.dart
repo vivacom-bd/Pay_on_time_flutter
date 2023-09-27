@@ -29,7 +29,8 @@ class CreateRecipientScreen extends StatefulWidget {
 class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailTextEditingController = TextEditingController();
-  final TextEditingController nameTextEditingController = TextEditingController();
+  final TextEditingController firstNameTextEditingController = TextEditingController();
+  final TextEditingController lastNameTextEditingController = TextEditingController();
   final TextEditingController phoneTextEditingController = TextEditingController();
   final TextEditingController addressTextEditingController = TextEditingController();
   final TextEditingController postalCodeTextEditingController = TextEditingController();
@@ -118,14 +119,30 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                           // ),
                           // const SizedBox(height: 10,),
                           CustomTextFormField(
-                              controller: nameTextEditingController,
+                              controller: firstNameTextEditingController,
                               validator: (value) {
                                 if(value!.isEmpty){
                                   return "Field can't be empty";
                                 }
                                 return null;
                               },
-                              labelText: "Full Name",
+                              labelText: "First Name",
+                              hindText: "",
+                              keyboardType: TextInputType.text,
+                              onChanged: (value) {
+
+                              }
+                          ),
+                          const SizedBox(height: 10,),
+                          CustomTextFormField(
+                              controller: lastNameTextEditingController,
+                              validator: (value) {
+                                if(value!.isEmpty){
+                                  return "Field can't be empty";
+                                }
+                                return null;
+                              },
+                              labelText: "Last Name",
                               hindText: "",
                               keyboardType: TextInputType.text,
                               onChanged: (value) {
@@ -380,24 +397,24 @@ class _CreateRecipientScreenState extends State<CreateRecipientScreen> {
                         if(_formKey.currentState!.validate()){
 
                           Utility.showLoadingDialog();
-                          setState(() {
-                            nameParts =  nameTextEditingController.text.split(" ");
-                            if (nameParts.length >= 1) {
-                              firstName = nameParts[0];
-                            }
-                            if (nameParts.length >= 2) {
-                              lastName = nameParts[nameParts.length - 1];
-                              middleName = nameParts.sublist(1, nameParts.length - 1).join(' ');
-                            }
-                          });
+                          // setState(() {
+                          //   nameParts =  nameTextEditingController.text.split(" ");
+                          //   if (nameParts.length >= 1) {
+                          //     firstName = nameParts[0];
+                          //   }
+                          //   if (nameParts.length >= 2) {
+                          //     lastName = nameParts[nameParts.length - 1];
+                          //     middleName = nameParts.sublist(1, nameParts.length - 1).join(' ');
+                          //   }
+                          // });
 
 
                           RecipientRequestBody recipientRequestBody =  RecipientRequestBody(
                             //email: emailTextEditingController.text,
-                            fullName: nameTextEditingController.text,
-                            firstName: firstName,
+                            //fullName: nameTextEditingController.text,
+                            firstName: firstNameTextEditingController.text,
                             middleName: middleName,
-                            lastName: lastName,
+                            lastName: lastNameTextEditingController.text,
                             phone: phoneNumber,
                             streetAddress: addressTextEditingController.text,
                             //postalCode: int.tryParse(postalCodeTextEditingController.text),

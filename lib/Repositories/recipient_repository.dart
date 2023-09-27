@@ -27,7 +27,7 @@ class RecipientRepository{
       if(data.statusCode == 201){
         return APIResponse<Recipient>(data: Recipient.fromJson(jsonData['data']));
       }
-      return APIResponse<Recipient>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<Recipient>(error: true, message:jsonData["message"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
       return APIResponse<Recipient>(error: true, message: "An Error Occurred!");

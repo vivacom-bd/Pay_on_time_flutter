@@ -255,48 +255,48 @@ class Data {
   String? partnerRefNumber;
   String? customerReferenceNo;
   String? beneficiaryReferenceNo;
-  Null? agentId;
-  Null? remarks;
-  Null? purpose;
+  // Null? agentId;
+  // Null? remarks;
+  // Null? purpose;
   String? payoutCurrencyId;
   int? payoutAmount;
-  Null? remitterStatus;
-  Null? remitterStatusRemarks;
+  // Null? remitterStatus;
+  // Null? remitterStatusRemarks;
   int? beneficiaryStatus;
-  Null? beneficiaryStatusRemarks;
+  //Null? beneficiaryStatusRemarks;
   int? senderMethodId;
   int? receiverMethodId;
   int? receiverCountryId;
   int? receiverCityId;
-  Null? organizationId;
-  Null? bankId;
-  Null? branchId;
+  //Null? organizationId;
+  int? bankId;
+  //Null? branchId;
   String? bankName;
-  Null? branchName;
+  String? branchName;
   String? bankAccountNo;
   String? bankAccountTitle;
   String? bankSwiftCode;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
-  Null? createdByUserId;
+  //Null? deletedAt;
+  int? createdByUserId;
   String? receivedCurrencyId;
-  int? receivedAmount;
-  int? commission;
+  double? receivedAmount;
+  double? commission;
   int? amountInUsd;
-  int? commissionInUsd;
+  double? commissionInUsd;
   int? purposeId;
-  Null? paymentBankId;
-  int? totalAmount;
+  int? paymentBankId;
+  double? totalAmount;
   PayoutCurrency? payoutCurrency;
   PayoutCurrency? receivedCurrency;
   ReceiverMethod? receiverMethod;
   SenderMethod? senderMethod;
-  Null? agent;
+  //Null? agent;
   Sender? sender;
   Receiver? receiver;
   TransactionSendingPurpose? sendingPurpose;
-  Null? paymentBank;
+  //Null? paymentBank;
 
   Data(
       {this.id,
@@ -305,22 +305,22 @@ class Data {
         this.partnerRefNumber,
         this.customerReferenceNo,
         this.beneficiaryReferenceNo,
-        this.agentId,
-        this.remarks,
-        this.purpose,
+        // this.agentId,
+        // this.remarks,
+        // this.purpose,
         this.payoutCurrencyId,
         this.payoutAmount,
-        this.remitterStatus,
-        this.remitterStatusRemarks,
+        // this.remitterStatus,
+        // this.remitterStatusRemarks,
         this.beneficiaryStatus,
-        this.beneficiaryStatusRemarks,
+        //this.beneficiaryStatusRemarks,
         this.senderMethodId,
         this.receiverMethodId,
         this.receiverCountryId,
         this.receiverCityId,
-        this.organizationId,
+       // this.organizationId,
         this.bankId,
-        this.branchId,
+        //this.branchId,
         this.bankName,
         this.branchName,
         this.bankAccountNo,
@@ -328,7 +328,7 @@ class Data {
         this.bankSwiftCode,
         this.createdAt,
         this.updatedAt,
-        this.deletedAt,
+        //this.deletedAt,
         this.createdByUserId,
         this.receivedCurrencyId,
         this.receivedAmount,
@@ -342,11 +342,12 @@ class Data {
         this.receivedCurrency,
         this.receiverMethod,
         this.senderMethod,
-        this.agent,
+        //this.agent,
         this.sender,
         this.receiver,
         this.sendingPurpose,
-        this.paymentBank});
+        //this.paymentBank
+      });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -355,22 +356,22 @@ class Data {
     partnerRefNumber = json['partner_ref_number'];
     customerReferenceNo = json['customer_reference_no'];
     beneficiaryReferenceNo = json['beneficiary_reference_no'];
-    agentId = json['agent_id'];
-    remarks = json['remarks'];
-    purpose = json['purpose'];
+    // agentId = json['agent_id'];
+    // remarks = json['remarks'];
+    // purpose = json['purpose'];
     payoutCurrencyId = json['payout_currency_id'];
     payoutAmount = json['payout_amount'];
-    remitterStatus = json['remitter_status'];
-    remitterStatusRemarks = json['remitter_status_remarks'];
+    // remitterStatus = json['remitter_status'];
+    // remitterStatusRemarks = json['remitter_status_remarks'];
     beneficiaryStatus = json['beneficiary_status'];
-    beneficiaryStatusRemarks = json['beneficiary_status_remarks'];
+    //beneficiaryStatusRemarks = json['beneficiary_status_remarks'];
     senderMethodId = json['sender_method_id'];
     receiverMethodId = json['receiver_method_id'];
     receiverCountryId = json['receiver_country_id'];
     receiverCityId = json['receiver_city_id'];
-    organizationId = json['organization_id'];
+    //organizationId = json['organization_id'];
     bankId = json['bank_id'];
-    branchId = json['branch_id'];
+    //branchId = json['branch_id'];
     bankName = json['bank_name'];
     branchName = json['branch_name'];
     bankAccountNo = json['bank_account_no'];
@@ -378,16 +379,16 @@ class Data {
     bankSwiftCode = json['bank_swift_code'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
+    //deletedAt = json['deleted_at'];
     createdByUserId = json['created_by_user_id'];
     receivedCurrencyId = json['received_currency_id'];
-    receivedAmount = json['received_amount'];
+    receivedAmount = json['received_amount'] !=null  ? json['received_amount'].toDouble() : json['received_amount'];
     commission = json['commission'];
     amountInUsd = json['amount_in_usd'];
     commissionInUsd = json['commission_in_usd'];
     purposeId = json['purpose_id'];
     paymentBankId = json['payment_bank_id'];
-    totalAmount = json['total_amount'];
+    totalAmount = json['total_amount'] !=null ? json['total_amount'].toDouble() : json['total_amount'];
     payoutCurrency = json['payout_currency'] != null
         ? new PayoutCurrency.fromJson(json['payout_currency'])
         : null;
@@ -400,7 +401,7 @@ class Data {
     senderMethod = json['sender_method'] != null
         ? new SenderMethod.fromJson(json['sender_method'])
         : null;
-    agent = json['agent'];
+    //agent = json['agent'];
     sender =
     json['sender'] != null ? new Sender.fromJson(json['sender']) : null;
     receiver = json['receiver'] != null
@@ -409,7 +410,7 @@ class Data {
     sendingPurpose = json['sending_purpose'] != null
         ? new TransactionSendingPurpose.fromJson(json['sending_purpose'])
         : null;
-    paymentBank = json['payment_bank'];
+    //paymentBank = json['payment_bank'];
   }
 
   Map<String, dynamic> toJson() {
@@ -420,22 +421,22 @@ class Data {
     data['partner_ref_number'] = this.partnerRefNumber;
     data['customer_reference_no'] = this.customerReferenceNo;
     data['beneficiary_reference_no'] = this.beneficiaryReferenceNo;
-    data['agent_id'] = this.agentId;
-    data['remarks'] = this.remarks;
-    data['purpose'] = this.purpose;
+    // data['agent_id'] = this.agentId;
+    // data['remarks'] = this.remarks;
+    // data['purpose'] = this.purpose;
     data['payout_currency_id'] = this.payoutCurrencyId;
     data['payout_amount'] = this.payoutAmount;
-    data['remitter_status'] = this.remitterStatus;
-    data['remitter_status_remarks'] = this.remitterStatusRemarks;
+    //data['remitter_status'] = this.remitterStatus;
+   // data['remitter_status_remarks'] = this.remitterStatusRemarks;
     data['beneficiary_status'] = this.beneficiaryStatus;
-    data['beneficiary_status_remarks'] = this.beneficiaryStatusRemarks;
+   // data['beneficiary_status_remarks'] = this.beneficiaryStatusRemarks;
     data['sender_method_id'] = this.senderMethodId;
     data['receiver_method_id'] = this.receiverMethodId;
     data['receiver_country_id'] = this.receiverCountryId;
     data['receiver_city_id'] = this.receiverCityId;
-    data['organization_id'] = this.organizationId;
+   // data['organization_id'] = this.organizationId;
     data['bank_id'] = this.bankId;
-    data['branch_id'] = this.branchId;
+    //data['branch_id'] = this.branchId;
     data['bank_name'] = this.bankName;
     data['branch_name'] = this.branchName;
     data['bank_account_no'] = this.bankAccountNo;
@@ -443,7 +444,7 @@ class Data {
     data['bank_swift_code'] = this.bankSwiftCode;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
+    //data['deleted_at'] = this.deletedAt;
     data['created_by_user_id'] = this.createdByUserId;
     data['received_currency_id'] = this.receivedCurrencyId;
     data['received_amount'] = this.receivedAmount;
@@ -465,7 +466,7 @@ class Data {
     if (this.senderMethod != null) {
       data['sender_method'] = this.senderMethod!.toJson();
     }
-    data['agent'] = this.agent;
+   // data['agent'] = this.agent;
     if (this.sender != null) {
       data['sender'] = this.sender!.toJson();
     }
@@ -475,7 +476,7 @@ class Data {
     if (this.sendingPurpose != null) {
       data['sending_purpose'] = this.sendingPurpose!.toJson();
     }
-    data['payment_bank'] = this.paymentBank;
+   // data['payment_bank'] = this.paymentBank;
     return data;
   }
 }
@@ -485,24 +486,25 @@ class PayoutCurrency {
   String? name;
   String? code;
   String? symbol;
-  Null? createdAt;
-  Null? updatedAt;
+  // Null? createdAt;
+  // Null? updatedAt;
 
   PayoutCurrency(
       {this.id,
         this.name,
         this.code,
         this.symbol,
-        this.createdAt,
-        this.updatedAt});
+        // this.createdAt,
+        // this.updatedAt
+      });
 
   PayoutCurrency.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     code = json['code'];
     symbol = json['symbol'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    // createdAt = json['created_at'];
+    // updatedAt = json['updated_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -511,8 +513,8 @@ class PayoutCurrency {
     data['name'] = this.name;
     data['code'] = this.code;
     data['symbol'] = this.symbol;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+    // data['created_at'] = this.createdAt;
+    // data['updated_at'] = this.updatedAt;
     return data;
   }
 }
@@ -520,40 +522,41 @@ class PayoutCurrency {
 class ReceiverMethod {
   int? id;
   String? name;
-  Null? description;
+  //Null? description;
   int? status;
-  Null? createdAt;
-  Null? updatedAt;
-  Null? deletedAt;
+  // Null? createdAt;
+  // Null? updatedAt;
+  // Null? deletedAt;
 
   ReceiverMethod(
       {this.id,
         this.name,
-        this.description,
+        //this.description,
         this.status,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt});
+        // this.createdAt,
+        // this.updatedAt,
+        // this.deletedAt
+      });
 
   ReceiverMethod.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    description = json['description'];
+    //description = json['description'];
     status = json['status'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
+    // createdAt = json['created_at'];
+    // updatedAt = json['updated_at'];
+    // deletedAt = json['deleted_at'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
-    data['description'] = this.description;
+    //data['description'] = this.description;
     data['status'] = this.status;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
+    // data['created_at'] = this.createdAt;
+    // data['updated_at'] = this.updatedAt;
+    // data['deleted_at'] = this.deletedAt;
     return data;
   }
 }
@@ -561,40 +564,41 @@ class ReceiverMethod {
 class SenderMethod {
   int? id;
   String? name;
-  Null? description;
+  //Null? description;
   int? status;
-  Null? createdAt;
-  Null? updatedAt;
-  Null? deletedAt;
+  // Null? createdAt;
+  // Null? updatedAt;
+  // Null? deletedAt;
 
   SenderMethod(
       {this.id,
         this.name,
-        this.description,
+        //this.description,
         this.status,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt});
+        // this.createdAt,
+        // this.updatedAt,
+        // this.deletedAt
+      });
 
   SenderMethod.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    description = json['description'];
+    //description = json['description'];
     status = json['status'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
+    // createdAt = json['created_at'];
+    // updatedAt = json['updated_at'];
+    // deletedAt = json['deleted_at'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
-    data['description'] = this.description;
+    //data['description'] = this.description;
     data['status'] = this.status;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
+    // data['created_at'] = this.createdAt;
+    // data['updated_at'] = this.updatedAt;
+    // data['deleted_at'] = this.deletedAt;
     return data;
   }
 }
@@ -609,20 +613,20 @@ class Sender {
   String? postalCode;
   int? countryId;
   int? cityId;
-  Null? organizationId;
+  int? organizationId;
   int? isBeneficiary;
   String? referenceNo;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
-  Null? createdByUserId;
+  String? deletedAt;
+  int? createdByUserId;
   String? firstName;
   String? middleName;
   String? lastName;
-  Null? emailVerifiedAt;
-  Null? dateOfBirth;
-  Null? profilePicture;
-  Null? otp;
+  String? emailVerifiedAt;
+  // Null? dateOfBirth;
+  // Null? profilePicture;
+  // Null? otp;
   String? otpCreatedAt;
   TransactionCountry? country;
   TransactionCity? city;
@@ -648,9 +652,9 @@ class Sender {
         this.middleName,
         this.lastName,
         this.emailVerifiedAt,
-        this.dateOfBirth,
-        this.profilePicture,
-        this.otp,
+        // this.dateOfBirth,
+        // this.profilePicture,
+        // this.otp,
         this.otpCreatedAt,
         this.country,
         this.city});
@@ -676,9 +680,9 @@ class Sender {
     middleName = json['middle_name'];
     lastName = json['last_name'];
     emailVerifiedAt = json['email_verified_at'];
-    dateOfBirth = json['date_of_birth'];
-    profilePicture = json['profile_picture'];
-    otp = json['otp'];
+    // dateOfBirth = json['date_of_birth'];
+    // profilePicture = json['profile_picture'];
+    // otp = json['otp'];
     otpCreatedAt = json['otp_created_at'];
     country =
     json['country'] != null ? new TransactionCountry.fromJson(json['country']) : null;
@@ -707,9 +711,9 @@ class Sender {
     data['middle_name'] = this.middleName;
     data['last_name'] = this.lastName;
     data['email_verified_at'] = this.emailVerifiedAt;
-    data['date_of_birth'] = this.dateOfBirth;
-    data['profile_picture'] = this.profilePicture;
-    data['otp'] = this.otp;
+    //data['date_of_birth'] = this.dateOfBirth;
+    // data['profile_picture'] = this.profilePicture;
+    // data['otp'] = this.otp;
     data['otp_created_at'] = this.otpCreatedAt;
     if (this.country != null) {
       data['country'] = this.country!.toJson();
@@ -725,37 +729,38 @@ class TransactionCountry {
   int? id;
   int? status;
   String? name;
-  Null? description;
+  //Null? description;
   String? isoCodeAlpha3;
   String? isoCodeAlpha2;
-  Null? logo;
-  Null? createdAt;
-  Null? updatedAt;
-  Null? deletedAt;
+  // Null? logo;
+  // Null? createdAt;
+  // Null? updatedAt;
+  // Null? deletedAt;
 
   TransactionCountry(
       {this.id,
         this.status,
         this.name,
-        this.description,
+        //this.description,
         this.isoCodeAlpha3,
         this.isoCodeAlpha2,
-        this.logo,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt});
+        // this.logo,
+        // this.createdAt,
+        // this.updatedAt,
+        // this.deletedAt
+     });
 
   TransactionCountry.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     status = json['status'];
     name = json['name'];
-    description = json['description'];
+    //description = json['description'];
     isoCodeAlpha3 = json['iso_code_alpha_3'];
     isoCodeAlpha2 = json['iso_code_alpha_2'];
-    logo = json['logo'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
+    // logo = json['logo'];
+    // createdAt = json['created_at'];
+    // updatedAt = json['updated_at'];
+    // deletedAt = json['deleted_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -763,13 +768,13 @@ class TransactionCountry {
     data['id'] = this.id;
     data['status'] = this.status;
     data['name'] = this.name;
-    data['description'] = this.description;
+    //data['description'] = this.description;
     data['iso_code_alpha_3'] = this.isoCodeAlpha3;
     data['iso_code_alpha_2'] = this.isoCodeAlpha2;
-    data['logo'] = this.logo;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
+    // data['logo'] = this.logo;
+    // data['created_at'] = this.createdAt;
+    // data['updated_at'] = this.updatedAt;
+    // data['deleted_at'] = this.deletedAt;
     return data;
   }
 }
@@ -777,48 +782,49 @@ class TransactionCountry {
 class TransactionCity {
   int? id;
   String? name;
-  Null? description;
+  //Null? description;
   int? status;
   int? countryId;
   int? createdByUserId;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  //Null? deletedAt;
 
   TransactionCity(
       {this.id,
         this.name,
-        this.description,
+        //this.description,
         this.status,
         this.countryId,
         this.createdByUserId,
         this.createdAt,
         this.updatedAt,
-        this.deletedAt});
+        //this.deletedAt
+      });
 
   TransactionCity.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    description = json['description'];
+    //description = json['description'];
     status = json['status'];
     countryId = json['country_id'];
     createdByUserId = json['created_by_user_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
+    //deletedAt = json['deleted_at'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
-    data['description'] = this.description;
+    //data['description'] = this.description;
     data['status'] = this.status;
     data['country_id'] = this.countryId;
     data['created_by_user_id'] = this.createdByUserId;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
+   // data['deleted_at'] = this.deletedAt;
     return data;
   }
 }
@@ -827,27 +833,27 @@ class Receiver {
   int? id;
   int? status;
   String? name;
-  Null? phone;
+  String? phone;
   String? email;
-  Null? streetAddress;
+  //Null? streetAddress;
   String? postalCode;
   int? countryId;
   int? cityId;
-  Null? organizationId;
+  int? organizationId;
   int? isBeneficiary;
   String? referenceNo;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
-  Null? createdByUserId;
+  //Null? deletedAt;
+  int? createdByUserId;
   String? firstName;
-  Null? middleName;
+  String? middleName;
   String? lastName;
-  Null? emailVerifiedAt;
-  Null? dateOfBirth;
-  Null? profilePicture;
-  Null? otp;
-  Null? otpCreatedAt;
+  String? emailVerifiedAt;
+  // Null? dateOfBirth;
+  // Null? profilePicture;
+  // Null? otp;
+  // Null? otpCreatedAt;
   TransactionCountry? country;
   TransactionCity? city;
 
@@ -857,7 +863,7 @@ class Receiver {
         this.name,
         this.phone,
         this.email,
-        this.streetAddress,
+        //this.streetAddress,
         this.postalCode,
         this.countryId,
         this.cityId,
@@ -866,16 +872,16 @@ class Receiver {
         this.referenceNo,
         this.createdAt,
         this.updatedAt,
-        this.deletedAt,
+        //this.deletedAt,
         this.createdByUserId,
         this.firstName,
         this.middleName,
         this.lastName,
         this.emailVerifiedAt,
-        this.dateOfBirth,
-        this.profilePicture,
-        this.otp,
-        this.otpCreatedAt,
+        // this.dateOfBirth,
+        // this.profilePicture,
+        // this.otp,
+        // this.otpCreatedAt,
         this.country,
         this.city});
 
@@ -885,7 +891,7 @@ class Receiver {
     name = json['name'];
     phone = json['phone'];
     email = json['email'];
-    streetAddress = json['street_address'];
+    //streetAddress = json['street_address'];
     postalCode = json['postal_code'];
     countryId = json['country_id'];
     cityId = json['city_id'];
@@ -894,16 +900,16 @@ class Receiver {
     referenceNo = json['reference_no'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
+    //deletedAt = json['deleted_at'];
     createdByUserId = json['created_by_user_id'];
     firstName = json['first_name'];
     middleName = json['middle_name'];
     lastName = json['last_name'];
     emailVerifiedAt = json['email_verified_at'];
-    dateOfBirth = json['date_of_birth'];
-    profilePicture = json['profile_picture'];
-    otp = json['otp'];
-    otpCreatedAt = json['otp_created_at'];
+    // dateOfBirth = json['date_of_birth'];
+    // profilePicture = json['profile_picture'];
+    // otp = json['otp'];
+    // otpCreatedAt = json['otp_created_at'];
     country =
     json['country'] != null ? new TransactionCountry.fromJson(json['country']) : null;
     city = json['city'] != null ? new TransactionCity.fromJson(json['city']) : null;
@@ -916,7 +922,7 @@ class Receiver {
     data['name'] = this.name;
     data['phone'] = this.phone;
     data['email'] = this.email;
-    data['street_address'] = this.streetAddress;
+    //data['street_address'] = this.streetAddress;
     data['postal_code'] = this.postalCode;
     data['country_id'] = this.countryId;
     data['city_id'] = this.cityId;
@@ -925,16 +931,16 @@ class Receiver {
     data['reference_no'] = this.referenceNo;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
+    //data['deleted_at'] = this.deletedAt;
     data['created_by_user_id'] = this.createdByUserId;
     data['first_name'] = this.firstName;
     data['middle_name'] = this.middleName;
     data['last_name'] = this.lastName;
     data['email_verified_at'] = this.emailVerifiedAt;
-    data['date_of_birth'] = this.dateOfBirth;
-    data['profile_picture'] = this.profilePicture;
-    data['otp'] = this.otp;
-    data['otp_created_at'] = this.otpCreatedAt;
+    // data['date_of_birth'] = this.dateOfBirth;
+    // data['profile_picture'] = this.profilePicture;
+    // data['otp'] = this.otp;
+    // data['otp_created_at'] = this.otpCreatedAt;
     if (this.country != null) {
       data['country'] = this.country!.toJson();
     }
@@ -950,27 +956,28 @@ class TransactionSendingPurpose {
   String? name;
   String? description;
   int? status;
-  Null? createdAt;
-  Null? updatedAt;
-  Null? deletedAt;
+  // Null? createdAt;
+  // Null? updatedAt;
+  // Null? deletedAt;
 
   TransactionSendingPurpose(
       {this.id,
         this.name,
         this.description,
         this.status,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt});
+        // this.createdAt,
+        // this.updatedAt,
+        // this.deletedAt
+      });
 
   TransactionSendingPurpose.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     description = json['description'];
     status = json['status'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
+    // createdAt = json['created_at'];
+    // updatedAt = json['updated_at'];
+    // deletedAt = json['deleted_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -979,9 +986,9 @@ class TransactionSendingPurpose {
     data['name'] = this.name;
     data['description'] = this.description;
     data['status'] = this.status;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
+    // data['created_at'] = this.createdAt;
+    // data['updated_at'] = this.updatedAt;
+    // data['deleted_at'] = this.deletedAt;
     return data;
   }
 }

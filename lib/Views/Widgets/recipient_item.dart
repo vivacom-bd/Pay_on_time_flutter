@@ -8,6 +8,7 @@ import 'package:hidmona/Repositories/recipient_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/default_dialogs.dart';
 import 'package:hidmona/Utilities/utility.dart';
+import 'package:hidmona/Views/Screens/Home/home_screen.dart';
 import 'package:hidmona/Views/Screens/Recipient/update_recepient_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/send_money_screen.dart';
 
@@ -145,10 +146,11 @@ class _RecipientItemState extends State<RecipientItem> {
                   ),
                 ),
                 if(!widget.isHideButtons)InkWell(
-                  onTap: () async{
+                  onTap: () async {
+                    //Get.to(()=> const HomeScreen());
 
                     commonController.selectedRecipient = widget.recipient;
-                    commonController.countryTo.value = CountryPickerUtils.getCountryByIsoCode(widget.recipient.countryId.toString());
+                    commonController.countryTo.value = CountryPickerUtils.getCountryByIsoCode(widget.recipient.country!.countryCode!);
 
                     if(commonController.countryFrom.value.isoCode != null && commonController.countryTo.value.isoCode != null){
                       Utility.showLoadingDialog();

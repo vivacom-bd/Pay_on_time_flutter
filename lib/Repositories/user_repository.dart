@@ -67,7 +67,7 @@ class UserRepository{
         Get.find<CommonController>().currentUser.value = appUser;
         return APIResponse<AppUser>(data: appUser);
       }
-      return APIResponse<AppUser>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<AppUser>(error: true, message:jsonData["message"].runtimeType.toString() == "String"? jsonData["message"]: jsonData["message"][0]["loc"][1] +": "+ jsonData["message"][0]["msg"]);
     }).catchError((onError){
       print(onError);
       return APIResponse<AppUser>(error: true, message: "An Error Occurred!");

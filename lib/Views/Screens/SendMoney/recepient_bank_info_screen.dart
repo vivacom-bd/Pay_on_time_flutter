@@ -44,7 +44,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
 
     commonController.selectedSendingPurpose = null;
     commonController.selectedCountryWiseBank = null;
-    commonController.bankAccountTitleTextEditingController.text = commonController.selectedRecipient!.fullName!;
+    commonController.bankAccountTitleTextEditingController.text = commonController.selectedRecipient!.fullName! ?? "";
   }
 
 
@@ -118,9 +118,9 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                       ],
                     ),
                   ),
-                  if(commonController.selectedModeOfReceive?.name!.toLowerCase() == "bankaccount")const SizedBox(height: 15,),
+                  if(commonController.selectedModeOfReceive?.name!.toLowerCase() == "bank")const SizedBox(height: 15,),
 
-                  if(commonController.selectedModeOfReceive?.name!.toLowerCase() == "bankaccount")Column(
+                  if(commonController.selectedModeOfReceive?.name!.toLowerCase() == "bank")Column(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -248,7 +248,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             // ),
                             // const SizedBox(height: 10,),
                             CustomTextFormField(
-                                controller: commonController.bankAccountNoTextEditingController,
+                                controller: commonController.bankAccountTitleTextEditingController,
                                 validator: (value) {
                                   if(value!.isEmpty){
                                     return "Field can't be empty";
@@ -278,8 +278,9 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                             ),
                             const SizedBox(height: 10,),
                             CustomTextFormField(
-                                controller: commonController.bankAccountTitleTextEditingController,
-                                enabled:false,
+                                controller: commonController.bankAccountNoTextEditingController,
+                                //commonController.bankAccountTitleTextEditingController,
+                                enabled:true,
                                 validator: (value) {
                                   if(value!.isEmpty){
                                     return "Field can't be empty";
@@ -362,8 +363,8 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                     ],
                   ),
 
-                  if(commonController.selectedModeOfPayment?.name!.toLowerCase() == "bankaccount")const SizedBox(height: 15,),
-                  if(commonController.selectedModeOfPayment?.name!.toLowerCase() == "bankaccount")Column(
+                  if(commonController.selectedModeOfPayment?.id ==  3)const SizedBox(height: 15,),
+                  if(commonController.selectedModeOfPayment?.id == 3)Column(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -463,7 +464,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                       buttonText: "Continue", onTap: () {
                         FocusScope.of(context).unfocus();
                         if(_formKey.currentState!.validate()){
-                          if(commonController.selectedModeOfReceive!.name!.toLowerCase() == "bankaccount") {
+                          if(commonController.selectedModeOfReceive!.id == 3) {
                             commonController.transactionRequestBodyForBank = TransactionRequestBodyforBank(
 
                               bankId: commonController.bankId,

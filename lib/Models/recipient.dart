@@ -168,6 +168,9 @@ class Recipient {
   int? userId;
   String? email;
   String? fullName;
+  String ? firstName;
+  String ? lastName;
+  String ? middleName;
   String? phone;
   int? countryId;
   String? streetAddress;
@@ -186,6 +189,9 @@ class Recipient {
   Recipient(
       {this.email,
         this.fullName,
+        this.firstName,
+        this.middleName,
+        this.lastName,
         this.phone,
         this.countryId,
         this.streetAddress,
@@ -206,6 +212,9 @@ class Recipient {
   Recipient.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     fullName = json['full_name'];
+    firstName = json['first_name'];
+    middleName = json['middle_name'];
+    lastName = json['last_name'];
     phone = json['phone'];
     countryId = json['country_id'];
     streetAddress = json['street_address'];
@@ -228,6 +237,9 @@ class Recipient {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['email'] = email;
     data['full_name'] = fullName;
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
+    data['middle_name'] = middleName;
     data['phone'] = phone;
     data['country_id'] = countryId;
     data['street_address'] = streetAddress;

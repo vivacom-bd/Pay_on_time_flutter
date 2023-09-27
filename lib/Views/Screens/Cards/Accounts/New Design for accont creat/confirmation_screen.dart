@@ -101,7 +101,7 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
                       buttonText: "Confirm",
                     onTap: () async {
                         Utility.showLoadingDialog();
-                        bool value = await commonController.createAccount();
+                        bool value = await commonController.createAccount(commonController.userProfile.value.id!);
                         Get.back();
                         if(value){
                           Get.to(()=> const ViewAccountDetailsScreen());

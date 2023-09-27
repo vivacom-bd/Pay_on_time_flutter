@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/transaction.dart';
+import 'package:hidmona/Models/transaction_list_model.dart';
 import 'package:hidmona/Repositories/api_constants.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Utilities/utility.dart';
@@ -35,7 +36,7 @@ class TransactionRepository{
       if(data.statusCode == 201){
         return APIResponse<Transaction>(data: Transaction.fromJson(jsonData));
       }
-      return APIResponse<Transaction>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<Transaction>(error: true, message:jsonData["message"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
       return APIResponse<Transaction>(error: true, message: "An Error Occurred!");
@@ -65,7 +66,7 @@ class TransactionRepository{
       if(data.statusCode == 201){
         return APIResponse<Transaction>(data: Transaction.fromJson(jsonData));
       }
-      return APIResponse<Transaction>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<Transaction>(error: true, message:jsonData["message"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
       return APIResponse<Transaction>(error: true, message: "An Error Occurred!");
@@ -129,9 +130,9 @@ class TransactionRepository{
 
 
   ///Transaction List
-  static Future<APIResponse<List<Transaction>>> getTransactions({int limit=100, offset=0}) async{
+  static Future<APIResponse<List<TransactionData>>> getTransactions({int limit=100, offset=0}) async{
     if(!await Utility.isInternetConnected()){
-      return APIResponse<List<Transaction>>(error: true, message: "Internet is not connected!");
+      return APIResponse<List<TransactionData>>(error: true, message: "Internet is not connected!");
     }
     Uri url = Uri.parse(baseAPIUrl()+'transactions?limit=$limit&offset=$offset');
     return http.get(url,headers: headersWithAuth)
@@ -140,23 +141,23 @@ class TransactionRepository{
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
       if(data.statusCode == 200){
-        List<Transaction> transactions = [];
-        jsonData['items'].forEach((transaction){
-          transactions.add(Transaction.fromJson(transaction));
+        List<TransactionData> transactions = [];
+        jsonData['data'].forEach((transaction){
+          transactions.add(TransactionData.fromJson(transaction));
         });
-        return APIResponse<List<Transaction>>(data: transactions);
+        return APIResponse<List<TransactionData>>(data: transactions);
       }
-      return APIResponse<List<Transaction>>(error: true, message: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<TransactionData>>(error: true, message: jsonData["message"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
-      return APIResponse<List<Transaction>>(error: true, message: "An Error Occurred!");
+      return APIResponse<List<TransactionData>>(error: true, message: "An Error Occurred!");
     });
   }
 
 
 
   /// getTransactionDetails
-  static Future<APIResponse<Transaction>> getTransactionDetails(int transactionNumber) async{
+  static Future<APIResponse<Transaction>> getTransactionDetails(String transactionNumber) async{
 
     ///internet check
     if(!await Utility.isInternetConnected()){
@@ -171,7 +172,7 @@ class TransactionRepository{
       if(data.statusCode == 200){
         return APIResponse<Transaction>(data: Transaction.fromJson(jsonData));
       }
-      return APIResponse<Transaction>(error: true, message: jsonData["detail"]??"An error occurred");
+      return APIResponse<Transaction>(error: true, message: jsonData["message"]??"An error occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<Transaction>(error: true, message: "An Error Occurred!");

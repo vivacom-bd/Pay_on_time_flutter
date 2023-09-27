@@ -124,7 +124,7 @@ class _ActivateYourCardScreenState extends State<ActivateYourCardScreen> {
                       Get.back();
                       if(value){
                         Get.to(const CardConfirmationAfterActiveScreen());
-                        Utility.showSnackBar(commonController.cardActive.value.message!);
+                        //Utility.showSnackBar(commonController.cardActive.value.message!);
                       }else{Get.back();}
                     }else{
                       Get.back();

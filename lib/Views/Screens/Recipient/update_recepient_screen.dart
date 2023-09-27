@@ -31,6 +31,8 @@ class UpdateRecipientScreen extends StatefulWidget {
 class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailTextEditingController = TextEditingController();
+  final TextEditingController firstNameTextEditingController = TextEditingController();
+  final TextEditingController lastNameTextEditingController = TextEditingController();
   final TextEditingController nameTextEditingController = TextEditingController();
   final TextEditingController phoneTextEditingController = TextEditingController();
   final TextEditingController addressTextEditingController = TextEditingController();
@@ -63,6 +65,8 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
 
     emailTextEditingController.text = widget.recipient.email??"";
     nameTextEditingController.text = widget.recipient.fullName??"";
+    firstNameTextEditingController.text = widget.recipient.firstName ?? "";
+    lastNameTextEditingController.text = widget.recipient.lastName ?? "";
     addressTextEditingController.text = widget.recipient.streetAddress??"";
     postalCodeTextEditingController.text = widget.recipient.postalCode.toString();
     dateOfBirthTextEditingController.text = widget.recipient.dateOfBirth.toString();
@@ -160,14 +164,30 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
                           // ),
                           // const SizedBox(height: 10,),
                           CustomTextFormField(
-                              controller: nameTextEditingController,
+                              controller: firstNameTextEditingController,
                               validator: (value) {
                                 if(value!.isEmpty){
                                   return "Field can't be empty";
                                 }
                                 return null;
                               },
-                              labelText: "Full Name",
+                              labelText: "First Name",
+                              hindText: "",
+                              keyboardType: TextInputType.text,
+                              onChanged: (value) {
+
+                              }
+                          ),
+                          const SizedBox(height: 10,),
+                          CustomTextFormField(
+                              controller: lastNameTextEditingController,
+                              validator: (value) {
+                                if(value!.isEmpty){
+                                  return "Field can't be empty";
+                                }
+                                return null;
+                              },
+                              labelText: "Last Name",
                               hindText: "",
                               keyboardType: TextInputType.text,
                               onChanged: (value) {
@@ -437,10 +457,10 @@ class _UpdateRecipientScreenState extends State<UpdateRecipientScreen> {
                           RecipientRequestBody recipientRequestBody =  RecipientRequestBody(
                             //email: emailTextEditingController.text,
                             fullName: nameTextEditingController.text,
-                            firstName: firstName,
-                            middleName: middleName,
-                            lastName: lastName,
-                            phone: phoneNumber,
+                            firstName: firstNameTextEditingController.text,
+                            //middleName: middleName,
+                            lastName: lastNameTextEditingController.text,
+                            phone: phoneTextEditingController.text,
                             streetAddress: addressTextEditingController.text,
                             //postalCode: int.tryParse(postalCodeTextEditingController.text),
                             //dateOfBirth: DateFormat("yyyy-MM-dd").format(dateTime!),
