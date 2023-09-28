@@ -122,8 +122,8 @@ class CommonRepository{
       if(data.statusCode == 200){
         return APIResponse<CurrencyConversionDetails>(data: CurrencyConversionDetails.fromJson(jsonData));
       }
-      print(jsonData["detail"].runtimeType);
-      return APIResponse<CurrencyConversionDetails>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      print(jsonData["message"].runtimeType);
+      return APIResponse<CurrencyConversionDetails>(error: true, message:jsonData["message"].runtimeType.toString() == "String"? jsonData["message"]: jsonData["message"][0]["loc"][1] +": "+ jsonData["message"][0]["msg"]);
     }).catchError((onError){
       print(onError);
       return APIResponse<CurrencyConversionDetails>(error: true, message: "An Error Occurred!");

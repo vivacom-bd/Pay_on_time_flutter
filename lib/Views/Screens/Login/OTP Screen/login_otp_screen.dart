@@ -72,7 +72,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                                 ),
                                 const SizedBox(height: 10,),
                                 Text(
-                                  'To login successful kindly enter the One Time Password (OTP) we just sent to your email.',
+                                  'To login successful kindly enter the One Time Password (OTP) we just sent to your email. It will expire with in 2 minute',
                                   style: TextStyle(
                                     color: AppColor.defaultTextColor,
                                     fontWeight: FontWeight.w600,
@@ -138,6 +138,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                     if(value){
                       bool value = await commonController.kycUserData();
                       if(value){
+                        Get.find<CommonController>().getStorage.write("loginChecker", true);
                         Get.offAll(()=> const HomeScreen());
                       }
                       Get.offAll(()=> const HomeScreen());

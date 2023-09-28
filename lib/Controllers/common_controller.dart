@@ -187,6 +187,7 @@ class CommonController extends GetxController{
               //savedLogin
               String? email = getStorage.read<String>("email");
              String? password = getStorage.read<String>("password");
+             bool? loginChecker = getStorage.read<bool>('loginChecker');
 
               if(email != null && password != null){
                 bool isSuccessful = await customerLogin(email,password);

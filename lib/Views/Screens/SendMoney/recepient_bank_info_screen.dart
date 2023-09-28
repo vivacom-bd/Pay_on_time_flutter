@@ -208,7 +208,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
 
                                     recipientBankBranch = value as RecipientBankBranch;
                                     commonController.recipientBankBranch = recipientBankBranch!.branchName!;
-                                    commonController.bankSwiftCodeTextEditingController.text = recipientBank!.swiftCode!;
+                                    commonController.bankSwiftCodeTextEditingController.text = recipientBank!.swiftCode ?? "";
 
 
                                     // branchNameTextEditingController.text = recipientBankBranch!.branchName!;
