@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AppColor{
   // static Color defaultColor = const Color(0xffAD4C1F);
   // static Color defaultColorLight = const Color(0xffE94F07);
+  static Color colorLight = const Color(0xffE94F07);
   static Color defaultColor = const Color(0xff97D700);
   static Color defaultColorLight = const Color(0xff108d2c);
   static Color dialogBackgroundColor = const Color(0xffFBF9F9);
