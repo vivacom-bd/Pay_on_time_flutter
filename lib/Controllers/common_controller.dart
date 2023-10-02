@@ -189,7 +189,7 @@ class CommonController extends GetxController{
              String? password = getStorage.read<String>("password");
              bool? loginChecker = getStorage.read<bool>('loginChecker');
 
-              if(email != null && password != null){
+              if(email != null && password != null && loginChecker==true){
                 bool isSuccessful = await customerLogin(email,password);
 
                 if(isSuccessful){

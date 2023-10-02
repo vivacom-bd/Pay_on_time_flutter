@@ -62,6 +62,7 @@ class UserRepository{
 
         Get.find<CommonController>().getStorage.write("email", email);
         Get.find<CommonController>().getStorage.write("password", password);
+        Get.find<CommonController>().getStorage.write("loginChecker", true);
 
         AppUser appUser = AppUser.fromJson(jsonData);
         Get.find<CommonController>().currentUser.value = appUser;
@@ -93,9 +94,9 @@ class UserRepository{
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
       if(data.statusCode == 201){
-        return APIResponse<bool>(data: true,error: false,message:jsonData["detail"] );
+        return APIResponse<bool>(data: true,error: false,message:jsonData["message"] );
       }
-      return APIResponse<bool>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
+      return APIResponse<bool>(error: true, message:jsonData["message"].toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);
     }).catchError((onError){
       print(onError);
       return APIResponse<bool>(error: true, message: "An Error Occurred!");

@@ -198,7 +198,7 @@ class CommonRepository{
         });
         return APIResponse<List<SendingPurpose>>(data: purposes);
       }
-      return APIResponse<List<SendingPurpose>>(error: true, message: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<SendingPurpose>>(error: true, message: jsonData["message"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<List<SendingPurpose>>(error: true, message: "An Error Occurred!");
@@ -250,7 +250,7 @@ class CommonRepository{
         });
         return APIResponse<List<CountryWiseBank>>(data: banks);
       }
-      return APIResponse<List<CountryWiseBank>>(error: true, message: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<CountryWiseBank>>(error: true, message: jsonData["message"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<List<CountryWiseBank>>(error: true, message: "An Error Occurred!");

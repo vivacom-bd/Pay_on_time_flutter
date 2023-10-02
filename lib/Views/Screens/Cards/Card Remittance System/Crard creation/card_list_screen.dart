@@ -72,7 +72,7 @@ class _CardListScreenState extends State<CardListScreen> {
                       const SizedBox(height: 10),
                       Center(
                         child: Text(
-                          'Sorry, you don\'t have Hidmona Debit Card at the moment. Apply to have one',
+                          'Sorry, you don\'t have Payontime Debit Card at the moment. Apply to have one',
                           style: TextStyle(
                             color: AppColor.textColor,
                             fontWeight: FontWeight.bold,

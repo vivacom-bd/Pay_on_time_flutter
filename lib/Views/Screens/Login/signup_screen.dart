@@ -571,7 +571,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                                       }else{
                                         Get.back();
-                                        Utility.showSnackBar(value.message??"An Error Occurred");
+                                        Utility.showSnackBar("The email has already been taken.");
                                       }
 
                                     });
