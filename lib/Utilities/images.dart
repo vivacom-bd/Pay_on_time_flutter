@@ -46,7 +46,7 @@ class AppImage{
         return "assets/images/euro_flag.png";
       }
       default : {
-        return "assets/images/logo_hidmona.webp";
+        return "assets/images/logo.webp";
       }
     }
   }
