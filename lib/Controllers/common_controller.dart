@@ -40,7 +40,9 @@ import 'package:hidmona/Repositories/user_repository.dart';
 import 'package:hidmona/Utilities/update_dialog.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Home/home_screen.dart';
+import 'package:hidmona/Views/Screens/Login/OTP%20Screen/login_otp_screen.dart';
 import 'package:hidmona/Views/Screens/Login/login_screen.dart';
+import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../Models/Card Remittance System/card_status.dart';
@@ -147,10 +149,16 @@ class CommonController extends GetxController{
 
 
   final getStorage = GetStorage();
+  DateTime ? now;
+  String? otpTimer;
+  String? newOtpTime;
 
 
   @override
   void onInit() {
+     now = DateTime.now();
+     newOtpTime = DateFormat('kk:mm:ss').format(now!);
+     otpTimer = getStorage.read<String>("newDateTime");
     super.onInit();
     getStarted();
   }
@@ -197,8 +205,14 @@ class CommonController extends GetxController{
                   return;
                 }
               }
-
               Get.offAll(()=> const LoginScreen());
+
+              // else if(newOtpTime != null &&  otpTimer != null && newOtpTime!.compareTo(otpTimer!) <= 0 ){
+              //   Get.offAll(()=> const LoginOtpScreen());
+              //   print(otpTimer);
+              // } else {
+              //   Get.offAll(()=> const LoginScreen());
+              // }
 
             }else{
               Utility.showSnackBar(apiResponse.message??"An error occurred");

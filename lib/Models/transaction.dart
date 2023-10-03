@@ -259,7 +259,7 @@ class Data {
   // Null? remarks;
   // Null? purpose;
   String? payoutCurrencyId;
-  int? payoutAmount;
+  num? payoutAmount;
   // Null? remitterStatus;
   // Null? remitterStatusRemarks;
   int? beneficiaryStatus;
@@ -282,9 +282,9 @@ class Data {
   int? createdByUserId;
   String? receivedCurrencyId;
   double? receivedAmount;
-  double? commission;
-  int? amountInUsd;
-  double? commissionInUsd;
+  num? commission;
+  num? amountInUsd;
+  num? commissionInUsd;
   int? purposeId;
   int? paymentBankId;
   double? totalAmount;

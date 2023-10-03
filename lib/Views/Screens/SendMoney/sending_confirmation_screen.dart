@@ -220,8 +220,10 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
 
                         if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debit or credit" || commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit"){
                           Get.offAll(const PaymentNewScreen());
+                          commonController.selectedRecipient = null;
                         }else{
                           Get.offAll(const SendingSuccessFulScreen());
+                          commonController.selectedRecipient = null;
                         }
 
                       }else{
@@ -235,11 +237,12 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         Get.back();
                         if(value.data != null){
                           commonController.currentTransaction = value.data;
-
                           if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debit or credit" || commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit"){
                             Get.offAll(const PaymentNewScreen());
+                            commonController.selectedRecipient = null;
                           }else{
                             Get.offAll(const SendingSuccessFulScreen());
+                            commonController.selectedRecipient = null;
                           }
 
                         }else{

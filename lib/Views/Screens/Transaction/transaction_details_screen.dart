@@ -157,7 +157,7 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                           ),
                         ),
                         const SizedBox(height: 20,),
-                         if(transaction.data!.senderMethod !=null && transaction.data!.senderMethod!.name!.toLowerCase() == "bank") InkWell(
+                         if(transaction.data!.senderMethod !=null && transaction.data!.senderMethod!.id == 3) InkWell(
                         //if(transaction.data!.senderMethodId! == 2) InkWell(
                           onTap: (){
                             Get.to(UploadBankReceiptScreen(transactionId: transaction.data!.id!));

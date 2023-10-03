@@ -62,7 +62,7 @@ class UserRepository{
 
         Get.find<CommonController>().getStorage.write("email", email);
         Get.find<CommonController>().getStorage.write("password", password);
-        Get.find<CommonController>().getStorage.write("loginChecker", true);
+        //Get.find<CommonController>().getStorage.write("loginChecker", true);
 
         AppUser appUser = AppUser.fromJson(jsonData);
         Get.find<CommonController>().currentUser.value = appUser;

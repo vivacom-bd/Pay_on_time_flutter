@@ -4,6 +4,7 @@ import 'package:country_currency_pickers/country_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/server_country.dart';
 import 'package:hidmona/Repositories/user_repository.dart';
@@ -17,6 +18,7 @@ import 'package:hidmona/Views/Screens/Login/forget_password_screen.dart';
 import 'package:hidmona/Views/Screens/Login/signup_screen.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
+import 'package:intl/intl.dart';
 
 import '../../Widgets/country_item.dart';
 
@@ -38,6 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Rx<bool> isPasswordHide = true.obs;
 
   final _formKey = GlobalKey<FormState>();
+
+  final getStorage = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Obx((){
                           if(commonController.serverCountries.isEmpty){
                             return SpinKitCircle(color: Get.theme.primaryColor,);
-                          }else{
+                          } else{
                             return Form(
                               key: _formKey,
                               child: Column(
@@ -117,14 +121,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   }),
                                   const SizedBox(height: 20,),
                                   DefaultButton(buttonText: "Login", onTap: (){
-
                                     FocusScope.of(context).unfocus();
-
                                     if(_formKey.currentState!.validate()){
                                       Utility.showLoadingDialog();
                                       UserRepository.customerLogin(emailController.text.trim(), passwordController.text).then((value)async{
                                         if(value.data != null){
-
                                           //get User Profile
                                           var userProfileResponse =  await UserRepository.getUserProfile();
                                           if(userProfileResponse.data != null){
@@ -141,10 +142,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                           bool value = await commonController.sendOTP();
                                           Get.back();
                                           if(value){
+                                            DateTime now = DateTime.now();
+                                            DateTime newDateTime = now.add(Duration(minutes: 2));
+                                            String formattedDate = DateFormat('kk:mm:ss').format(newDateTime);
+                                            Get.find<CommonController>().getStorage.write("newDateTime", formattedDate);
                                             Get.offAll(()=> const LoginOtpScreen());
+                                            String? otpTimer = getStorage.read<String>("newDateTime");
+                                            print(otpTimer);
                                           }
-
-                                        }else{
+                                        } else{
                                           Get.back();
                                           Utility.showSnackBar(value.message??"An Error Occurred");
                                         }

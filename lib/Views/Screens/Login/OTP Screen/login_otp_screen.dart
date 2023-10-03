@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/images.dart';
@@ -11,6 +12,7 @@ import 'package:hidmona/Views/Screens/Home/home_screen.dart';
 import 'package:hidmona/Views/Widgets/custom_dialogbox.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
+import 'package:intl/intl.dart';
 
 
 class LoginOtpScreen extends StatefulWidget {
@@ -136,12 +138,14 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                     bool value = await commonController.verifyOTP(int.parse(otpController.text));
                     Get.back();
                     if(value){
-                      bool value = await commonController.kycUserData();
-                      if(value){
-                        Get.find<CommonController>().getStorage.write("loginChecker", true);
-                        Get.offAll(()=> const HomeScreen());
-                      }
+                      Get.find<CommonController>().getStorage.write("loginChecker", true);
                       Get.offAll(()=> const HomeScreen());
+                      //bool value = await commonController.kycUserData();
+                      // if(value){
+                      //   Get.find<CommonController>().getStorage.write("loginChecker", true);
+                      //   Get.offAll(()=> const HomeScreen());
+                      // }
+                      //Get.offAll(()=> const HomeScreen());
                     } else {Get.back();}
 
                   },

@@ -278,6 +278,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   logout(){
     commonController.getStorage.erase();
+    Get.find<CommonController>().getStorage.write("loginChecker", false);
     commonController.currentUser.value = AppUser();
     commonController.userProfile.value = UserProfile();
     commonController.countryTo.value = Country();

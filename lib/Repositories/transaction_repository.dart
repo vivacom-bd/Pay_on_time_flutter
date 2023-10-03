@@ -43,7 +43,7 @@ class TransactionRepository{
     });
   }
 
-  /// create Transaction
+  /// create Transaction for Bank
   static Future<APIResponse<Transaction>> createTransactionForBank(TransactionRequestBodyforBank requestBody,
       ) async{
 

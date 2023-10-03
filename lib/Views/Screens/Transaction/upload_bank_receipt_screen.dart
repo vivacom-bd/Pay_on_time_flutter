@@ -178,7 +178,7 @@ class _UploadBankReceiptScreenState extends State<UploadBankReceiptScreen> {
 
                     var request = http.MultipartRequest("POST",Uri.parse(baseAPIUrl()+"bank_payment/uploads/${widget.transactionId}"));
 
-                    request.headers.addAll(headersWithAuth);
+                    request.headers.addAll(headersWithAuthAndContentTypeAndAccept);
 
                     request.fields["description"] = descriptionTextEditingController.text;
 
