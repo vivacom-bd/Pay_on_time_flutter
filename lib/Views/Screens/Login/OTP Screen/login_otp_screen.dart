@@ -136,10 +136,13 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                   onTap: () async {
                     Utility.showLoadingDialog();
                     bool value = await commonController.verifyOTP(int.parse(otpController.text));
-                    Get.back();
                     if(value){
-                      Get.find<CommonController>().getStorage.write("loginChecker", true);
-                      Get.offAll(()=> const HomeScreen());
+                      bool value = await commonController.kycUserData();
+                      Get.back();
+                      if(value){
+                        Get.find<CommonController>().getStorage.write("loginChecker", true);
+                        Get.offAll(()=> const HomeScreen());
+                      }
                       //bool value = await commonController.kycUserData();
                       // if(value){
                       //   Get.find<CommonController>().getStorage.write("loginChecker", true);
@@ -147,7 +150,6 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                       // }
                       //Get.offAll(()=> const HomeScreen());
                     } else {Get.back();}
-
                   },
                 ),
                 const SizedBox(height: 15,),

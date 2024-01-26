@@ -168,7 +168,6 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                     ),
                   ),
 
-
                   Container(
                     width: double.infinity,
                     alignment: Alignment.center,
@@ -267,10 +266,10 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                                 if(input==null){
                                   return "Please enter correct format";
                                 }
-                                else if(input > 50000)
-                                  {
-                                    return "You can not send money more than 50000 ${commonController.serverCountryFrom.value.selectedCurrency!.code}";
-                                  }
+                                // else if(input > 50000)
+                                //   {
+                                //     return "You can not send money more than 50000 ${commonController.serverCountryFrom.value.selectedCurrency!.code}";
+                                //   }
                                 return null;
                               },
                               labelText: "Enter amount in ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
@@ -285,7 +284,13 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                               }
                           ),
                           const SizedBox(height: 20,),
+
                           Obx((){
+                            WidgetsBinding.instance.addPostFrameCallback((_){
+
+                              // Add Your Code here.
+
+                            });
                             if(inputAmount.value!=0){
                               return FutureBuilder(
                                 future: commonController.getConversionDetails((commonController.countryTo.value.iso3Code == 'ETH' && commonController.modeOfReceiveId == 3) ? "dashen_bank" :'',inputAmount.value, commonController.serverCountryFrom.value.selectedCurrency!, commonController.serverCountryTo.value.selectedCurrency!),
@@ -295,50 +300,53 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                                     APIResponse<CurrencyConversionDetails>? apiResponse = snapshot.data;
 
                                     if(apiResponse!.data != null){
+                                      WidgetsBinding.instance.addPostFrameCallback((_){
 
-                                      CurrencyConversionDetails currencyConversionDetails = apiResponse.data!;
+                                        CurrencyConversionDetails currencyConversionDetails = apiResponse.data!;
+                                        commonController.currencyConversionDetails.value = currencyConversionDetails;
 
-                                      commonController.currencyConversionDetails.value = currencyConversionDetails;
-
+                                      });
 
                                       return Column(
                                         children: [
-                                          SendMoneyCalculationItem(
+                                         if(commonController.currencyConversionDetails.value.message == "Success") SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("rate"),
                                             title: "Our Rate",
-                                            value: "1 ${commonController.serverCountryFrom.value.selectedCurrency!.code} = ${currencyConversionDetails.data!.ourRate!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}",
+                                            value: "1 ${commonController.serverCountryFrom.value.selectedCurrency!.code} = ${commonController.currencyConversionDetails.value.data!.ourRate!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}",
                                           ),
                                           const SizedBox(height: 10,),
-                                          SendMoneyCalculationItem(
+                                          if(commonController.currencyConversionDetails.value.message == "Success")SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("transfer"),
                                             title: "Transfer Fee",
-                                            value: "${(currencyConversionDetails.data!.amountToPay!-currencyConversionDetails.data!.amountToSend!).toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
+                                            value: "${(commonController.currencyConversionDetails.value.data!.amountToPay!-commonController.currencyConversionDetails.value.data!.amountToSend!).toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
                                             // value: "${currencyConversionDetails.fees!.toStringAsFixed(2)} ${currencyConversionDetails.sendingCurrency}",
                                           ),
                                           const SizedBox(height: 10,),
-                                          SendMoneyCalculationItem(
+                                          if(commonController.currencyConversionDetails.value.message == "Success")SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("amount_to_send"),
                                             title: "Amount to send",
-                                            value: "${currencyConversionDetails.data!.amountToSend!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
+                                            value: "${commonController.currencyConversionDetails.value.data!.amountToSend!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
                                           ),
                                           const SizedBox(height: 10,),
-                                          SendMoneyCalculationItem(
+                                          if(commonController.currencyConversionDetails.value.message == "Success")SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("Amount_to_receive"),
                                             title: "Amount to receive",
-                                            value: '${currencyConversionDetails.data!.amountToReceive!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}',
+                                            value: '${commonController.currencyConversionDetails.value.data!.amountToReceive!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}',
                                           ),
                                           const SizedBox(height: 10,),
-                                          SendMoneyCalculationItem(
+                                          if(commonController.currencyConversionDetails.value.message == "Success")SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("Amount_to_receive"),
                                             title: "Amount to receive in USD",
-                                            value: '${currencyConversionDetails.data!.receivingAmountInUsd!.toStringAsFixed(2)} USD',
+                                            value: '${commonController.currencyConversionDetails.value.data!.receivingAmountInUsd!.toStringAsFixed(2)} USD',
                                           ),
                                           const SizedBox(height: 10,),
-                                          SendMoneyCalculationItem(
+                                          if(commonController.currencyConversionDetails.value.message == "Success")SendMoneyCalculationItem(
                                             iconPath: AppSvg.getPath("Amount_to_receive"),
                                             title: "Total to pay",
-                                            value: "${currencyConversionDetails.data!.amountToPay!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
+                                            value: "${commonController.currencyConversionDetails.value.data!.amountToPay!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
                                           ),
+                                          if(commonController.currencyConversionDetails.value.message == "You can not send more than 1000 USD." || commonController.currencyConversionDetails.value.message == "You can not send less than 1 USD." )Text(commonController.currencyConversionDetails.value.message!, style: TextStyle(color: AppColor.defaultColorLight),),
+
                                         ],
                                       );
                                     }else{
@@ -360,7 +368,6 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                       ),
                   ),
                   //const SizedBox(height: 10.0,),
-
                   const SizedBox(height: 10,),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 15),
@@ -415,7 +422,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: DefaultButton(
-                      buttonText: "Send Money", onTap: () async{
+                      buttonText: "Send Money", onTap: commonController.currencyConversionDetails.value.message == "Success" ?  () async{
                         if(_formKey.currentState!.validate()){
 
                           Utility.showLoadingDialog();
@@ -436,7 +443,9 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
 
                           Get.to(const RecipientDetailsScreen());
                         }
-                    },),
+                    } : (){},
+                        buttonColor: commonController.currencyConversionDetails.value.message == "Success" ? "default" : "grey"
+                    ),
                   ),
                   const SizedBox(height: 15,)
                 ],

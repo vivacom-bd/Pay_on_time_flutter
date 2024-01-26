@@ -23,6 +23,7 @@ import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/country_wise_bank.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
+import 'package:hidmona/Models/kyc_token_model.dart';
 import 'package:hidmona/Models/mode_of_payment.dart';
 import 'package:hidmona/Models/recipient.dart';
 import 'package:hidmona/Models/recipient_bank.dart';
@@ -87,13 +88,12 @@ class CommonController extends GetxController{
   int? bankId;
   String ? bankAccountTitle;
   String ? recipientBankBranch;
+  String ? email;
 
   TextEditingController bankNameTextEditingController = TextEditingController();
   TextEditingController bankSwiftCodeTextEditingController = TextEditingController();
   final TextEditingController bankAccountTitleTextEditingController = TextEditingController();
   final TextEditingController bankAccountNoTextEditingController = TextEditingController();
-
-
 
 
   /// Card Remittance.
@@ -112,6 +112,8 @@ class CommonController extends GetxController{
   Rx<OTP> otp= OTP().obs;
   Rx<OTPVerification> otpVerify= OTPVerification().obs;
   Rx<KYCDataRetrieve> kycDataRetrieve= KYCDataRetrieve().obs;
+  Rx<KycTokenModel> kycToken= KycTokenModel().obs;
+
 
 
 
@@ -159,14 +161,13 @@ class CommonController extends GetxController{
      now = DateTime.now();
      newOtpTime = DateFormat('kk:mm:ss').format(now!);
      otpTimer = getStorage.read<String>("newDateTime");
+     email = getStorage.read<String>("email");
     super.onInit();
     getStarted();
   }
 
-
   ///getCountries
   void getStarted(){
-
     //version control
     FirebaseRepository.getVersionControl().listen((apiResponse) async {
       if(apiResponse.data != null){
@@ -190,19 +191,21 @@ class CommonController extends GetxController{
           CommonRepository.getCountries().then((APIResponse<List<ServerCountry>> apiResponse) async {
             if(apiResponse.data != null){
               serverCountries.addAll(apiResponse.data!);
-
-
               //savedLogin
               String? email = getStorage.read<String>("email");
-             String? password = getStorage.read<String>("password");
-             bool? loginChecker = getStorage.read<bool>('loginChecker');
+              String? password = getStorage.read<String>("password");
+              bool? loginChecker = getStorage.read<bool>('loginChecker');
 
               if(email != null && password != null && loginChecker==true){
                 bool isSuccessful = await customerLogin(email,password);
-
                 if(isSuccessful){
-                  Get.offAll(()=> const HomeScreen());
-                  return;
+                  bool value = await kycUserData();
+                  if(value){
+                   // bool value1 = await CommonController().kycTokenData(email);
+                    Get.offAll(()=> const HomeScreen());
+                    return;
+                  }
+                  //Get.offAll(()=> const HomeScreen());
                 }
               }
               Get.offAll(()=> const LoginScreen());
@@ -222,7 +225,6 @@ class CommonController extends GetxController{
       }
     });
   }
-
 
   Future<bool> customerLogin(String email, String password){
 
@@ -367,14 +369,12 @@ class CommonController extends GetxController{
 
   }
 
-
   /// getConversionDetails
   Future<APIResponse<CurrencyConversionDetails>> getConversionDetails(String currencySource,double amount, ServerCurrency serverCurrencyFrom, ServerCurrency serverCurrencyTo) async{
     APIResponse<CurrencyConversionDetails> apiResponse = await CommonRepository.getConversionDetails(currencySource,amount, serverCurrencyFrom.id!, serverCurrencyTo.id!, serverCountryFrom.value.id!, serverCountryTo.value.id!);
 
     return apiResponse;
   }
-
 
   ///UpdateCurrencies
   Future<bool> updateCurrencies() async{
@@ -421,8 +421,6 @@ class CommonController extends GetxController{
 
     return true;
   }
-
-
 
   ///PersonalAccountCreate
   Future<bool> createAccount(int userId) async{
@@ -502,7 +500,6 @@ class CommonController extends GetxController{
     }
     return true;
   }
-
 
   ///getCardStatus
   Future<bool> getCardStatus(int userId, int accountCardPk) async{
@@ -595,6 +592,18 @@ class CommonController extends GetxController{
       kycDataRetrieve.value = apiResponseKycData.data!;
     }else{
       Utility.showSnackBar(apiResponseKycData.message??"No data Found");
+      return false;
+    }
+    return true;
+  }
+
+  ///Kyc Token Data
+  Future<bool> kycTokenData(String email) async{
+    APIResponse<KycTokenModel> apiResponseKycTokenData = await CardRemittanceRepository.kycDataToken(email);
+    if(apiResponseKycTokenData.data!=null){
+      kycToken.value = apiResponseKycTokenData.data!;
+    }else{
+      Utility.showSnackBar(apiResponseKycTokenData.message??"No data Found");
       return false;
     }
     return true;

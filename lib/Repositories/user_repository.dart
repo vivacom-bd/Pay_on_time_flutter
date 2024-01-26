@@ -46,7 +46,6 @@ class UserRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<AppUser>(error: true, message: "Internet is not connected!");
     }
-
     Uri url = Uri.parse(baseAPIUrl()+'customer-login');
     return http.post(
         url,

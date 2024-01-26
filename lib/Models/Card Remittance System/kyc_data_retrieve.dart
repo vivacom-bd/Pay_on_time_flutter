@@ -2,7 +2,7 @@ class KYCDataRetrieve {
   String? email;
   String? kycApplicationId;
   String? kycApplicationStatus;
-  int? kycApplicationCurrentStatus;
+  var kycApplicationCurrentStatus;
   String? firstName;
   String? middleName;
   String? lastName;
@@ -11,7 +11,8 @@ class KYCDataRetrieve {
   PhysicalAddress? physicalAddress;
 
   KYCDataRetrieve(
-      {this.email,
+      {
+        this.email,
         this.kycApplicationId,
         this.kycApplicationStatus,
         this.kycApplicationCurrentStatus,
@@ -20,7 +21,8 @@ class KYCDataRetrieve {
         this.lastName,
         this.dateOfBirth,
         this.nationality,
-        this.physicalAddress});
+        this.physicalAddress
+      });
 
   KYCDataRetrieve.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -104,11 +106,13 @@ class PhysicalAddress {
   String? postalcode;
 
   PhysicalAddress(
-      {this.addressLine1,
+      {
+        this.addressLine1,
         this.addressLine2,
         this.city,
         this.province,
-        this.postalcode});
+        this.postalcode
+      });
 
   PhysicalAddress.fromJson(Map<String, dynamic> json) {
     addressLine1 = json['address_line_1'];

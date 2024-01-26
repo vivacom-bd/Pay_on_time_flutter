@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -41,8 +43,6 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Payment"),
@@ -54,7 +54,6 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-
                 Container(
                   padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
@@ -97,10 +96,7 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
 
                             if(response.data != null){
                               List<PaymentCard> cards = response.data!;
-
                               //transactions = transactions.reversed.toList();
-
-
                               return Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -171,21 +167,31 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                                           if(returnUrl != null && returnUrl.isNotEmpty){
                                             print(returnUrl);
 
-                                            var errorCode = Uri.parse(returnUrl).queryParameters['errorcode'];
-                                            var errorMessage = Uri.parse(returnUrl).queryParameters['errormessage'];
-                                            var orderReference = Uri.parse(returnUrl).queryParameters['orderreference'];
-                                            var jwt = Uri.parse(returnUrl).queryParameters['jwt'];
+                                            // var errorCode = Uri.parse(returnUrl).queryParameters['errorcode'];
+                                            // var errorMessage = Uri.parse(returnUrl).queryParameters['errormessage'];
+                                            // var orderReference = Uri.parse(returnUrl).queryParameters['transactionreference'];
+                                            // var jwt = Uri.parse(returnUrl).queryParameters['jwt'];
+                                            var data = Uri.parse(returnUrl).queryParameters['data'];
+                                            var jsonData = json.decode(data!);
+                                            //PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
+                                            var errorCode = jsonData['errorcode'];
+                                            var errorMessage = jsonData['message'];
+                                            var orderReference = jsonData['transactionreference'];
+
 
                                             if(errorCode == "0"){
-                                              PaymentRepository.transactionConfirmation(jwt!).then((value){
-                                                Get.back();
-                                                if(value.data!=null && value.data!){
-                                                  PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
-                                                }else{
-                                                  Utility.showSnackBar(value.message??"Transaction Failed!");
-                                                }
-                                              });
-                                            }else{
+                                              PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
+
+                                              // PaymentRepository.transactionConfirmation(jwt!).then((value){
+                                              //   Get.back();
+                                              //   if(value.data!=null && value.data!){
+                                              //     PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
+                                              //   }else{
+                                              //     Utility.showSnackBar(value.message??"Transaction Failed!");
+                                              //   }
+                                              // });
+                                            }
+                                            else{
                                               Get.back();
                                               Utility.showSnackBar(errorMessage??"Transaction Failed!");
                                             }
@@ -202,7 +208,6 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                                   ),
                                 ],
                               );
-
                             }else{
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -229,32 +234,39 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                                       buttonText: "Pay Now",
                                       onTap: ()async{
                                         Utility.showLoadingDialog();
-
                                         APIResponse<PaymentAuthResponse> apiResponse = await PaymentRepository.payment3dAuth(commonController.currentTransaction!.data!.transactionNumber!,isCardSave);
-
                                         if(apiResponse.data != null){
                                           String? returnUrl = await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Payment3DAuthScreen(paymentAuthResponse: apiResponse.data!,)));
                                           if(returnUrl != null && returnUrl.isNotEmpty){
                                             print(returnUrl);
-
-                                            var errorCode = Uri.parse(returnUrl).queryParameters['errorcode'];
-                                            var errorMessage = Uri.parse(returnUrl).queryParameters['errormessage'];
-                                            var orderReference = Uri.parse(returnUrl).queryParameters['orderreference'];
-                                            var jwt = Uri.parse(returnUrl).queryParameters['jwt'];
+                                            // var errorCode = Uri.parse(returnUrl).queryParameters['errorcode'];
+                                            // var errorMessage = Uri.parse(returnUrl).queryParameters['errormessage'];
+                                            // var orderReference = Uri.parse(returnUrl).queryParameters['transactionreference'];
+                                            // var jwt = Uri.parse(returnUrl).queryParameters['jwt'];
+                                            var data = Uri.parse(returnUrl).queryParameters['data'];
+                                            var jsonData = json.decode(data!);
+                                            //PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
+                                            var errorCode = jsonData['errorcode'];
+                                            var errorMessage = jsonData['message'];
+                                            var orderReference = jsonData['transactionreference'];
 
                                             if(errorCode == "0"){
-                                              PaymentRepository.transactionConfirmation(jwt!).then((value){
-                                                Get.back();
-                                                if(value.data!=null && value.data!){
-                                                  PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
-                                                }else{
-                                                  Utility.showSnackBar(value.message??"Transaction Failed!");
-                                                }
-                                              });
+                                              PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
+
+                                              // PaymentRepository.transactionConfirmation(jwt!).then((value){
+                                              //   Get.back();
+                                              //   if(value.data!=null && value.data!){
+                                              //     PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
+                                              //   }else{
+                                              //     Utility.showSnackBar(value.message??"Transaction Failed!");
+                                              //   }
+                                              // });
                                             }else{
                                               Get.back();
                                               Utility.showSnackBar(errorMessage??"Transaction Failed!");
                                             }
+                                            //PaymentDialog.showDialog(text: "Your Transaction is Successful.\nYour Transaction Reference is: ${orderReference}");
+
                                           }else{
                                             Get.back();
                                           }
@@ -269,9 +281,7 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                                 ],
                               );
                             }
-
                           }
-
                           return Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Center(child: SpinKitCircle(color: AppColor.defaultColor,)),

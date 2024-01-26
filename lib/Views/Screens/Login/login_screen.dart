@@ -100,9 +100,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                         validator: (value) {
                                           if(value!.isEmpty){
                                             return "Password can't be empty";
-                                          }else if(value.length <8){
-                                            return "Password at least 8 digits";
                                           }
+                                          // else if(value.length <8){
+                                          //   return "Password at least 8 digits";
+                                          // }
                                           return null;
                                         },
                                         suffixIcon: InkWell(
@@ -124,7 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     FocusScope.of(context).unfocus();
                                     if(_formKey.currentState!.validate()){
                                       Utility.showLoadingDialog();
-                                      UserRepository.customerLogin(emailController.text.trim(), passwordController.text).then((value)async{
+                                      UserRepository.customerLogin(
+                                          emailController.text.trim(), passwordController.text).then((value)async{
                                         if(value.data != null){
                                           //get User Profile
                                           var userProfileResponse =  await UserRepository.getUserProfile();
@@ -134,6 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               List<ServerCountry> countries = commonController.serverCountries.where((country) => commonController.userProfile.value.countryId == country.id).toList();
                                               if (countries.isNotEmpty) {
                                                 //serverCountryFrom.value = userProfile.value.country!;
+                                                Get.find<CommonController>().getStorage.write("userEmail", emailController.text.trim());
                                                 commonController.countryFrom.value = CountryPickerUtils.getCountryByIsoCode(countries.first.countryCode!);
                                               }
                                             }
@@ -148,6 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             Get.find<CommonController>().getStorage.write("newDateTime", formattedDate);
                                             Get.offAll(()=> const LoginOtpScreen());
                                             String? otpTimer = getStorage.read<String>("newDateTime");
+                                            commonController.email = getStorage.read<String>("userEmail");
                                             print(otpTimer);
                                           }
                                         } else{
@@ -157,7 +161,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                       });
                                     }
-                                  },),
+                                  },
+                                  ),
                                   const SizedBox(height: 5,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,

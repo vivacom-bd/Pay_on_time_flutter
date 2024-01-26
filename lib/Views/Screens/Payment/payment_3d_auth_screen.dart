@@ -53,10 +53,9 @@ class _Payment3DAuthScreenState extends State<Payment3DAuthScreen> {
             onLoadStart: (controller, uri) {
               String url = Uri.decodeFull(uri.toString());
               print(url);
-              if(uri.toString().contains("trustpayAppCallback")){
+              if(uri.toString().contains("trustpayAppCallback")){ //front-end er end point
                 Navigator.of(context).pop(url);
               }
-
             },
             onLoadStop: (controller, uri) async {
               String url = Uri.decodeFull(uri.toString());

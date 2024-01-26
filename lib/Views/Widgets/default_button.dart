@@ -9,6 +9,7 @@ class DefaultButton extends StatelessWidget {
     this.onTap,
     this.textColor = Colors.white,
     this.linearGradient,
+    this.buttonColor  = "default",
   }) : super(key: key);
 
 
@@ -17,6 +18,7 @@ class DefaultButton extends StatelessWidget {
   final IconData? iconData;
   final LinearGradient? linearGradient;
   final Function()? onTap;
+  final String buttonColor;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class DefaultButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical:12,horizontal:20),
         decoration: BoxDecoration(
-          gradient : linearGradient?? AppGradient.getColorGradient('default'),
+          gradient : linearGradient?? AppGradient.getColorGradient(buttonColor),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Row(

@@ -103,13 +103,14 @@ class CommonRepository{
     if(!await Utility.isInternetConnected()){
       return APIResponse<CurrencyConversionDetails>(error: true, message: "Internet is not connected!");
     }
-    body: json.encode({
+    print("jehan - $currencySource");
+    json.encode({
       "amount" : amount,
       "from_currency_id" : fromCurrencyId,
       "to_currency_id" : toCurrencyId,
       "from_country_id" : fromCountryId,
-      "to_country_id" : toCountryId
-      // "currency_source" : currencySource
+      "to_country_id" : toCountryId,
+      "currency_source" : currencySource
     });
     Uri url = Uri.parse(baseAPIUrl()+'currency_conversion?from_currency_id=$fromCurrencyId&to_currency_id=$toCurrencyId&from_country_id=$fromCountryId&to_country_id=$toCountryId&amount=$amount');
     return http.get(

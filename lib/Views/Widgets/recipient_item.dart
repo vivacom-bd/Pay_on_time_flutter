@@ -141,7 +141,7 @@ class _RecipientItemState extends State<RecipientItem> {
                     children: [
                       const Icon(Icons.location_city_outlined,size: 20,),
                       const SizedBox(width: 5,),
-                      Expanded(child: Text("${widget.recipient.city!.name!}, ${widget.recipient.country!.name!}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),)),
+                      Expanded(child: Text("${widget.recipient.city?.name ?? ""}, ${widget.recipient.country?.name ?? ""}", style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),)),
                     ],
                   ),
                 ),

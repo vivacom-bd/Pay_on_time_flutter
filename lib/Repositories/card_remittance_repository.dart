@@ -15,6 +15,7 @@ import 'package:hidmona/Models/Card%20Remittance%20System/otp_verify.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/personal_account_card.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/set_pin.dart';
 import 'package:hidmona/Models/Card%20Remittance%20System/supported_country.dart';
+import 'package:hidmona/Models/kyc_token_model.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/api_constants.dart';
 import 'package:hidmona/Utilities/utility.dart';
@@ -436,7 +437,6 @@ class CardRemittanceRepository{
     });
   }
 
-
   ///KYC User Data
   static Future<APIResponse<KYCDataRetrieve>> kycDataRetrieve() async{
     ///internet check
@@ -448,7 +448,8 @@ class CardRemittanceRepository{
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
-      if(data.statusCode == 201){
+      print("status_code-${data.statusCode}");
+      if(data.statusCode == 200){
         return APIResponse<KYCDataRetrieve>(data: KYCDataRetrieve.fromJson(jsonData));
       }
       return APIResponse<KYCDataRetrieve>(error: true, message: jsonData["message"]??"An error occurred");
@@ -458,5 +459,25 @@ class CardRemittanceRepository{
     });
   }
 
+  ///KYC Token Data
+  static Future<APIResponse<KycTokenModel>> kycDataToken(String email) async{
+    ///internet check
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<KycTokenModel>(error: true, message: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'kyc_application_create/$email');
+    return http.post(url,headers: headersWithAuthAndContentTypeAndAccept).then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 201){
+        return APIResponse<KycTokenModel>(data: KycTokenModel.fromJson(jsonData));
+      }
+      return APIResponse<KycTokenModel>(error: true, message: jsonData["message"]??"An error occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<KycTokenModel>(error: true, message: "An Error Occurred!");
+    });
+  }
 
 }

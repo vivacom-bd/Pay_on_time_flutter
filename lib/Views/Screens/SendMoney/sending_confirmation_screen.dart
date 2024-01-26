@@ -110,7 +110,7 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                           SendDetailsItem(title: "Mobile Number",value: "${commonController.selectedRecipient!.phone}",),
 
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "City",value: "${commonController.selectedRecipient!.city!.name}",),
+                          SendDetailsItem(title: "City",value: commonController.selectedRecipient?.city?.name ?? "",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
                           SendDetailsItem(title: "Country",value: "${commonController.selectedRecipient!.country!.name}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
