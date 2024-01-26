@@ -11,10 +11,6 @@ import 'package:hidmona/Utilities/default_dialogs.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/size_config.dart';
 import 'package:hidmona/Utilities/utility.dart';
-import 'package:hidmona/Views/Screens/Cards/Accounts/account_screen.dart';
-import 'package:hidmona/Views/Screens/Cards/Accounts/create_account_option_screen.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/existing_holder_list.dart';
-import 'package:hidmona/Views/Screens/Cards/Card%20Remittance%20System/Crard%20creation/card_list_screen.dart';
 import 'package:hidmona/Views/Screens/Profile/profile_screen.dart';
 import 'package:hidmona/Views/Screens/Recipient/my_recipients_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/send_money_screen.dart';
@@ -117,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                        Get.to(const ProfileScreen());
                       },
                     ),
+                    const SizedBox(height: 10,),
                     DashboardExploreItem(title: "Account",subtitle: "See your Account here",iconName: "users",
                         onTap: ()  {
                           DefaultDialogs.showDialog(
@@ -129,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         }
                     ),
+                    const SizedBox(height: 10,),
                     DashboardExploreItem(title: "Card",subtitle: "See your Card here",iconName: "card",
                       onTap: () async{
                         DefaultDialogs.showDialog(
