@@ -43,16 +43,26 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    commonController.recipientCity = null;
-    //commonController.selectedRecipient = null;
-
+    WidgetsBinding.instance.addPostFrameCallback((_){
+     if(commonController.myRecipients.isEmpty){
+       _asyncMethod();
+       commonController.recipientCity = null;
+     }
+    });
+  }
+  _asyncMethod() async {
+    Utility.showLoadingDialog();
+    bool isSuccessGetMyRecipients = await commonController.getMyRecipients();
+    Get.back();
+    if(!isSuccessGetMyRecipients){
+      return;
+    }
   }
 
 
   @override
   Widget build(BuildContext context) {
     selectedPhoneCountry ??= commonController.countryTo.value;
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50.0),

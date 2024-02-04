@@ -13,6 +13,7 @@ import 'package:hidmona/Repositories/recipient_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/SendMoney/recepient_bank_info_screen.dart';
+import 'package:hidmona/Views/Screens/SendMoney/recepient_details_screen.dart';
 import 'package:hidmona/Views/Widgets/country_item.dart';
 import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
@@ -570,7 +571,9 @@ class _RecipientDetailsNewScreenState extends State<RecipientDetailsNewScreen> {
                             bool isGetCountryWiseBanks = await commonController.getCountryWiseBanks();
                             Get.back();
                             if(isGetSendingPurposes && isGetCountryWiseBanks){
-                              Get.off(const TransactionBankInfoScreen());
+                              //Get.off(const TransactionBankInfoScreen());
+                              Get.off(const RecipientDetailsScreen());
+
                             }
                           }else{
                             Get.back();

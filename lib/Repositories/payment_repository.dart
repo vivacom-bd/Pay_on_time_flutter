@@ -164,6 +164,7 @@ class PaymentRepository{
       final jsonData = json.decode(responseData);
       if(data.statusCode == 201){
         print(jsonData);
+        print("${baseUrl()}mobile-transaction?amount=1&currency=USD&JWT=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXlsb2FkIjp7ImFjY291bnR0eXBlZGVzY3JpcHRpb24iOiJFQ09NIiwiYmFzZWFtb3VudCI6MTAwLCJjdXJyZW5jeWlzbzNhIjoiVVNEIiwib3JkZXJyZWZlcmVuY2UiOiJCVC02NWJhMTgwZGQxNzYzIiwic2l0ZXJlZmVyZW5jZSI6ImhpZG1vbmFnbWJoMTA3OTM3IiwicmVxdWVzdHR5cGVkZXNjcmlwdGlvbnMiOlsiVEhSRUVEUVVFUlkiLCJBVVRIIl19LCJpYXQiOjE3MDY2OTQ2NzUsImlzcyI6ImxpdmVqd3RAaGlkbW9uYWdtYmguY29tIn0.rShZU9Fh8DSRzYPG_HDwrOjjn_47mKkfG0zfJa0fzYw");
         return APIResponse<PaymentAuthResponse>(data: PaymentAuthResponse.fromJson(jsonData));
       }
       return APIResponse<PaymentAuthResponse>(error: true, message:jsonData["detail"].runtimeType.toString() == "String"? jsonData["detail"]: jsonData["detail"][0]["loc"][1] +": "+ jsonData["detail"][0]["msg"]);

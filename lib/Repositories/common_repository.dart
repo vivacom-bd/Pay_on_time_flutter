@@ -174,7 +174,7 @@ class CommonRepository{
         });
         return APIResponse<List<ModeOfPayment>>(data: modes);
       }
-      return APIResponse<List<ModeOfPayment>>(error: true, message: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<ModeOfPayment>>(error: true, message: jsonData["message"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<List<ModeOfPayment>>(error: true, message: "An Error Occurred!");
@@ -225,7 +225,7 @@ class CommonRepository{
         });
         return APIResponse<List<City>>(data: cities);
       }
-      return APIResponse<List<City>>(error: true, message: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<City>>(error: true, message: jsonData["message"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<List<City>>(error: true, message: "An Error Occurred!");
@@ -276,7 +276,7 @@ class CommonRepository{
         });
         return APIResponse<List<RecipientBank>>(data: banks);
       }
-      return APIResponse<List<RecipientBank>>(error: true, message: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<RecipientBank>>(error: true, message: jsonData["message"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<List<RecipientBank>>(error: true, message: "An Error Occurred!");
@@ -301,7 +301,7 @@ class CommonRepository{
         });
         return APIResponse<List<RecipientBankBranch>>(data: branches);
       }
-      return APIResponse<List<RecipientBankBranch>>(error: true, message: jsonData["detail"]??"An Error Occurred");
+      return APIResponse<List<RecipientBankBranch>>(error: true, message: jsonData["message"]??"An Error Occurred");
     }).catchError((onError){
       print(onError);
       return APIResponse<List<RecipientBankBranch>>(error: true, message: "An Error Occurred!");

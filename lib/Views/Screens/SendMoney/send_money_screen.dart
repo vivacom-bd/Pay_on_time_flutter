@@ -427,11 +427,18 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
 
                           Utility.showLoadingDialog();
 
-                          bool isSuccessGetMyRecipients = await commonController.getMyRecipients();
-                          if(!isSuccessGetMyRecipients){
-                            Get.back();
-                            return;
-                          }
+                          Get.back();
+                          Get.to(const RecipientDetailsScreen());
+
+
+                          // bool isSuccessGetMyRecipients = await commonController.getMyRecipients();
+                          // if(!isSuccessGetMyRecipients){
+                          //   Get.back();
+                          //   return;
+                          // }else{
+                          //   Get.back();
+                          //   Get.to(const RecipientDetailsScreen());
+                          // }
 
                           bool isSuccessGetCities = await commonController.getCities();
                           if(!isSuccessGetCities){
@@ -439,9 +446,8 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                             return;
                           }
 
-                          Get.back();
-
-                          Get.to(const RecipientDetailsScreen());
+                          // Get.back();
+                          // Get.to(const RecipientDetailsScreen());
                         }
                     } : (){},
                         buttonColor: commonController.currencyConversionDetails.value.message == "Success" ? "default" : "grey"

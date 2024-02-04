@@ -31,6 +31,7 @@ class _Payment3DAuthScreenState extends State<Payment3DAuthScreen> {
       body: Stack(
         children: [
           InAppWebView(
+
             // initialUrlRequest: URLRequest(
             //     url: Uri.parse("https://payments.securetrading.net/process/payments/choice"),
             //     method: 'POST',
@@ -63,6 +64,10 @@ class _Payment3DAuthScreenState extends State<Payment3DAuthScreen> {
               // if(uri.toString().contains("trustpayAppCallback")){
               //   Navigator.of(context).pop(url);
               // }
+            },
+            onReceivedServerTrustAuthRequest: (controller, challenge) async {
+              print(challenge);
+              return ServerTrustAuthResponse(action: ServerTrustAuthResponseAction.PROCEED);
             },
           ),
           _progress < 1? SizedBox(
