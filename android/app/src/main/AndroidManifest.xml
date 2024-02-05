@@ -45,7 +45,7 @@
     </queries>
 
    <application
-        android:label="Payontime"
+        android:label="Hidmona"
         android:icon="@mipmap/ic_launcher"
        >
         <activity
