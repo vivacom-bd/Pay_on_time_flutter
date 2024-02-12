@@ -2,7 +2,7 @@
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 
-bool isDev = true;
+bool isDev = false;
 
 String baseUrl(){
   //return isDev ? 'http://45.77.224.119:8080/' : 'http://45.77.224.119:8001/';

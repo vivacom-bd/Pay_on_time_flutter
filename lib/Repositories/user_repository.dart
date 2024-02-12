@@ -178,7 +178,7 @@ class UserRepository{
       // if(data.statusCode == 200){
       //   return APIResponse<String>(data: AppUser.fromJson(jsonData));
       // }
-      return APIResponse<String>(error: false, data:jsonData["message"].runtimeType.toString() == "String"? jsonData["message"]: jsonData["message"][0]["loc"][1] +": "+ jsonData["message"][0]["msg"]);
+      return APIResponse<String>(error: false, data:jsonData["message"].runtimeType.toString() == "String"? jsonData["message"]: jsonData["message"][0]);
     }).catchError((onError){
       print(onError);
       return APIResponse<String>(error: true, message: "An Error Occurred!");
