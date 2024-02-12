@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/transaction.dart';
+import 'package:hidmona/Repositories/api_constants.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Repositories/transaction_repository.dart';
 import 'package:hidmona/Utilities/colors.dart';
@@ -10,6 +13,10 @@ import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/Payment/payment_new_screen.dart';
 import 'package:hidmona/Views/Screens/Payment/payment_screen.dart';
 import 'package:hidmona/Views/Screens/SendMoney/sending_successful_screen.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
+
 
 class SendingMoneyConfirmationScreen extends StatefulWidget {
 
@@ -38,7 +45,7 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sending Information")
+        title: Text("Sending Information", style: TextStyle(color: AppColor.dialogBackgroundColor),)
       ),
       body:SafeArea(
         child: SingleChildScrollView(
@@ -61,15 +68,15 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         children: [
                           const Center(child: Text("Your Money Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                           Divider(color: AppColor.defaultColor,thickness: 2,),
-                          SendDetailsItem(title: "Amount to send",value: "${commonController.currencyConversionDetails.value.data!.amountToSend!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
+                          SendDetailsItem(title: "Amount to send",value: "${commonController.currencyConversionDetails.value?.data!.amountToSend!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Amount to receive",value: "${commonController.currencyConversionDetails.value.data!.amountToReceive!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}",),
+                          SendDetailsItem(title: "Amount to receive",value: "${commonController.currencyConversionDetails.value?.data!.amountToReceive!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Amount to receive in USD",value: "${commonController.currencyConversionDetails.value.data!.receivingAmountInUsd!.toStringAsFixed(2)} USD",),
+                          SendDetailsItem(title: "Amount to receive in USD",value: "${commonController.currencyConversionDetails.value?.data!.receivingAmountInUsd!.toStringAsFixed(2)} USD",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Fees",value: "${commonController.currencyConversionDetails.value.data!.ourFees!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
+                          SendDetailsItem(title: "Fees",value: "${commonController.currencyConversionDetails.value?.data!.ourFees!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Total to pay",value: "${commonController.currencyConversionDetails.value.data!.amountToPay!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
+                          SendDetailsItem(title: "Total to pay",value: "${commonController.currencyConversionDetails.value?.data!.amountToPay!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",),
                         ],
                       ),
                     ),
@@ -105,16 +112,15 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                         children: [
                           const Center(child: Text("Your Recipient Information",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),)),
                           Divider(color: AppColor.defaultColor,thickness: 2,),
-                          SendDetailsItem(title: "Full name",value: "${commonController.selectedRecipient!.fullName}",),
+                          SendDetailsItem(title: "Full name",value: "${commonController.selectedRecipient?.fullName}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Mobile Number",value: "${commonController.selectedRecipient!.phone}",),
-
+                          SendDetailsItem(title: "Mobile Number",value: "${commonController.selectedRecipient?.phone}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
                           SendDetailsItem(title: "City",value: commonController.selectedRecipient?.city?.name ?? "",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Country",value: "${commonController.selectedRecipient!.country!.name}",),
+                          SendDetailsItem(title: "Country",value: "${commonController.selectedRecipient?.country?.name}",),
                           Divider(color: AppColor.defaultColor,thickness: .5,),
-                          SendDetailsItem(title: "Mode of Receive",value: "${commonController.selectedModeOfReceive!.name}",),
+                          SendDetailsItem(title: "Mode of Receive",value: "${commonController.selectedModeOfReceive?.name}",),
                         ],
                       ),
                     ),
@@ -209,28 +215,215 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
               InkWell(
                 onTap: () async {
                   if(isInformationCorrect) {
-                    Utility.showLoadingDialog();
-                    if(commonController.selectedModeOfReceive!.id == 3) {
-                      TransactionRepository.createTransactionForBank(
-                      commonController.transactionRequestBodyForBank!,
-                    ).then((value){
-                      Get.back();
-                      if(value.data != null){
-                        commonController.currentTransaction = value.data;
+                    ///Utility.showLoadingDialog();
 
+                    Utility.showLoadingDialog();
+                    ///
+                    if(commonController.currencyConversionDetails.value!.data!.receivingAmountInUsd! >= 2000 && commonController.selectedModeOfReceive!.id == 3) {
+                      var request = http.MultipartRequest("POST",Uri.parse(baseAPIUrl()+'transactions'));
+                      request.headers.addAll(headersWithAuthAndContentTypeAndAccept);
+                      request.fields['bank_id'] = commonController.bankId.toString();
+                      request.fields['bank_account_no'] = commonController.bankAccountNoTextEditingController.text;
+                      request.fields['bank_account_title'] = commonController.bankAccountTitleTextEditingController.text;
+                      request.fields['bank_swift_code'] = commonController.bankSwiftCodeTextEditingController.text;
+                      request.fields['payout_currency'] = commonController.serverCountryFrom.value.selectedCurrency!.code!;
+                      request.fields['receiving_currency'] = commonController.serverCountryTo.value.selectedCurrency!.code!;
+                      request.fields['payout_amount'] = commonController.currencyConversionDetails.value!.data!.amountToSend!.toString();
+                      request.fields['receiver_method_id'] = commonController.selectedModeOfReceive!.id.toString();
+                      request.fields['sender_method_id'] = commonController.selectedModeOfPayment!.id.toString();
+                      request.fields['recipient_id'] = commonController.selectedRecipient!.id!.toString();
+                      request.fields['sender_country_id'] = commonController.serverCountryFrom.value.id.toString();
+                      request.fields['receiver_city_id'] = commonController.recipientCity!.id.toString();
+                      request.fields['receiver_country_id'] = commonController.selectedRecipient!.countryId.toString();
+                      request.fields['purpose_id'] = commonController.selectedSendingPurpose!.id.toString();
+                      request.fields['bank_name'] = commonController.bankNameTextEditingController.text;
+                      request.fields['branch_name'] = commonController.recipientBankBranch ?? "";
+                      request.fields['fund_source_id'] =  commonController.foundSourceId!.toString();
+                      final stream = http.ByteStream(Stream.castFrom(commonController.imageFile!.openRead()));
+                      final length = await commonController.imageFile!.length();
+                      var file = http.MultipartFile('fund_source_file', stream, length, filename: path.basename(commonController.imageFile!.path));
+                      request.files.add(file);
+                      var response = await request.send();
+                      print(response);
+                      Get.back();
+                      if(response.statusCode == 201){
+                        final decodedResponse = await utf8.decodeStream(response.stream);
+                        final parsed = jsonDecode(decodedResponse);
+                        setState(() {
+                          commonController.currentTransaction = Transaction.fromJson(parsed);
+                        });
+                        //commonController.currentTransaction = value.data;
                         if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debit or credit" || commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit"){
                           Get.offAll(const PaymentNewScreen());
                           commonController.selectedRecipient = null;
-                        }else{
+                        } else {
                           Get.offAll(const SendingSuccessFulScreen());
                           commonController.selectedRecipient = null;
                         }
-
-                      }else{
-                        Utility.showSnackBar(value.message??"An Error Occurred");
+                      } else {
+                        Utility.showSnackBar("File is not uploaded");
                       }
-                    });
-                    } else {
+                    }
+                    if(commonController.currencyConversionDetails.value!.data!.receivingAmountInUsd! >= 2000) {
+                      var request = http.MultipartRequest("POST",Uri.parse(baseAPIUrl()+'transactions'));
+                      request.headers.addAll(headersWithAuthAndContentTypeAndAccept);
+                      // request.fields['bank_id'] = commonController.bankId.toString();
+                      request.fields['bank_account_no'] = commonController.bankAccountNoTextEditingController.text;
+                      request.fields['bank_account_title'] = commonController.bankAccountTitleTextEditingController.text;
+                      request.fields['bank_swift_code'] = commonController.bankSwiftCodeTextEditingController.text;
+                      request.fields['payout_currency'] = commonController.serverCountryFrom.value.selectedCurrency!.code!;
+                      request.fields['receiving_currency'] = commonController.serverCountryTo.value.selectedCurrency!.code!;
+                      request.fields['payout_amount'] = commonController.currencyConversionDetails.value!.data!.amountToSend!.toString();
+                      request.fields['receiver_method_id'] = commonController.selectedModeOfReceive!.id.toString();
+                      request.fields['sender_method_id'] = commonController.selectedModeOfPayment!.id.toString();
+                      request.fields['recipient_id'] = commonController.selectedRecipient!.id.toString();
+                      request.fields['sender_country_id'] = commonController.serverCountryFrom.value.id.toString();
+                      request.fields['receiver_city_id'] = commonController.recipientCity!.id.toString();
+                      request.fields['receiver_country_id'] = commonController.selectedRecipient!.countryId.toString();
+                      request.fields['purpose_id'] = commonController.selectedSendingPurpose!.id.toString();
+                      request.fields['bank_name'] = commonController.bankNameTextEditingController.text;
+                      request.fields['branch_name'] = commonController.recipientBankBranch ?? "";
+                      request.fields['fund_source_id'] =  commonController.foundSourceId!.toString();
+                      final stream = http.ByteStream(Stream.castFrom(commonController.imageFile!.openRead()));
+                      final length = await commonController.imageFile!.length();
+                      var file = http.MultipartFile('fund_source_file', stream, length, filename: path.basename(commonController.imageFile!.path));
+                      request.files.add(file);
+                      var response = await request.send();
+                      print(response);
+                      Get.back();
+                      if(response.statusCode == 201){
+                        final decodedResponse = await utf8.decodeStream(response.stream);
+                        final parsed = jsonDecode(decodedResponse);
+                        setState(() {
+                          commonController.currentTransaction = Transaction.fromJson(parsed);
+                        });
+                        //commonController.currentTransaction = value.data;
+                        if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debit or credit" || commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit"){
+                          Get.offAll(const PaymentNewScreen());
+                          commonController.selectedRecipient = null;
+                        } else {
+                          Get.offAll(const SendingSuccessFulScreen());
+                          commonController.selectedRecipient = null;
+                        }
+                      } else {
+                        Utility.showSnackBar("File is not uploaded");
+                      }
+                    }
+                    // else if(commonController.currencyConversionDetails.value?.data!.receivingAmountInUsd! >= 2000 && commonController.selectedModeOfReceive!.id == 1) {
+                    //   var request = http.MultipartRequest("POST",Uri.parse(baseAPIUrl()+'transactions'));
+                    //   request.headers.addAll(headersWithAuthAndContentType);
+                    //   request.fields['bank_id'] = commonController.bankId.toString();
+                    //   request.fields['bank_account_no'] = commonController.bankAccountNoTextEditingController.text;
+                    //   request.fields['bank_account_title'] = commonController.bankAccountTitleTextEditingController.text;
+                    //   request.fields['bank_swift_code'] = commonController.bankSwiftCodeTextEditingController.text;
+                    //   request.fields['payout_currency'] = commonController.serverCountryFrom.value.selectedCurrency!.code!;
+                    //   request.fields['receiving_currency'] =  commonController.serverCountryTo.value.selectedCurrency!.code!;
+                    //   request.fields['payout_amount'] = commonController.currencyConversionDetails.value?.data!.amountToSend.toString();
+                    //   request.fields['receiver_method_id'] =  commonController.selectedModeOfReceive!.id.toString();
+                    //   request.fields['sender_method_id'] = commonController.selectedModeOfPayment!.id.toString();
+                    //   request.fields['recipient_id'] = commonController.selectedRecipient!.id.toString();
+                    //   request.fields['sender_country_id'] = commonController.serverCountryFrom.value.id.toString();
+                    //   request.fields['receiver_city_id'] =  commonController.recipientCity!.id.toString();
+                    //   request.fields['receiver_country_id'] = commonController.selectedRecipient!.countryId!.toString();
+                    //   request.fields['purpose_id'] = commonController.selectedSendingPurpose!.id!.toString();
+                    //   request.fields['bank_name'] = commonController.bankNameTextEditingController.text;
+                    //   request.fields['branch_name'] = commonController.recipientBankBranch ?? "";
+                    //   request.fields['fund_source_id'] =  commonController.foundSourceId!.toString();
+                    //
+                    //   final stream = http.ByteStream(Stream.castFrom(commonController.imageFile!.openRead()));
+                    //   final length = await commonController.imageFile!.length();
+                    //   var file = http.MultipartFile('fund_source_file', stream, length, filename: path.basename(commonController.imageFile!.path));
+                    //   request.files.add(file);
+                    //   var response = await request.send();
+                    //   print(response);
+                    //   Get.back();
+                    //   if(response.statusCode == 201){
+                    //     final decodedResponse = await utf8.decodeStream(response.stream);
+                    //     final parsed = jsonDecode(decodedResponse);
+                    //     setState(() {
+                    //       commonController.currentTransaction = Transaction.fromJson(parsed);
+                    //     });
+                    //     //commonController.currentTransaction = value.data;
+                    //     if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debit or credit" || commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit"){
+                    //       Get.offAll(const PaymentNewScreen());
+                    //       commonController.selectedRecipient = null;
+                    //     } else {
+                    //       Get.offAll(const SendingSuccessFulScreen());
+                    //       commonController.selectedRecipient = null;
+                    //     }
+                    //   } else {
+                    //     Utility.showSnackBar("File is not uploaded");
+                    //   }
+                    //
+                    // }
+                    // else if(commonController.currencyConversionDetails.value?.data!.receivingAmountInUsd! >= 2000) {
+                    //   var request = http.MultipartRequest("POST",Uri.parse(baseAPIUrl()+'transactions'));
+                    //   request.headers.addAll(headersWithAuthAndContentType);
+                    //   request.fields['bank_id'] = commonController.bankId.toString();
+                    //   request.fields['bank_account_no'] = commonController.bankAccountNoTextEditingController.text;
+                    //   request.fields['bank_account_title'] = commonController.bankAccountTitleTextEditingController.text;
+                    //   request.fields['bank_swift_code'] = commonController.bankSwiftCodeTextEditingController.text;
+                    //   request.fields['payout_currency'] = commonController.serverCountryFrom.value.selectedCurrency!.code!;
+                    //   request.fields['receiving_currency'] =  commonController.serverCountryTo.value.selectedCurrency!.code!;
+                    //   request.fields['payout_amount'] = commonController.currencyConversionDetails.value?.data!.amountToSend.toString();
+                    //   request.fields['receiver_method_id'] =  commonController.selectedModeOfReceive!.id.toString();
+                    //   request.fields['sender_method_id'] = commonController.selectedModeOfPayment!.id.toString();
+                    //   request.fields['recipient_id'] = commonController.selectedRecipient!.id.toString();
+                    //   request.fields['sender_country_id'] = commonController.serverCountryFrom.value.id.toString();
+                    //   request.fields['receiver_city_id'] =  commonController.recipientCity!.id.toString();
+                    //   request.fields['receiver_country_id'] = commonController.selectedRecipient!.countryId!.toString();
+                    //   request.fields['purpose_id'] = commonController.selectedSendingPurpose!.id!.toString();
+                    //   request.fields['bank_name'] = commonController.bankNameTextEditingController.text;
+                    //   request.fields['branch_name'] = commonController.recipientBankBranch ?? "";
+                    //   request.fields['fund_source_id'] =  commonController.foundSourceId!.toString();
+                    //
+                    //   final stream = http.ByteStream(Stream.castFrom(commonController.imageFile!.openRead()));
+                    //   final length = await commonController.imageFile!.length();
+                    //   var file = http.MultipartFile('fund_source_file', stream, length, filename: path.basename(commonController.imageFile!.path));
+                    //   request.files.add(file);
+                    //   var response = await request.send();
+                    //   print(response);
+                    //   Get.back();
+                    //   if(response.statusCode == 201){
+                    //     final decodedResponse = await utf8.decodeStream(response.stream);
+                    //     final parsed = jsonDecode(decodedResponse);
+                    //     setState(() {
+                    //       commonController.currentTransaction = Transaction.fromJson(parsed);
+                    //     });
+                    //     //commonController.currentTransaction = value.data;
+                    //     if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debit or credit" || commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit"){
+                    //       Get.offAll(const PaymentNewScreen());
+                    //       commonController.selectedRecipient = null;
+                    //     } else {
+                    //       Get.offAll(const SendingSuccessFulScreen());
+                    //       commonController.selectedRecipient = null;
+                    //     }
+                    //   } else {
+                    //     Utility.showSnackBar("File is not uploaded");
+                    //   }
+                    //
+                    // }
+                    else if(commonController.selectedModeOfReceive!.id == 3) {
+                        TransactionRepository.createTransactionForBank(
+                        commonController.transactionRequestBodyForBank!,
+                      ).then((value){
+                        Get.back();
+                        if(value.data != null){
+                          commonController.currentTransaction = value.data;
+                          if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "debit or credit" || commonController.selectedModeOfPayment!.name!.toLowerCase() == "debitorcredit"){
+                            Get.offAll(const PaymentNewScreen());
+                            commonController.selectedRecipient = null;
+                          } else {
+                            Get.offAll(const SendingSuccessFulScreen());
+                            commonController.selectedRecipient = null;
+                          }
+
+                        } else {
+                          Utility.showSnackBar(value.message??"An Error Occurred");
+                        }
+                      });
+                    }
+                    else {
                       TransactionRepository.createTransaction(
                         commonController.transactionRequestBody!,
                       ).then((value){
@@ -251,7 +444,8 @@ class _SendingMoneyConfirmationScreenState extends State<SendingMoneyConfirmatio
                       });
 
                     }
-                  }else{
+
+                  } else{
                     Utility.showSnackBar("Please ensure this information is correct");
                   }
                 },

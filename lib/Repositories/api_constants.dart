@@ -2,7 +2,7 @@
 import 'package:get/get.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 
-bool isDev = false;
+bool isDev = true;
 
 String baseUrl(){
   //return isDev ? 'http://45.77.224.119:8080/' : 'http://45.77.224.119:8001/';
@@ -14,8 +14,7 @@ return isDev ? 'https://dev.hidmona.ch/' : 'https://hidmona.ch/';
 String baseAPIUrl(){
   // return isDev ? 'http://45.77.224.119:8001/api/' : 'http://45.77.224.119:8001/api/';
  // return isDev ? 'https://dev.hidmona.ch/api/' : 'http://139.180.145.36:8002/api/';
-  return isDev ? 'https://dev.hidmona.ch/api/' : 'https://hidmona.ch//api/';
-
+  return isDev ? 'https://dev.hidmona.ch/api/' : 'https://hidmona.ch/api/';
 }
 
 String kycBaseUrl(){
@@ -37,11 +36,9 @@ final headers = {
 
 get headersWithAuth{
   return {
-
     // "x-org-domain": "hidmona",
     'Accept' : 'application/json',
     'Authorization': 'Bearer '+ (Get.find<CommonController>().currentUser.value.data!.token??"bearer"),
-
     //'Authorization': Get.find<CommonController>().currentUser.value.data!.token ??'bearer',
   };
 }

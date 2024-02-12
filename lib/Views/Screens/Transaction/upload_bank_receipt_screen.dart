@@ -161,9 +161,7 @@ class _UploadBankReceiptScreenState extends State<UploadBankReceiptScreen> {
                   }
 
                   if(_formKey.currentState!.validate()){
-
                     Utility.showLoadingDialog();
-
                     //
                     // APIResponse<bool> apiResponse = await PaymentRepository.paymentAndSaveCard(cardInfo, commonController.currentTransaction!.transactionNumber!);
                     //
@@ -174,32 +172,22 @@ class _UploadBankReceiptScreenState extends State<UploadBankReceiptScreen> {
                     // }else{
                     //   Utility.showSnackBar(apiResponse.errorMessage?? "An Error Occurred",durationInSeconds: 5);
                     // }
-
-
                     var request = http.MultipartRequest("POST",Uri.parse(baseAPIUrl()+"bank_payment/uploads/${widget.transactionId}"));
-
                     request.headers.addAll(headersWithAuthAndContentTypeAndAccept);
-
                     request.fields["description"] = descriptionTextEditingController.text;
-
                     final stream = http.ByteStream(Stream.castFrom(imageFile!.openRead()));
                     final length = await imageFile!.length();
                     var file = http.MultipartFile('file', stream, length, filename: path.basename(imageFile!.path));
                     request.files.add(file);
-
                     var response = await request.send();
                     print(response);
-
                     Get.back();
-
                     if(response.statusCode == 201){
                       Utility.showSnackBar("File Uploaded Successfully");
                       Get.back();
-                    }else{
+                    } else {
                       Utility.showSnackBar("File is not uploaded");
                     }
-
-
                   }
                 },),
               ),

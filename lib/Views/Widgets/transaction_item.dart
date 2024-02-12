@@ -59,22 +59,22 @@ class TransactionItem extends StatelessWidget {
                         ),
                         child: Icon(Icons.visibility,size: 17,color: AppColor.defaultColor,)
                       ),
-                      (transaction.senderMethod!.name!.toLowerCase() == "bank") ?  const SizedBox(width: 7,) : SizedBox(width: 0,),
-                      if(transaction.senderMethod!.name!.toLowerCase() == "bank") InkWell(
-                        onTap: (){
-                          Get.to(UploadBankReceiptScreen(transactionId: transaction.id!));
-                        },
-                        child: Container(
-                            height: 30,
-                            width: 30,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: AppColor.defaultColor.withOpacity(.15),
-                                borderRadius: BorderRadius.circular(20)
-                            ),
-                            child: Icon(Icons.cloud_upload,size: 17,color: AppColor.defaultColor,)
-                        ),
-                      ),
+                      // (transaction.senderMethod!.name!.toLowerCase() == "bank") ?  const SizedBox(width: 7,) : SizedBox(width: 0,),
+                      // if(transaction.senderMethod!.name!.toLowerCase() == "bank") InkWell(
+                      //   onTap: (){
+                      //     Get.to(UploadBankReceiptScreen(transactionId: transaction.id!));
+                      //   },
+                      //   child: Container(
+                      //       height: 30,
+                      //       width: 30,
+                      //       alignment: Alignment.center,
+                      //       decoration: BoxDecoration(
+                      //           color: AppColor.defaultColor.withOpacity(.15),
+                      //           borderRadius: BorderRadius.circular(20)
+                      //       ),
+                      //       child: Icon(Icons.cloud_upload,size: 17,color: AppColor.defaultColor,)
+                      //   ),
+                      // ),
                       // if(transaction.remitterStatus != null && transaction.remitterStatus!.toUpperCase() == "INPROCESS") const SizedBox(width: 7,),
                       // if(transaction.remitterStatus != null && transaction.remitterStatus!.toUpperCase() == "INPROCESS") InkWell(
                       //   onTap: (){

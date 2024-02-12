@@ -89,6 +89,9 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       });
     }
+    setState(() {
+      // CommonController().currencyConversionDetails.value = null;
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -319,7 +322,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Get.back();
                                 if(userProfileResponse.data != null){
                                   controller.kycToken.value = userProfileResponse.data!;
-
                                   //String url = '${kycBaseUrl()}applications';
                                   String url = '${kycBaseUrl()}applications/${controller.kycToken.value.kycApplicationId}?access_token=${controller.kycToken.value.kycUserToken}';
                                   print(url);
@@ -528,6 +530,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               // }
 
                               bool isSuccessModeOfPayments = await controller.getModeOfPayments(controller.countryFrom.value.isoCode!);
+                              bool isSuccessFoundSource = await controller.getFoundSource();
+
                               // if(!isSuccessModeOfPayments){
                               //   Get.back();
                               //   return;

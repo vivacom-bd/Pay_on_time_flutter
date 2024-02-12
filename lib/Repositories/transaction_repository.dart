@@ -59,7 +59,7 @@ class TransactionRepository{
         url,
         headers: headersWithAuthAndContentType,
         body: json.encode(requestBody.toJson())
-    ).then((data){
+      ).then((data){
       print(data.body);
       final responseData = utf8.decode(data.bodyBytes);
       final jsonData = json.decode(responseData);
@@ -72,7 +72,6 @@ class TransactionRepository{
       return APIResponse<Transaction>(error: true, message: "An Error Occurred!");
     });
   }
-
 
   // /// update Transaction
   // static Future<APIResponse<Transaction>> updateTransaction(int transactionId,RecipientRequestBody requestBody) async{
@@ -100,7 +99,6 @@ class TransactionRepository{
   //     return APIResponse<Transaction>(error: true, errorMessage: "An Error Occurred!");
   //   });
   // }
-
 
   /// delete Transaction
   static Future<APIResponse<bool>> deleteTransaction(int transactionId) async{

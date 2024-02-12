@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title:const Text("Profile"),
+        title: Text("Profile", style: TextStyle(color: AppColor.dialogBackgroundColor),),
         // actions: [
         //   InkWell(
         //     onTap: (){
@@ -114,20 +114,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 10,),
                 Divider(color: AppColor.defaultColor),
                 const SizedBox(height: 10,),
-                ContactItem(
-                  iconData: CupertinoIcons.creditcard,text: "Card List",
-                  onTap: () {
-                    Get.to(const CardListScreen());
-                  },
-                ),
-                const SizedBox(height: 10,),
-                ContactItem(
-                  iconData: CupertinoIcons.lock,text: "Change Password",
-                  onTap: () {
-                    Get.to(const ChangePasswordScreen());
-                  },
-                ),
-                const SizedBox(height: 10),
+                // ContactItem(
+                //   iconData: CupertinoIcons.creditcard,text: "Card List",
+                //   onTap: () {
+                //     Get.to(const CardListScreen());
+                //   },
+                // ),
+                // const SizedBox(height: 10,),
+                // ContactItem(
+                //   iconData: CupertinoIcons.lock,text: "Change Password",
+                //   onTap: () {
+                //     Get.to(const ChangePasswordScreen());
+                //   },
+                // ),
+                // const SizedBox(height: 10),
                 ContactItem(
                   iconData: CupertinoIcons.arrowshape_turn_up_left_fill,text: "Logout",
                   onTap: () {

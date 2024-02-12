@@ -55,7 +55,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50.0),
         child: AppBar(
-          title: const Text("Recipient Details"),
+          title: Text("Recipient Details", style: TextStyle(color: AppColor.dialogBackgroundColor),),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: AppGradient.getColorGradient("default"),
@@ -466,14 +466,13 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                         if(_formKey.currentState!.validate()){
                           if(commonController.selectedModeOfReceive!.id == 3) {
                             commonController.transactionRequestBodyForBank = TransactionRequestBodyforBank(
-
                               bankId: commonController.bankId,
                               bankAccountNo: commonController.bankAccountNoTextEditingController.text,
                               bankAccountTitle: commonController.bankAccountTitleTextEditingController.text,
                               bankSwiftCode: commonController.bankSwiftCodeTextEditingController.text,
                               payoutCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
                               receivingCurrency: commonController.serverCountryTo.value.selectedCurrency!.code,
-                              payoutAmount: commonController.currencyConversionDetails.value.data?.amountToSend,
+                              payoutAmount: commonController.currencyConversionDetails.value?.data?.amountToSend,
                               receiverMethodId: commonController.selectedModeOfReceive!.id,
                               senderMethodId: commonController.selectedModeOfPayment!.id,
                               recipientId: commonController.selectedRecipient!.id,
@@ -483,9 +482,11 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                               purposeId: commonController.selectedSendingPurpose!.id!,
                               bankName: commonController.bankNameTextEditingController.text,
                               branchName: commonController.recipientBankBranch,
+                              sourceId: (commonController.currencyConversionDetails.value?.data != null && commonController.currencyConversionDetails.value!.data!.receivingAmountInUsd! >= 2000) ? commonController.foundSourceId : null,
 
                             );
-                          } else{
+                          }
+                          else{
                             commonController.transactionRequestBody = TransactionRequestBody(
 
                               bankId: commonController.bankId,
@@ -494,7 +495,7 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                               bankSwiftCode: commonController.bankSwiftCodeTextEditingController.text,
                               payoutCurrency: commonController.serverCountryFrom.value.selectedCurrency!.code,
                               receivingCurrency: commonController.serverCountryTo.value.selectedCurrency!.code,
-                              payoutAmount: commonController.currencyConversionDetails.value.data?.amountToSend,
+                              payoutAmount: commonController.currencyConversionDetails.value?.data?.amountToSend,
                               receiverMethodId: commonController.selectedModeOfReceive!.id,
                               senderMethodId: commonController.selectedModeOfPayment!.id,
                               recipientId: commonController.selectedRecipient!.id,
@@ -504,12 +505,10 @@ class _TransactionBankInfoScreenState extends State<TransactionBankInfoScreen> {
                               purposeId: commonController.selectedSendingPurpose!.id!,
                               bankName: commonController.bankNameTextEditingController.text,
                               branchName: commonController.recipientBankBranch,
+                              sourceId: (commonController.currencyConversionDetails.value?.data != null && commonController.currencyConversionDetails.value!.data!.receivingAmountInUsd! >= 2000) ? commonController.foundSourceId : null,
 
                             );
                           }
-
-
-
 
                            Get.to(const SendingMoneyConfirmationScreen());
 

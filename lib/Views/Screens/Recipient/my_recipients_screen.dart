@@ -27,7 +27,7 @@ class _MyRecipientScreenState extends State<MyRecipientScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title:  const Text("My Recipient"),
+          title: Text("My Recipient", style: TextStyle(color: AppColor.dialogBackgroundColor),),
           actions: [
             InkWell(
               onTap: (){

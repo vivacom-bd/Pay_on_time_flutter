@@ -1,20 +1,28 @@
+import 'dart:io';
+
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:hidmona/Controllers/common_controller.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
+import 'package:hidmona/Models/found_Source_model.dart';
 import 'package:hidmona/Models/mode_of_payment.dart';
 import 'package:hidmona/Models/server_currency.dart';
 import 'package:hidmona/Repositories/api_response.dart';
 import 'package:hidmona/Utilities/colors.dart';
+import 'package:hidmona/Utilities/get_picture_dialog.dart';
 import 'package:hidmona/Utilities/images.dart';
 import 'package:hidmona/Utilities/utility.dart';
 import 'package:hidmona/Views/Screens/SendMoney/recepient_details_screen.dart';
+import 'package:hidmona/Views/Screens/Transaction/upload_bank_receipt_screen.dart';
 import 'package:hidmona/Views/Widgets/country_item.dart';
 import 'package:hidmona/Views/Widgets/custom_dropdown_form_field.dart';
 import 'package:hidmona/Views/Widgets/custom_text_form_field.dart';
 import 'package:hidmona/Views/Widgets/default_button.dart';
 import 'package:hidmona/Views/Widgets/sendmoneycalculationitem.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SendMoneyScreen extends StatefulWidget {
   static const String routeName = "/SendMoneyScreen";
@@ -26,17 +34,19 @@ class SendMoneyScreen extends StatefulWidget {
 class _SendMoneyScreenState extends State<SendMoneyScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController amountTextEditingController = TextEditingController();
-  Rx<double> inputAmount = 0.0.obs;
-  CommonController commonController = Get.find<CommonController>();
 
+  CommonController commonController = Get.find<CommonController>();
 
   @override
   void initState() {
     super.initState();
     commonController.selectedModeOfPayment = null;
     commonController.selectedModeOfReceive = null;
+    commonController.selectedFound = null;
+    commonController.imageFile = null;
+    amountTextEditingController.text = "0";
+    commonController.inputAmount.value = 0.0;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +54,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50.0),
         child: AppBar(
-          title: const Text("Send Money"),
+          title: Text("Send Money", style: TextStyle(color: AppColor.dialogBackgroundColor),),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: AppGradient.getColorGradient("default"),
@@ -123,7 +133,6 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                             ),
                           ],
                         ),
-
                         Container(
                           padding: const EdgeInsets.only(top: 15),
                           alignment: Alignment.center,
@@ -167,7 +176,6 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                       ],
                     ),
                   ),
-
                   Container(
                     width: double.infinity,
                     alignment: Alignment.center,
@@ -276,94 +284,244 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                               hindText: "",
                               keyboardType: TextInputType.number,
                               onChanged: (value) {
-
                                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  inputAmount.value = double.tryParse(value as String)??0;
+                                 commonController.inputAmount.value = double.tryParse(value as String)??0;
                                 });
-
                               }
                           ),
-                          const SizedBox(height: 20,),
-
+                          const SizedBox(height: 10,),
                           Obx((){
-                            WidgetsBinding.instance.addPostFrameCallback((_){
 
-                              // Add Your Code here.
+                            // WidgetsBinding.instance.addPostFrameCallback((_){
+                            //
+                            //   // Add Your Code here.
+                            //
+                            // });
 
-                            });
-                            if(inputAmount.value!=0){
-                              return FutureBuilder(
-                                future: commonController.getConversionDetails((commonController.countryTo.value.iso3Code == 'ETH' && commonController.modeOfReceiveId == 3) ? "dashen_bank" :'',inputAmount.value, commonController.serverCountryFrom.value.selectedCurrency!, commonController.serverCountryTo.value.selectedCurrency!),
-                                builder: (context, AsyncSnapshot<APIResponse<CurrencyConversionDetails>> snapshot){
+                            return FutureBuilder(
+                              future: commonController.getConversionDetails((commonController.countryTo.value.iso3Code == 'ETH' && commonController.modeOfReceiveId == 3) ? "dashen_bank" :'',commonController.inputAmount.value, commonController.serverCountryFrom.value.selectedCurrency!, commonController.serverCountryTo.value.selectedCurrency!),
+                              builder: (context, AsyncSnapshot<APIResponse<CurrencyConversionDetails>> snapshot){
 
-                                  if(snapshot.data!=null){
-                                    APIResponse<CurrencyConversionDetails>? apiResponse = snapshot.data;
+                                if(snapshot.data!=null){
+                                  APIResponse<CurrencyConversionDetails>? apiResponse = snapshot.data;
 
-                                    if(apiResponse!.data != null){
+                                  if(apiResponse!.data != null){
+                                    CurrencyConversionDetails currencyConversionDetails = apiResponse.data!;
+                                    if(commonController.currencyConversionDetails.value.data?.payoutAmountInUsd != currencyConversionDetails.data?.payoutAmountInUsd){
                                       WidgetsBinding.instance.addPostFrameCallback((_){
 
-                                        CurrencyConversionDetails currencyConversionDetails = apiResponse.data!;
                                         commonController.currencyConversionDetails.value = currencyConversionDetails;
 
                                       });
-
-                                      return Column(
-                                        children: [
-                                         if(commonController.currencyConversionDetails.value.message == "Success") SendMoneyCalculationItem(
-                                            iconPath: AppSvg.getPath("rate"),
-                                            title: "Our Rate",
-                                            value: "1 ${commonController.serverCountryFrom.value.selectedCurrency!.code} = ${commonController.currencyConversionDetails.value.data!.ourRate!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}",
-                                          ),
-                                          const SizedBox(height: 10,),
-                                          if(commonController.currencyConversionDetails.value.message == "Success")SendMoneyCalculationItem(
-                                            iconPath: AppSvg.getPath("transfer"),
-                                            title: "Transfer Fee",
-                                            value: "${(commonController.currencyConversionDetails.value.data!.amountToPay!-commonController.currencyConversionDetails.value.data!.amountToSend!).toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
-                                            // value: "${currencyConversionDetails.fees!.toStringAsFixed(2)} ${currencyConversionDetails.sendingCurrency}",
-                                          ),
-                                          const SizedBox(height: 10,),
-                                          if(commonController.currencyConversionDetails.value.message == "Success")SendMoneyCalculationItem(
-                                            iconPath: AppSvg.getPath("amount_to_send"),
-                                            title: "Amount to send",
-                                            value: "${commonController.currencyConversionDetails.value.data!.amountToSend!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
-                                          ),
-                                          const SizedBox(height: 10,),
-                                          if(commonController.currencyConversionDetails.value.message == "Success")SendMoneyCalculationItem(
-                                            iconPath: AppSvg.getPath("Amount_to_receive"),
-                                            title: "Amount to receive",
-                                            value: '${commonController.currencyConversionDetails.value.data!.amountToReceive!.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency!.code}',
-                                          ),
-                                          const SizedBox(height: 10,),
-                                          if(commonController.currencyConversionDetails.value.message == "Success")SendMoneyCalculationItem(
-                                            iconPath: AppSvg.getPath("Amount_to_receive"),
-                                            title: "Amount to receive in USD",
-                                            value: '${commonController.currencyConversionDetails.value.data!.receivingAmountInUsd!.toStringAsFixed(2)} USD',
-                                          ),
-                                          const SizedBox(height: 10,),
-                                          if(commonController.currencyConversionDetails.value.message == "Success")SendMoneyCalculationItem(
-                                            iconPath: AppSvg.getPath("Amount_to_receive"),
-                                            title: "Total to pay",
-                                            value: "${commonController.currencyConversionDetails.value.data!.amountToPay!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency!.code}",
-                                          ),
-                                          if(commonController.currencyConversionDetails.value.message == "You can not send more than 1000 USD." || commonController.currencyConversionDetails.value.message == "You can not send less than 1 USD." )Text(commonController.currencyConversionDetails.value.message!, style: TextStyle(color: AppColor.defaultColorLight),),
-
-                                        ],
-                                      );
-                                    }else{
-                                      return Center(child: Text(apiResponse.message?? "An Error Occurred"));
                                     }
 
-                                  }else{
-                                    return SpinKitCircle(color: Get.theme.primaryColor,);
+                                    return Column(
+                                      children: [
+                                        if(commonController.currencyConversionDetails.value.message == "Success" || commonController.currencyConversionDetails.value.message != "Success") SendMoneyCalculationItem(
+                                          iconPath: AppSvg.getPath("rate"),
+                                          title: "Our Rate",
+                                          value: "1 ${commonController.serverCountryFrom.value.selectedCurrency!.code} = ${commonController.currencyConversionDetails.value.data?.ourRate?.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency?.code}",
+                                        ),
+                                        const SizedBox(height: 10,),
+                                        if(commonController.currencyConversionDetails.value?.message == "Success" || commonController.currencyConversionDetails.value.message != "Success")SendMoneyCalculationItem(
+                                          iconPath: AppSvg.getPath("transfer"),
+                                          title: "Transfer Fee",
+                                          value: "${((commonController.currencyConversionDetails.value?.data?.amountToPay ?? 0) - (commonController.currencyConversionDetails.value.data?.amountToSend ?? 0)).toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency?.code}",
+                                          // value: "${currencyConversionDetails.fees!.toStringAsFixed(2)} ${currencyConversionDetails.sendingCurrency}",
+                                        ),
+                                        const SizedBox(height: 10,),
+                                        if(commonController.currencyConversionDetails.value.message == "Success" || commonController.currencyConversionDetails.value.message != "Success")SendMoneyCalculationItem(
+                                          iconPath: AppSvg.getPath("amount_to_send"),
+                                          title: "Amount to send",
+                                          value: "${commonController.currencyConversionDetails.value.data?.amountToSend!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency?.code}",
+                                        ),
+                                        const SizedBox(height: 10,),
+                                        if(commonController.currencyConversionDetails.value.message == "Success" || commonController.currencyConversionDetails.value.message != "Success")SendMoneyCalculationItem(
+                                          iconPath: AppSvg.getPath("Amount_to_receive"),
+                                          title: "Amount to receive",
+                                          value: '${commonController.currencyConversionDetails.value.data?.amountToReceive?.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency?.code}',
+                                        ),
+                                        const SizedBox(height: 10,),
+                                        if(commonController.currencyConversionDetails.value.message == "Success" || commonController.currencyConversionDetails.value?.message != "Success")SendMoneyCalculationItem(
+                                          iconPath: AppSvg.getPath("Amount_to_receive"),
+                                          title: "Amount to receive in USD",
+                                          value: '${commonController.currencyConversionDetails.value.data?.receivingAmountInUsd?.toStringAsFixed(2)} USD',
+                                        ),
+                                        const SizedBox(height: 10,),
+                                        if(commonController.currencyConversionDetails.value.message == "Success" || commonController.currencyConversionDetails.value?.message != "Success")SendMoneyCalculationItem(
+                                          iconPath: AppSvg.getPath("Amount_to_receive"),
+                                          title: "Total to pay",
+                                          value: "${commonController.currencyConversionDetails.value.data?.amountToPay?.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency?.code}",
+                                        ),
+                                        if(commonController.currencyConversionDetails.value.message !=  "Success") const SizedBox(height: 15,),
+                                        if(commonController.currencyConversionDetails.value.message !=  "Success")Text(commonController.currencyConversionDetails.value.message ?? "", style: TextStyle(color: AppColor.defaultColorLight),),
+                                      ],
+                                    );
+                                  } else {
+                                    return Center(child: Text(apiResponse.message?? "An Error Occurred"));
                                   }
 
-                                },
-                              );
-                            }else{
-                              return const Center(child: Text("Please enter correct format"));
-                            }
+                                }else{
+                                  return SpinKitCircle(color: Get.theme.primaryColor,);
+                                }
+
+                              },
+                            );
+
+                            // if(commonController.inputAmount.value!=0){
+                            //   return FutureBuilder(
+                            //     future: commonController.getConversionDetails((commonController.countryTo.value.iso3Code == 'ETH' && commonController.modeOfReceiveId == 3) ? "dashen_bank" :'',commonController.inputAmount.value, commonController.serverCountryFrom.value.selectedCurrency!, commonController.serverCountryTo.value.selectedCurrency!),
+                            //     builder: (context, AsyncSnapshot<APIResponse<CurrencyConversionDetails>> snapshot){
+                            //
+                            //       if(snapshot.data!=null){
+                            //         APIResponse<CurrencyConversionDetails>? apiResponse = snapshot.data;
+                            //
+                            //         if(apiResponse!.data != null){
+                            //           CurrencyConversionDetails currencyConversionDetails = apiResponse.data!;
+                            //           if(commonController.currencyConversionDetails.value.data?.payoutAmountInUsd != currencyConversionDetails.data?.payoutAmountInUsd){
+                            //             WidgetsBinding.instance.addPostFrameCallback((_){
+                            //
+                            //               commonController.currencyConversionDetails.value = currencyConversionDetails;
+                            //
+                            //             });
+                            //           }
+                            //
+                            //           return Column(
+                            //             children: [
+                            //              if(commonController.currencyConversionDetails.value.message == "Success" || commonController.currencyConversionDetails.value.message != "Success") SendMoneyCalculationItem(
+                            //                 iconPath: AppSvg.getPath("rate"),
+                            //                 title: "Our Rate",
+                            //                 value: "1 ${commonController.serverCountryFrom.value.selectedCurrency!.code} = ${commonController.currencyConversionDetails.value.data?.ourRate?.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency?.code}",
+                            //               ),
+                            //               const SizedBox(height: 10,),
+                            //               if(commonController.currencyConversionDetails.value?.message == "Success" || commonController.currencyConversionDetails.value.message != "Success")SendMoneyCalculationItem(
+                            //                 iconPath: AppSvg.getPath("transfer"),
+                            //                 title: "Transfer Fee",
+                            //                 value: "${((commonController.currencyConversionDetails.value?.data?.amountToPay ?? 0) - (commonController.currencyConversionDetails.value.data?.amountToSend ?? 0)).toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency?.code}",
+                            //                 // value: "${currencyConversionDetails.fees!.toStringAsFixed(2)} ${currencyConversionDetails.sendingCurrency}",
+                            //               ),
+                            //               const SizedBox(height: 10,),
+                            //               if(commonController.currencyConversionDetails.value.message == "Success" || commonController.currencyConversionDetails.value.message != "Success")SendMoneyCalculationItem(
+                            //                 iconPath: AppSvg.getPath("amount_to_send"),
+                            //                 title: "Amount to send",
+                            //                 value: "${commonController.currencyConversionDetails.value.data?.amountToSend!.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency?.code}",
+                            //               ),
+                            //               const SizedBox(height: 10,),
+                            //               if(commonController.currencyConversionDetails.value.message == "Success" || commonController.currencyConversionDetails.value.message != "Success")SendMoneyCalculationItem(
+                            //                 iconPath: AppSvg.getPath("Amount_to_receive"),
+                            //                 title: "Amount to receive",
+                            //                 value: '${commonController.currencyConversionDetails.value.data?.amountToReceive?.toStringAsFixed(2)} ${commonController.serverCountryTo.value.selectedCurrency?.code}',
+                            //               ),
+                            //               const SizedBox(height: 10,),
+                            //               if(commonController.currencyConversionDetails.value.message == "Success" || commonController.currencyConversionDetails.value?.message != "Success")SendMoneyCalculationItem(
+                            //                 iconPath: AppSvg.getPath("Amount_to_receive"),
+                            //                 title: "Amount to receive in USD",
+                            //                 value: '${commonController.currencyConversionDetails.value.data?.receivingAmountInUsd?.toStringAsFixed(2)} USD',
+                            //               ),
+                            //               const SizedBox(height: 10,),
+                            //               if(commonController.currencyConversionDetails.value.message == "Success" || commonController.currencyConversionDetails.value?.message != "Success")SendMoneyCalculationItem(
+                            //                 iconPath: AppSvg.getPath("Amount_to_receive"),
+                            //                 title: "Total to pay",
+                            //                 value: "${commonController.currencyConversionDetails.value.data?.amountToPay?.toStringAsFixed(2)} ${commonController.serverCountryFrom.value.selectedCurrency?.code}",
+                            //               ),
+                            //               if(commonController.currencyConversionDetails.value.message !=  "Success") const SizedBox(height: 15,),
+                            //               if(commonController.currencyConversionDetails.value.message !=  "Success")Text(commonController.currencyConversionDetails.value.message ?? "", style: TextStyle(color: AppColor.defaultColorLight),),
+                            //             ],
+                            //           );
+                            //         } else {
+                            //           return Center(child: Text(apiResponse.message?? "An Error Occurred"));
+                            //         }
+                            //
+                            //       }else{
+                            //         return SpinKitCircle(color: Get.theme.primaryColor,);
+                            //       }
+                            //
+                            //     },
+                            //   );
+                            // }else{
+                            //   return const Center(child: Text("Please enter correct format"));
+                            // }
                           }),
-                          const SizedBox(height: 10,),
+                          if(commonController.currencyConversionDetails.value?.data != null && commonController.currencyConversionDetails.value.data!.receivingAmountInUsd! >= 2000)Container(
+                            padding: const EdgeInsets.only(top: 15),
+                            alignment: Alignment.center,
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: Text('Fund Source', style: TextStyle(color: AppColor.textColor, fontWeight: FontWeight.w600, fontSize: 17,),),
+                                ),
+                                const SizedBox(height: 7,),
+                                CustomDropDownFromField(
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return "Select fund source";
+                                      }
+                                      return null;
+                                    },
+                                    items: commonController.foundSource.map((FoundSourceModel modeOfReceive) {
+                                      return DropdownMenuItem(
+                                          value: modeOfReceive,
+                                          child: Text(modeOfReceive.name!, style: const TextStyle(color: Colors.black, fontSize: 16.0),)
+                                      );
+                                    }).toList(),
+                                    selectedValue: commonController.selectedFound,
+                                    labelAndHintText: "Select fund source",
+                                    suffixIcon: Padding(
+                                      padding: const EdgeInsets.only(bottom: 4.0),
+                                      child: Icon(Icons.keyboard_arrow_down_rounded,color:Get.theme.primaryColor,size: 25,),
+                                    ),
+                                    filledColor: AppColor.dropdownBoxColor.withOpacity(0.5),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        commonController.selectedFound = value as FoundSourceModel;
+                                        commonController.foundSourceId = commonController.selectedFound!.id;
+                                      });
+                                    }
+                                ),
+                              ],
+                            ),
+                          ),
+                          if(commonController.currencyConversionDetails.value?.data != null && commonController.currencyConversionDetails.value.data!.receivingAmountInUsd! >= 2000)const SizedBox(height: 10,),
+                          if(commonController.currencyConversionDetails.value?.data != null && commonController.currencyConversionDetails.value.data!.receivingAmountInUsd! >= 2000)Row(
+                            children: [
+                              if(commonController.imageFile!=null) Container(
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5)
+                                ),
+                                child: Image.file(commonController.imageFile!,height: 40,width: 50,fit: BoxFit.cover,),
+                              ),
+                              if(commonController.imageFile!=null) const SizedBox(width: 7,),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: (){
+                                    showModal(
+                                        context: context,
+                                        builder: (context){
+                                          return GetPictureDialog(
+                                            onCamera: (){
+                                              pickImage(ImageSource.camera);
+                                            },
+                                            onGallery: (){
+                                              pickImage(ImageSource.gallery);
+                                            },
+                                          );
+                                        }
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.withOpacity(.2),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: const Text("Proof Of Fund"),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                   ),
@@ -393,7 +551,6 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                               }
                               return null;
                             },
-
                             items: commonController.modeOfPayments.map((ModeOfPayment modeOfPayment) {
                               return DropdownMenuItem(
                                   value: modeOfPayment,
@@ -423,14 +580,14 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: DefaultButton(
                       buttonText: "Send Money", onTap: commonController.currencyConversionDetails.value.message == "Success" ?  () async{
+                      if(commonController.currencyConversionDetails.value.data != null && commonController.currencyConversionDetails.value.data!.receivingAmountInUsd! >= 2000 && commonController.imageFile==null){
+                        Utility.showSnackBar("Choose an image");
+                        return;
+                      } else {
                         if(_formKey.currentState!.validate()){
-
                           Utility.showLoadingDialog();
-
                           Get.back();
                           Get.to(const RecipientDetailsScreen());
-
-
                           // bool isSuccessGetMyRecipients = await commonController.getMyRecipients();
                           // if(!isSuccessGetMyRecipients){
                           //   Get.back();
@@ -439,18 +596,17 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                           //   Get.back();
                           //   Get.to(const RecipientDetailsScreen());
                           // }
-
                           bool isSuccessGetCities = await commonController.getCities();
                           if(!isSuccessGetCities){
                             Get.back();
                             return;
                           }
-
                           // Get.back();
                           // Get.to(const RecipientDetailsScreen());
                         }
+                      }
                     } : (){},
-                        buttonColor: commonController.currencyConversionDetails.value.message == "Success" ? "default" : "grey"
+                        buttonColor: commonController.currencyConversionDetails.value?.message == "Success" ? "default" : "grey"
                     ),
                   ),
                   const SizedBox(height: 15,)
@@ -461,5 +617,22 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
         ),
       ),
     );
+  }
+
+  pickImage(ImageSource source) async{
+    final pickedFile = await ImagePicker().pickImage(
+      source: source,
+      maxWidth: 1080,
+      maxHeight: 1080,
+      imageQuality: 50,
+    );
+
+    if(pickedFile != null){
+      setState(() {
+        commonController.imageFile =  File(pickedFile.path);
+      });
+
+    }
+
   }
 }

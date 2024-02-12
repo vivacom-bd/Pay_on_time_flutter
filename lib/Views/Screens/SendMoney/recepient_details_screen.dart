@@ -67,7 +67,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50.0),
         child: AppBar(
-          title: const Text("Choose Recipient"),
+          title: Text("Choose Recipient", style: TextStyle(color: AppColor.dialogBackgroundColor),),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: AppGradient.getColorGradient("default"),

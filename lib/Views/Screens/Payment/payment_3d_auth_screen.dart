@@ -40,6 +40,7 @@ class _Payment3DAuthScreenState extends State<Payment3DAuthScreen> {
             //       'Content-Type': 'application/x-www-form-urlencoded'
             //     }
             // ),
+
             initialUrlRequest: URLRequest(
                 url: Uri.parse("${baseUrl()}mobile-transaction?amount=${widget.paymentAuthResponse.baseamount}&currency=${widget.paymentAuthResponse.currencyiso3a}&JWT=${widget.paymentAuthResponse.jwtToken}")
             ),

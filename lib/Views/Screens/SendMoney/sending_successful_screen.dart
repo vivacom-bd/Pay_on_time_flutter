@@ -38,7 +38,7 @@ class _SendingSuccessFulScreenState extends State<SendingSuccessFulScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sending Successful"),
+        title:  Text("Sending Successful", style: TextStyle(color: AppColor.dialogBackgroundColor),),
         automaticallyImplyLeading: false,
       ),
       body:SafeArea(
@@ -92,21 +92,21 @@ class _SendingSuccessFulScreenState extends State<SendingSuccessFulScreen> {
                 ),
 
 
-                if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "bank")Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                      color: AppColor.defaultColor.withOpacity(.1),
-                      borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Center(child: Text("Note: Your transaction was successful but awaiting bank receipt upload for verification. After banking please upload the bank receipt from Transaction History page.",textAlign: TextAlign.justify,style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700,color: AppColor.defaultColorLight),)),
-                    ],
-                  ),
-                ),
+                // if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "bank")Container(
+                //   margin: const EdgeInsets.only(top: 20),
+                //   padding: const EdgeInsets.all(15),
+                //   decoration: BoxDecoration(
+                //       color: AppColor.defaultColor.withOpacity(.1),
+                //       borderRadius: BorderRadius.circular(10)
+                //   ),
+                //   child: Column(
+                //     mainAxisSize: MainAxisSize.min,
+                //     crossAxisAlignment: CrossAxisAlignment.stretch,
+                //     children: [
+                //       Center(child: Text("Note: Your transaction was successful but awaiting bank receipt upload for verification. After banking please upload the bank receipt from Transaction History page.",textAlign: TextAlign.justify,style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700,color: AppColor.defaultColorLight),)),
+                //     ],
+                //   ),
+                // ),
 
                 if(commonController.selectedModeOfPayment!.name!.toLowerCase() == "bank")Container(
                   margin: const EdgeInsets.only(top: 20),

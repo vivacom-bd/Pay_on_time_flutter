@@ -134,7 +134,7 @@ class _CardListScreenState extends State<CardListScreen> {
                   );
 
                 }else{
-                  return Center(child: Text(response.message??"An Error Occurred"),);
+                  return Center(child: Text("No card available"),);
                 }
 
               }

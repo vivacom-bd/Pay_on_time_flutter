@@ -28,7 +28,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title:  const Text("Transactions",),
+        title: Text("Transactions", style: TextStyle(color: AppColor.dialogBackgroundColor),),
       ),
       body: SafeArea(
         child: FutureBuilder(
@@ -85,7 +85,6 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                     },
                   ),
                 );
-
               }else{
                 return Center(child: Text(response.message??"An Error Occurred"),);
               }

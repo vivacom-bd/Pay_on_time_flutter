@@ -23,6 +23,8 @@ import 'package:hidmona/Models/app_user.dart';
 import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/country_wise_bank.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
+import 'package:hidmona/Models/forgate_password_model.dart';
+import 'package:hidmona/Models/found_Source_model.dart';
 import 'package:hidmona/Models/kyc_token_model.dart';
 import 'package:hidmona/Models/mode_of_payment.dart';
 import 'package:hidmona/Models/recipient.dart';
@@ -50,6 +52,8 @@ import '../Models/Card Remittance System/card_status.dart';
 
 class CommonController extends GetxController{
   int cardIndexNo = 0;
+  File? imageFile;
+  Rx<double> inputAmount = 0.0.obs;
 
   Rx<Country> countryFrom = Country().obs; // CountryPickerUtils.getCountryByIsoCode("SE").obs;
   Rx<Country> countryTo = Country().obs; // CountryPickerUtils.getCountryByIsoCode("SE").obs;
@@ -61,9 +65,12 @@ class CommonController extends GetxController{
   Rx<AppUser> currentUser = AppUser().obs;
   Rx<UserProfile> userProfile = UserProfile().obs;
 
+  Rx<ForgotPassword> forgotPassword = ForgotPassword().obs;
+
   RxList<ServerCountry> serverCountries = <ServerCountry>[].obs;
   RxList<ModeOfPayment> modeOfReceives = <ModeOfPayment>[].obs;
   RxList<ModeOfPayment> modeOfPayments = <ModeOfPayment>[].obs;
+  RxList<FoundSourceModel> foundSource = <FoundSourceModel>[].obs;
   RxList<Recipient> myRecipients = <Recipient>[].obs;
   RxList<City> receiveCities = <City>[].obs;
   // RxList<City> sendingCities = <City>[].obs;
@@ -73,12 +80,16 @@ class CommonController extends GetxController{
   Rx<CurrencyConversionDetails> currencyConversionDetails = CurrencyConversionDetails().obs;
   TransactionRequestBody? transactionRequestBody;
   TransactionRequestBodyforBank ? transactionRequestBodyForBank;
+
+
   Transaction? currentTransaction;
 
   int ? modeOfReceiveId;
+  int ? foundSourceId;
   int ? modeOfPaymentId;
 
   ModeOfPayment? selectedModeOfReceive;
+  FoundSourceModel? selectedFound;
   ModeOfPayment? selectedModeOfPayment;
   SendingPurpose? selectedSendingPurpose;
   Recipient? selectedRecipient;
@@ -255,7 +266,29 @@ class CommonController extends GetxController{
 
   }
 
-  
+  ///forgate password
+  Future<bool> forgotpass(String email){
+
+    return UserRepository.forgetPassword(email).then((value)async{
+      if(value.data != null){
+        //get User Profile
+        var forgotPassword =  await UserRepository.forgetPassword(email);
+        if(forgotPassword.data != null){
+          forgotPassword.message = forgotPassword.message!;
+        }
+
+        return true;
+
+      }else{
+        return false;
+      }
+
+    });
+
+  }
+
+
+
   ///getModeOfReceives
   Future<bool> getModeOfReceives(String countryCode) async{
     
@@ -282,6 +315,21 @@ class CommonController extends GetxController{
       if(apiResponse.data != null){
         modeOfPayments.clear();
         modeOfPayments.addAll(apiResponse.data!);
+        return true;
+      }else{
+        Utility.showSnackBar("ModeOfPayments: ${apiResponse.message??"An error Occurred"}");
+        return false;
+      }
+    });
+  }
+
+  ///getFoundSource
+  Future<bool> getFoundSource() async{
+
+    return CommonRepository.getFoundSource().then((APIResponse<List<FoundSourceModel>> apiResponse){
+      if(apiResponse.data != null){
+        foundSource.clear();
+        foundSource.addAll(apiResponse.data!);
         return true;
       }else{
         Utility.showSnackBar("ModeOfPayments: ${apiResponse.message??"An error Occurred"}");

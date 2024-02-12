@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:hidmona/Models/city.dart';
 import 'package:hidmona/Models/country_wise_bank.dart';
 import 'package:hidmona/Models/currency_conversion_details.dart';
+import 'package:hidmona/Models/found_Source_model.dart';
 import 'package:hidmona/Models/mode_of_payment.dart';
 import 'package:hidmona/Models/recipient_bank.dart';
 import 'package:hidmona/Models/sending_purpose.dart';
@@ -130,6 +131,31 @@ class CommonRepository{
       return APIResponse<CurrencyConversionDetails>(error: true, message: "An Error Occurred!");
     });
   }
+  ///getFoundSource
+  static Future<APIResponse<List<FoundSourceModel>>> getFoundSource() async{
+    if(!await Utility.isInternetConnected()){
+      return APIResponse<List<FoundSourceModel>>(error: true, message: "Internet is not connected!");
+    }
+    Uri url = Uri.parse(baseAPIUrl()+'get_fund_sources');
+    return http.get(url,headers: headers)
+        .then((data){
+      print(data.body);
+      final responseData = utf8.decode(data.bodyBytes);
+      final jsonData = json.decode(responseData);
+      if(data.statusCode == 200){
+        List<FoundSourceModel> modes = [];
+        jsonData['data'].forEach((mode){
+          modes.add(FoundSourceModel.fromJson(mode));
+        });
+        return APIResponse<List<FoundSourceModel>>(data: modes);
+      }
+      return APIResponse<List<FoundSourceModel>>(error: true, message: jsonData["detail"]??"An Error Occurred");
+    }).catchError((onError){
+      print(onError);
+      return APIResponse<List<FoundSourceModel>>(error: true, message: "An Error Occurred!");
+    });
+  }
+
 
   ///getPaymentMethod
   static Future<APIResponse<List<ModeOfPayment>>> getModeOfPayment(int countryId) async{

@@ -1013,6 +1013,7 @@ class TransactionRequestBody {
   int? purposeId;
   String? bankName;
   String? branchName;
+  int ? sourceId;
 
   TransactionRequestBody(
       {
@@ -1031,7 +1032,8 @@ class TransactionRequestBody {
         this.receiverCountryId,
         this.purposeId,
         this.bankName,
-        this.branchName
+        this.branchName,
+        this.sourceId,
       });
 
   TransactionRequestBody.fromJson(Map<String, dynamic> json) {
@@ -1051,6 +1053,7 @@ class TransactionRequestBody {
     purposeId = json['purpose_id'];
     branchName = json['bank_name'];
     bankName = json['branch_name'];
+    sourceId = json['fund_source_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1071,6 +1074,7 @@ class TransactionRequestBody {
     data['purpose_id'] = purposeId;
     data['bank_name'] = branchName;
     data['branch_name'] = bankName;
+    data['fund_source_id'] = sourceId;
 
     return data;
   }
@@ -1093,6 +1097,7 @@ class TransactionRequestBodyforBank {
   int? purposeId;
   String? bankName;
   String? branchName;
+  int ? sourceId;
 
   TransactionRequestBodyforBank(
       {
@@ -1111,7 +1116,8 @@ class TransactionRequestBodyforBank {
         this.receiverCountryId,
         this.purposeId,
         this.bankName,
-        this.branchName
+        this.branchName,
+        this.sourceId
       });
 
   TransactionRequestBodyforBank.fromJson(Map<String, dynamic> json) {
@@ -1131,6 +1137,7 @@ class TransactionRequestBodyforBank {
     purposeId = json['purpose_id'];
     branchName = json['bank_name'];
     bankName = json['branch_name'];
+    sourceId = json['fund_source_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1151,7 +1158,10 @@ class TransactionRequestBodyforBank {
     data['purpose_id'] = purposeId;
     data['bank_name'] = branchName;
     data['branch_name'] = bankName;
+    data['fund_source_id'] = sourceId;
 
     return data;
   }
 }
+
+

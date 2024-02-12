@@ -137,22 +137,22 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                                     }
                                   },),
                                   if(cards.isNotEmpty) Divider(height: 30,color: AppColor.defaultColor.withOpacity(.7),thickness: 1,),
-                                  Row(
-                                    children: [
-                                      SizedBox(
-                                        height: 35,
-                                        width: 35,
-                                        child: Checkbox(activeColor: AppColor.defaultColor,value: isCardSave == 1, onChanged: (value){
-                                          setState(() {
-                                            isCardSave = value! == true? 1:0;
-                                          });
-                                        }),
-                                      ),
-                                      Expanded(
-                                        child: Text("Save Card Details", style: TextStyle(color: AppColor.defaultColor,fontWeight: FontWeight.w700,fontSize: 15),),
-                                      ),
-                                    ],
-                                  ),
+                                  // Row(
+                                  //   children: [
+                                  //     SizedBox(
+                                  //       height: 35,
+                                  //       width: 35,
+                                  //       child: Checkbox(activeColor: AppColor.defaultColor,value: isCardSave == 1, onChanged: (value){
+                                  //         setState(() {
+                                  //           isCardSave = value! == true? 1:0;
+                                  //         });
+                                  //       }),
+                                  //     ),
+                                  //     Expanded(
+                                  //       child: Text("Save Card Details", style: TextStyle(color: AppColor.defaultColor,fontWeight: FontWeight.w700,fontSize: 15),),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                   const SizedBox(height: 5,),
                                   Center(
                                     child: DefaultButton(
@@ -212,23 +212,23 @@ class _PaymentNewScreenState extends State<PaymentNewScreen> {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  Row(
-                                    children: [
-                                      SizedBox(
-                                        height: 35,
-                                        width: 35,
-                                        child: Checkbox(activeColor: AppColor.defaultColor,value: isCardSave == 1, onChanged: (value){
-                                          setState(() {
-                                            isCardSave = value! == true? 1:0;
-                                          });
-                                        }),
-                                      ),
-                                      Expanded(
-                                        child: Text("Save Card Details", style: TextStyle(color: AppColor.defaultColor,fontWeight: FontWeight.w700,fontSize: 15),),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 5,),
+                                  // Row(
+                                  //   children: [
+                                  //     SizedBox(
+                                  //       height: 35,
+                                  //       width: 35,
+                                  //       child: Checkbox(activeColor: AppColor.defaultColor,value: isCardSave == 1, onChanged: (value){
+                                  //         setState(() {
+                                  //           isCardSave = value! == true? 1:0;
+                                  //         });
+                                  //       }),
+                                  //     ),
+                                  //     Expanded(
+                                  //       child: Text("Save Card Details", style: TextStyle(color: AppColor.defaultColor,fontWeight: FontWeight.w700,fontSize: 15),),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  const SizedBox(height: 15,),
                                   Center(
                                     child: DefaultButton(
                                       buttonText: "Pay Now",
