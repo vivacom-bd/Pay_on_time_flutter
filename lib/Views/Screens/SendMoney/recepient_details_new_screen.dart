@@ -569,10 +569,13 @@ class _RecipientDetailsNewScreenState extends State<RecipientDetailsNewScreen> {
                           if(commonController.selectedRecipient != null){
                             bool isGetSendingPurposes = await commonController.getSendinPurposes();
                             bool isGetCountryWiseBanks = await commonController.getCountryWiseBanks();
-                            Get.back();
                             if(isGetSendingPurposes && isGetCountryWiseBanks){
                               //Get.off(const TransactionBankInfoScreen());
-                              Get.off(const RecipientDetailsScreen());
+                              bool isSuccessGetMyRecipients = await commonController.getMyRecipients();
+                              Get.back();
+                              if(isSuccessGetMyRecipients){
+                                Get.off(const RecipientDetailsScreen());
+                              }
 
                             }
                           }else{

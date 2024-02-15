@@ -586,8 +586,11 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                       } else {
                         if(_formKey.currentState!.validate()){
                           Utility.showLoadingDialog();
+                          bool isSuccessGetMyRecipients = await commonController.getMyRecipients();
                           Get.back();
-                          Get.to(const RecipientDetailsScreen());
+                          if(isSuccessGetMyRecipients){
+                            Get.to(const RecipientDetailsScreen());
+                          }
                           // bool isSuccessGetMyRecipients = await commonController.getMyRecipients();
                           // if(!isSuccessGetMyRecipients){
                           //   Get.back();

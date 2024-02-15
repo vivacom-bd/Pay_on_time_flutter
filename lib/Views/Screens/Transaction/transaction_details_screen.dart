@@ -152,7 +152,9 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                               Divider(color: AppColor.defaultColor,thickness: .5,),
                               // SendDetailsItem(title: "Transaction Date",value: DateFormat("dd MMM, YYYY hh:mm").format(DateFormat("yyyy-MM-ddThh:mm:ss").parse(transaction.data!.createdAt!.substring(0,0)),),),
                               // Divider(color: AppColor.defaultColor,thickness: .5,),
-                              SendDetailsItem(title: "Benificiary Status",value: transaction.data!.beneficiaryStatus!.toString() ??"",),
+                              // SendDetailsItem(title: "Benificiary Status",value: transaction.data!.beneficiaryStatus!.toString() ??"",),
+                              SendDetailsItem(title: "Benificiary Status",value: transaction.data!.beneficiaryStatus==0 ? "Pending" : "Confirm" ??"",),
+
                             ],
                           ),
                         ),

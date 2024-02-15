@@ -45,7 +45,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
      if(commonController.myRecipients.isEmpty){
-       _asyncMethod();
+       //_asyncMethod();
        commonController.recipientCity = null;
      }
     });
@@ -85,7 +85,7 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                 children: [
 
                   const SizedBox(height: 10,),
-                  if(commonController.myRecipients.isNotEmpty)Container(
+                  Container(
                     margin: const EdgeInsets.symmetric(horizontal: 15),
                     padding: const EdgeInsets.only(top: 15),
                     child: Column(
@@ -107,7 +107,6 @@ class _RecipientDetailsScreenState extends State<RecipientDetailsScreen> {
                               }
                               return null;
                             },
-
                             items: commonController.myRecipients.map((Recipient recipient) {
                               return DropdownMenuItem(
                                   value: recipient,
